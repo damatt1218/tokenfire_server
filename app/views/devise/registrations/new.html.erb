@@ -1,0 +1,29 @@
+<div class="span16">
+  <header class="page-header">
+    <h2>Sign up</h2>
+  </header>
+
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div class="clearfix"><%= f.label :username %>
+    <div class="input"><%= f.text_field :username, :autofocus => true %></div></div>
+
+  <div class="clearfix"><%= f.label :email %>
+    <div class="input"><%= f.email_field :email %></div></div>
+
+  <div class="clearfix"><%= f.label :password %>
+    <div class="input"><%= f.password_field :password %></div></div>
+
+  <div class="clearfix"><%= f.label :password_confirmation %>
+    <div class="input"><%= f.password_field :password_confirmation %></div></div>
+
+  <%= render :partial => "devise/shared/fields", :locals => {:f => f} %>
+
+  <%= f.hidden_field :registered, :value => true %>
+
+  <div class="actions"><%= f.submit "Sign up" %></div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+</div>

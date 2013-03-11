@@ -1,0 +1,24 @@
+<div class="span16">
+  <header class="page-header">
+    <h2>Sign in</h2>
+  </header>
+
+  <div class="span12">
+    <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+      <div class="clearfix"><%= f.label :username %>
+      <div class="input"><%= f.text_field :username, :autofocus => true %></div></div>
+
+      <div class="clearfix"><%= f.label :password %>
+        <div class="input"><%= f.password_field :password %></div></div>
+
+      <% if devise_mapping.rememberable? -%>
+        <div class="clearfix"><%= f.label :remember_me %>
+          <div class="input"><%= f.check_box :remember_me %></div></div>
+      <% end -%>
+
+      <div class="actions"><%= f.submit "Sign in" %></div>
+    <% end %>
+
+    <%= render "devise/shared/links" %>
+  </div>
+</div>

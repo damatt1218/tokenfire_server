@@ -1,0 +1,28 @@
+<div><%= f.label :username %><br />
+  <%= f.text_field :username, :autofocus => true %></div>
+
+<div><%= f.label :email %><br />
+  <%= f.email_field :email %></div>
+
+<div><%= f.label :password %><br />
+  <%= f.password_field :password, :autocomplete => "off" %></div>
+
+<div><%= f.label :password_confirmation %><br />
+  <%= f.password_field :password_confirmation %></div>
+
+<div><%= f.label :first_name %><br />
+  <%= f.text_field :first_name %></div>
+
+<div><%= f.label :last_name %><br />
+  <%= f.text_field :last_name %></div>
+
+<div><%= f.label :company %><br />
+  <%= f.text_field :company %></div>
+
+<% for role in Role.all %>
+    <div><%= check_box_tag "user[role_ids][]", role.id, @user.roles.include?(role) %>
+      <%= f.label role.name %></div>
+<% end %>
+
+<div><%= f.submit "Save" %> or
+  <%= link_to "Cancel", admin_users_path %></div>

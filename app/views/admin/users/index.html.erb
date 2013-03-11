@@ -1,0 +1,32 @@
+<% role = Role.find_by_name("Prospective Developer") %>
+<h1 xmlns="http://www.w3.org/1999/html">Users</h1>
+<table class="zebra-striped">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th><b>Username</b></th>
+    <th><b>Email</b></th>
+    <th><b>Created at</b></th>
+    <th><b>Prospective Developer</b></th>
+    <th><b>Actions</b></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @users.each do |user| -%>
+      <tr>
+        <td><%= user.id %></td>
+        <td><%= link_to user.username, admin_user_path(user) %></td>
+        <td><%= user.email %></td>
+        <td><%= user.created_at %></td>
+        <td><%= user.roles.include?(role) %></td>
+        <td>
+          <%= link_to "Show", admin_user_path(user) %>
+          <%= link_to "Edit", edit_admin_user_path(user) %>
+          <%= link_to "Destroy", admin_user_path(user), :method => :delete, :confirm => "Are you sure?" %>
+        </td>
+      </tr>
+  <% end -%>
+  </tbody>
+</table>
+
+<%= link_to "New", new_admin_user_path %>

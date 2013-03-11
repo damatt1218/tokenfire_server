@@ -1,0 +1,37 @@
+<p>
+  <b>Username: </b>
+  <%= @user.username %>
+</p>
+
+<p>
+  <b>Email: </b>
+  <%= @user.email %>
+</p>
+
+<p>
+  <b>First Name: </b>
+  <%= @user.first_name %>
+</p>
+
+<p>
+  <b>Last Name: </b>
+  <%= @user.last_name %>
+</p>
+
+<p>
+  <b>Company: </b>
+  <%= @user.company %>
+</p>
+
+<% for role in Role.all %>
+    <p>
+      <b><%=  role.name %>: </b>
+      <%= @user.roles.include?(role) %>
+    </p>
+<% end %>
+
+<div class="form-actions">
+  <%= link_to "Back", admin_users_path, :class => 'btn'  %>
+  <%= link_to "Edit", edit_admin_user_path(@user), :class => 'btn' %>
+  <%= link_to "Delete", admin_user_path(@user), :method => "delete", :confirm => "#{t("web-app-theme.confirm", :default => "Are you sure?")}", :class => 'btn' %>
+</div>

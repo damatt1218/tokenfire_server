@@ -1,0 +1,33 @@
+<div class="span16">
+  <header class="page-header">
+    <h2>Your applications</h2>
+  </header>
+
+  <p><%= link_to 'New Application', new_oauth_application_path %></p>
+
+  <table class="zebra-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Users</th>
+      <th>Total Usage Times</th>
+      <th>Usage Time per User</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @applications.each do |application| %>
+        <tr id="application_<%= application.id %>">
+          <td><%= link_to application.name, oauth_application_path(application) %></td>
+          <td><%= application.accounts.count %></td>
+          <td><%= application.getTotalUsageTime %></td>
+          <td><% if ((application.getTotalUsageTime == 0) || (application.accounts.count == 0)) %>0
+              <% else %>
+                <%= (application.getTotalUsageTime / application.accounts.count)  %>
+              <% end %>
+                </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+</div>
