@@ -1,6 +1,5 @@
 class AddDoorkeeperClientToApps < ActiveRecord::Migration
   def self.up
-    drop_table :oauth_applications
     change_table(:apps) do |t|
       t.string :uid
       t.string :secret
