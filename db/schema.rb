@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130308001618) do
+ActiveRecord::Schema.define(:version => 20130311174438) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",    :default => 0.0
@@ -113,8 +113,10 @@ ActiveRecord::Schema.define(:version => 20130308001618) do
   create_table "reward_histories", :force => true do |t|
     t.integer  "account_id"
     t.integer  "reward_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+    t.boolean  "processed",       :default => false
+    t.string   "redemption_code"
   end
 
   add_index "reward_histories", ["account_id", "reward_id"], :name => "index_reward_histories_on_account_id_and_reward_id"
