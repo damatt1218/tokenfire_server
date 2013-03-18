@@ -31,14 +31,7 @@ module Api
     def create
       parsed_json = JSON.parse(request.body.read)
       @history = RewardHistory.new(parsed_json)
-
       @history.account_id = current_user.account.id
-
-      puts "******* in Reward Histories Controller ********"
-      puts @history.account_id
-      puts @history.reward_id
-      puts "***********************************************"
-
 
       # Validate that the user has enough credit to redeem (create) the reward
       # Also decrement the cost of the reward from the user's balance.

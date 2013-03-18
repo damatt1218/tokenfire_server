@@ -36,7 +36,9 @@ devise_for :users, :controllers => { :registrations => "users/registrations", :s
 
   namespace :admin do
     match '/' => 'users#index'
+    match 'rewards/pending_redeemed', :to => 'reward_histories#index'
     resources :users
+    resources :reward_histories
   end
 
 

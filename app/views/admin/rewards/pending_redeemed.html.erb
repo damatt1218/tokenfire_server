@@ -1,0 +1,25 @@
+<h1 xmlns="http://www.w3.org/1999/html">Pending Rewards</h1>
+<table class="zebra-striped">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th><b>Username</b></th>
+    <th><b>Reward</b></th>
+    <th><b>Created at</b></th>
+    <th><b>Actions</b></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @reward_histories.each do |reward_history| -%>
+      <tr>
+        <td><%= reward_history.id %></td>
+        <td><%= link_to reward_history.account.user.username, admin_user_path(reward_history.account.user) %></td>
+        <td><%= reward_history.reward.name %></td>
+        <td><%= reward_history.created_at %></td>
+        <td>
+          pending
+        </td>
+      </tr>
+  <% end -%>
+  </tbody>
+</table>

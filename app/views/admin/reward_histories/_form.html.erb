@@ -1,0 +1,14 @@
+<div>Reward History ID: <%= @reward_history.id %><br>
+  User: <%= @reward_history.account.user.username %><br>
+  Reward: <%= @reward_history.reward.name %><br>
+  Created At: <%= @reward_history.created_at %></div>
+
+<div><%= f.label :redemption_code %><br />
+  <%= f.text_field :redemption_code, :autofocus => true %></div>
+
+<div><%= check_box_tag "reward_history[processed]", 1, @reward_history.processed %>
+  <%= f.label :processed %></div>
+
+
+<div><%= f.submit "Save" %> or
+  <%= link_to "Cancel", admin_reward_histories_path %></div>
