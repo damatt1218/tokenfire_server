@@ -58,11 +58,6 @@ class User < ActiveRecord::Base
 
     if device.user.id != self.id
 
-      puts "***"
-      puts device.user.id
-      puts self.id
-      puts"***"
-
       device.user = self
       device.save
 
@@ -90,10 +85,8 @@ class User < ActiveRecord::Base
   # be able to access their account.  Registration requires that an email be submitted.
   def password_required?
     if self.email.empty?
-      puts "got here"
       return false
     else
-      puts "got here 2"
       return true
     end
   end
