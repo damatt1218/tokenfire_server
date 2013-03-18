@@ -59,6 +59,8 @@ module MobileRewardz
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+    config.assets.initialize_on_precompile = false
+
     config.to_prepare do
       # Base layout. Uses app/views/layouts/application.html.erb
       Doorkeeper::ApplicationController.layout "application"

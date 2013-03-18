@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dcf0cc2d-5f98-4222-bf9e-8869b86e059e" name="Default" comment="Removed debug outputs">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Gemfile.lock" afterPath="$PROJECT_DIR$/Gemfile.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Gemfile" afterPath="$PROJECT_DIR$/Gemfile" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/database.yml" afterPath="$PROJECT_DIR$/config/database.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/mobile-rewardz.iml" afterPath="$PROJECT_DIR$/.idea/mobile-rewardz.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db/schema.rb" afterPath="$PROJECT_DIR$/db/schema.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/application.rb" afterPath="$PROJECT_DIR$/config/application.rb" />
     </list>
     <ignored path="mobile-rewardz.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -41,7 +36,7 @@
     <file path="/index.html.erb" changelist="dcf0cc2d-5f98-4222-bf9e-8869b86e059e" time="1363046901825" ignored="false" />
     <file path="/edit.html.erb" changelist="dcf0cc2d-5f98-4222-bf9e-8869b86e059e" time="1363045628279" ignored="false" />
     <file path="/_form.html.erb" changelist="dcf0cc2d-5f98-4222-bf9e-8869b86e059e" time="1363078341624" ignored="false" />
-    <file path="/database.yml" changelist="dcf0cc2d-5f98-4222-bf9e-8869b86e059e" time="1363594432643" ignored="false" />
+    <file path="/database.yml" changelist="dcf0cc2d-5f98-4222-bf9e-8869b86e059e" time="1363604731801" ignored="false" />
     <file path="/20130123232829_create_roles.rb" changelist="dcf0cc2d-5f98-4222-bf9e-8869b86e059e" time="1363603558952" ignored="false" />
     <file path="/20130123233326_users_have_and_belong_to_many_roles.rb" changelist="dcf0cc2d-5f98-4222-bf9e-8869b86e059e" time="1363603651030" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -64,10 +59,28 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="database.yml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="database.yml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/database.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="41" column="12" selection-start="844" selection-end="844" vertical-scroll-proportion="1.2276119">
+            <state line="33" column="12" selection-start="725" selection-end="725" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Gemfile" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Gemfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="7" selection-start="310" selection-end="310" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="application.rb" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/config/application.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="61" column="50" selection-start="2861" selection-end="2861" vertical-scroll-proportion="0.6831276">
               <folding />
             </state>
           </provider>
@@ -95,15 +108,6 @@
         <entry file="file://$PROJECT_DIR$/app/models/user.rb">
           <provider selected="true" editor-type-id="text-editor">
             <state line="29" column="47" selection-start="1189" selection-end="1189" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="20130125120431_add_doorkeeper_client_to_apps.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/db/migrate/20130125120431_add_doorkeeper_client_to_apps.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="13" selection-start="71" selection-end="71" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -145,15 +149,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="routes.rb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config/routes.rb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FindManager">
@@ -172,7 +167,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/app/views/admin/reward_histories/edit.html.erb" />
         <option value="$PROJECT_DIR$/app/views/admin/reward_histories/index.html.erb" />
         <option value="$PROJECT_DIR$/app/models/reward_history.rb" />
         <option value="$PROJECT_DIR$/app/controllers/admin/reward_histories_controller.rb" />
@@ -188,6 +182,7 @@
         <option value="$PROJECT_DIR$/db/migrate/20130123233326_users_have_and_belong_to_many_roles.rb" />
         <option value="$PROJECT_DIR$/db/migrate/20130202000834_add_username_to_users.rb" />
         <option value="$PROJECT_DIR$/config/database.yml" />
+        <option value="$PROJECT_DIR$/config/application.rb" />
       </list>
     </option>
   </component>
@@ -716,13 +711,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/db/migrate/20130125120431_add_doorkeeper_client_to_apps.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="13" selection-start="71" selection-end="71" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/models/reward_history.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -779,13 +767,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gemfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="7" selection-start="310" selection-end="310" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/db/migrate/20130123232829_create_roles.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="50" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
@@ -823,7 +804,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config/database.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="41" column="12" selection-start="844" selection-end="844" vertical-scroll-proportion="1.2276119">
+        <state line="33" column="12" selection-start="725" selection-end="725" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Gemfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="7" selection-start="310" selection-end="310" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/application.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="50" selection-start="2861" selection-end="2861" vertical-scroll-proportion="0.6831276">
           <folding />
         </state>
       </provider>
