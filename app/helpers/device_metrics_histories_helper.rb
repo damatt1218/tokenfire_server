@@ -1,0 +1,2 @@
+module DeviceMetricsHistoriesHelper
+end

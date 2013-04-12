@@ -1,0 +1,45 @@
+<%= form_for(@device_metrics_history) do |f| %>
+  <% if @device_metrics_history.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@device_metrics_history.errors.count, "error") %> prohibited this device_metrics_history from being saved:</h2>
+
+      <ul>
+      <% @device_metrics_history.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :OS %><br />
+    <%= f.text_field :OS %>
+  </div>
+  <div class="field">
+    <%= f.label :OS_version %><br />
+    <%= f.text_field :OS_version %>
+  </div>
+  <div class="field">
+    <%= f.label :Device_Type %><br />
+    <%= f.text_field :Device_Type %>
+  </div>
+  <div class="field">
+    <%= f.label :Resolution %><br />
+    <%= f.text_field :Resolution %>
+  </div>
+  <div class="field">
+    <%= f.label :Carrier %><br />
+    <%= f.text_field :Carrier %>
+  </div>
+  <div class="field">
+    <%= f.label :AppVersion %><br />
+    <%= f.text_field :AppVersion %>
+  </div>
+  <div class="field">
+    <%= f.label :Location %><br />
+    <%= f.text_field :Location %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

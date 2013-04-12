@@ -1,5 +1,9 @@
 MobileRewardz::Application.routes.draw do
 
+  resources :device_metrics_histories
+
+  resources :app_session_histories
+
   use_doorkeeper do
     # it accepts :authorizations, :tokens, :applications and :authorized_applications
     controllers :applications => 'apps/custom_applications'
@@ -14,8 +18,7 @@ MobileRewardz::Application.routes.draw do
   end
 
 
-
-devise_for :users, :controllers => { :registrations => "users/registrations", :sessions => "users/sessions" }
+  devise_for :users, :controllers => {:registrations => "users/registrations", :sessions => "users/sessions"}
   #resources :users
 
   namespace :api do

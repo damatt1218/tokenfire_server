@@ -1,0 +1,27 @@
+<h1>Listing app_session_histories</h1>
+
+<table>
+  <tr>
+    <th>Sdkversion</th>
+    <th>Eventtimestamp</th>
+    <th>Sessionduration</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @app_session_histories.each do |app_session_history| %>
+  <tr>
+    <td><%= app_session_history.sdkVersion %></td>
+    <td><%= app_session_history.eventTimeStamp %></td>
+    <td><%= app_session_history.SessionDuration %></td>
+    <td><%= link_to 'Show', app_session_history %></td>
+    <td><%= link_to 'Edit', edit_app_session_history_path(app_session_history) %></td>
+    <td><%= link_to 'Destroy', app_session_history, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New App session history', new_app_session_history_path %>

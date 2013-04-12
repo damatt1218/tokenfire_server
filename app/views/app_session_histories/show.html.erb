@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Sdkversion:</b>
+  <%= @app_session_history.sdkVersion %>
+</p>
+
+<p>
+  <b>Eventtimestamp:</b>
+  <%= @app_session_history.eventTimeStamp %>
+</p>
+
+<p>
+  <b>Sessionduration:</b>
+  <%= @app_session_history.SessionDuration %>
+</p>
+
+
+<%= link_to 'Edit', edit_app_session_history_path(@app_session_history) %> |
+<%= link_to 'Back', app_session_histories_path %>

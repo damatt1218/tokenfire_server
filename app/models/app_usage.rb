@@ -6,6 +6,8 @@ class AppUsage < ActiveRecord::Base
   belongs_to :account
   belongs_to :app
 
+  has_many :app_session_histories
+
   def init
     self.usage_time ||= 0
   end

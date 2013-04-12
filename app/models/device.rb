@@ -3,4 +3,5 @@ class Device < ActiveRecord::Base
 
   #relationships
   belongs_to :user
+  has_many :app_session_histories
 end

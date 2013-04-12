@@ -26,17 +26,11 @@
 
 
 development:
-  adapter: postgresql
-  encoding: unicode
-  database: tokenfire_development
+  adapter: sqlite3
+  database: db/tokenfire_development.sqlite3
   pool: 5
-  username: postgres
-  password:
 
 test:
-  adapter: postgresql
-  encoding: unicode
-  database: tokenfire_test
+  adapter: sqlite3
+  database: db/tokenfire_test.sqlite3
   pool: 5
-  username: postgres
-  password:

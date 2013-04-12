@@ -7,6 +7,7 @@ class App < ActiveRecord::Base
 
   # relationships
   has_many :app_usages
+
   has_many :accounts, through: :app_usages
   belongs_to :account
 

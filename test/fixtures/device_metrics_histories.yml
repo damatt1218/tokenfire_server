@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  OS: MyString
+  OS_version: MyString
+  Device_Type: MyString
+  Resolution: MyString
+  Carrier: MyString
+  AppVersion: MyString
+  Location: MyString
+
+two:
+  OS: MyString
+  OS_version: MyString
+  Device_Type: MyString
+  Resolution: MyString
+  Carrier: MyString
+  AppVersion: MyString
+  Location: MyString
