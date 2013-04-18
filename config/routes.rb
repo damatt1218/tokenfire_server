@@ -23,6 +23,8 @@ MobileRewardz::Application.routes.draw do
 
   namespace :api do
 
+    match 'client_api/validate_app_id', :to => 'client_sdk_api#validate_app_id'
+    match 'client_api/post_session_history', :to => 'client_sdk_api#post_session_history'
     match 'app_usages/increment_time', :to => 'app_usages#incrementTimeSpent'
     match 'app_usages/get_usage', :to => 'app_usages#getUsageTime'
     match 'accounts/get_profile', :to => 'accounts#getProfile'

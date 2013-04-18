@@ -1,5 +1,5 @@
 class AppSessionHistory < ActiveRecord::Base
-  attr_accessible :SessionDuration, :eventTimeStamp, :sdkVersion
+  attr_accessible :session_id, :SessionDuration, :eventTimeStamp, :sdkVersion
 
   belongs_to :app_usage
   belongs_to :device

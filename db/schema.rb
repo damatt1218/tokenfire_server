@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20130412023719) do
   add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
 
   create_table "app_session_histories", :force => true do |t|
+    t.string "session_id"
     t.string "sdkVersion"
     t.datetime "eventTimeStamp"
     t.integer "SessionDuration"
