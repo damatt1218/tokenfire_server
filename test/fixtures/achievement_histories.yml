@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  acquired: 2013-04-14 21:00:51
+  value: 
+
+two:
+  acquired: 2013-04-14 21:00:51
+  value: 

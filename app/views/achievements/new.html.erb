@@ -1,0 +1,9 @@
+<div class="span16">
+  <header class="page-header"><h2>New achievement for </h2></header>
+</div>
+
+<div class="span12">
+  <%= form_for :achievement, :url => app_achievements_path(@achievement.app_id), :html => { :method => :post } do |f| %>
+      <%= render 'form', :achievement => @achievement, :f => f %>
+  <% end %>
+</div>

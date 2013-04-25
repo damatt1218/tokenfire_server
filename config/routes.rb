@@ -9,6 +9,10 @@ MobileRewardz::Application.routes.draw do
     controllers :applications => 'apps/custom_applications'
   end
 
+  resources :apps do
+    resources :achievements
+  end
+
   scope :module => "oauth" do
 
   end

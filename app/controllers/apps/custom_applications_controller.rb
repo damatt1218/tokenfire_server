@@ -21,13 +21,11 @@ module Apps
       @application.account = current_user.account
 
       if @application.save
-        redirect_to oauth_application_url(@application), :notice => t('doorkeeper.flash.applications.create.notice')
+        redirect_to apps_url, :notice => t('doorkeeper.flash.applications.create.notice')
       else
         render :new
       end
     end
-
-
 
   end
 

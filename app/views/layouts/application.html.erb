@@ -18,8 +18,7 @@
               Welcome <%= current_user.first_name %> <%= current_user.last_name %> (<%= current_user.company %>)!
               Logged in as <strong><%= current_user.email %></strong>.<br>
               <% if ((current_user.role? :admin) || (current_user.role? :developer)) %>
-                  <%=  link_to "Manage Applications", oauth_applications_path %> |
-                  <%=  link_to "Applications Stats", oauth_usage_info_path %> |
+                  <%=  link_to "Manage Applications", apps_path %> |
               <% end %>
               <% if current_user.role? :admin %>
                   <%=  link_to "Manage Users", admin_users_path %> |

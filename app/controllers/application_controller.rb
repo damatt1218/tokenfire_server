@@ -9,8 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    oauth_applications_path
-
+    apps_path
   end
 
 

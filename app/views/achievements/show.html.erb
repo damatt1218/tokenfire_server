@@ -1,0 +1,32 @@
+<div class="span16">
+  <header class="page-header">
+    <h1>Application: <%= @application.name %></h1>
+    <h2>Achievement: <%= @achievement.name %></h2>
+  </header>
+</div>
+
+<div class="span10">
+  <h4>Description:</h4>
+  <p><code id="description"><%= @achievement.description %></code></p>
+
+  <h4>Tokens paid for achievement:</h4>
+  <p><code id="value"><%= @achievement.value %></code></p>
+
+  <h4>Cost for achievement:</h4>
+  <p><code id="cost"><%= @achievement.cost %></code></p>
+
+  <h4>Enabled:</h4>
+  <p><code id="enabled"><%= @achievement.enabled %></code></p>
+
+  <h4>Repeatable:</h4>
+  <p><code id="repeatable"><%= @achievement.repeatable %></code></p>
+
+  <h4>Availability:</h4>
+  <p><code id="availability"><%= @achievement.availability %></code></p>
+
+  <div>
+    <%= link_to 'Edit', edit_app_achievement_path(@application, @achievement), :class => "btn primary" %>
+    <%= link_to 'Back to App', app_path(@application), :class => "btn" %>
+  </div>
+</div>
+

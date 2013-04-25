@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130412023719) do
+ActiveRecord::Schema.define(:version => 20130415040050) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",    :default => 0.0
@@ -21,6 +21,27 @@ ActiveRecord::Schema.define(:version => 20130412023719) do
   end
 
   add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
+
+  create_table "achievement_histories", :force => true do |t|
+    t.datetime "acquired"
+    t.integer  "value"
+    t.integer  "device_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "achievements", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.integer  "value"
+    t.decimal  "cost"
+    t.boolean  "enabled"
+    t.boolean  "repeatable"
+    t.string   "availability"
+    t.integer  "app_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "app_session_histories", :force => true do |t|
     t.string   "session_id"

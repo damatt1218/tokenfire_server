@@ -9,6 +9,7 @@ class App < ActiveRecord::Base
   has_many :app_usages
 
   has_many :accounts, through: :app_usages
+  has_many :achievements
   belongs_to :account
 
   def getTotalUsageTime

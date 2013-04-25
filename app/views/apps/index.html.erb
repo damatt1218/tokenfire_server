@@ -1,0 +1,33 @@
+<div class="span16">
+  <header class="page-header">
+    <h2>Your applications</h2>
+  </header>
+  <h1>
+    Apps: <%= @applications.count %> &nbsp;&nbsp;
+    Users: <%= @users %> &nbsp;&nbsp;
+    Usage: <%= @usageTime %> min.
+  </h1>
+
+  <table class="zebra-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Users</th>
+      <th>Total Usage Times</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @applications.each do |application| %>
+        <tr id="application_<%= application.id %>">
+          <td><%= link_to application.name, app_path(application) %></td>
+          <td><%= application.accounts.count %></td>
+          <td><%= application.getTotalUsageTime %></td>
+          <td><%= link_to 'OAuth Attributes', oauth_application_path(application) %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <%= link_to 'New Application', new_oauth_application_path, :class => "btn primary" %>
+  <%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn" %>
+</div>

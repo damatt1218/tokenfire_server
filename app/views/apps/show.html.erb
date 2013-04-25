@@ -1,0 +1,45 @@
+<div class="span16">
+  <header class="page-header">
+    <h1>Application: <%= @application.name %></h1>
+  </header>
+</div>
+
+<h1>
+  Users: <%= @application.accounts.count %> &nbsp;&nbsp;
+  Usage: <%= @application.getTotalUsageTime %> min.
+</h1>
+
+<div>
+  <%= link_to 'Edit Application', edit_oauth_application_path(@application), :class => "btn primary" %>
+  <%= link_to 'View OAuth Attributes', oauth_application_path(@application), :class => "btn" %>
+</div>
+
+<h2>Achievements</h2>
+<div>
+  <table class="zebra-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Token value</th>
+      <th>Cost</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @application.achievements.each do |achievement| %>
+        <tr>
+          <td><%= link_to achievement.name, app_achievement_path(@application, achievement)%></td>
+          <td><%= achievement.description%></td>
+          <td><%= achievement.value%></td>
+          <td><%= achievement.cost%></td>
+          <td><%= link_to 'Edit', edit_app_achievement_path(@application, achievement) %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <div>
+    <%= link_to 'New Achievement', new_app_achievement_path(@application), :class => "btn primary" %>
+  </div>
+</div>
+
