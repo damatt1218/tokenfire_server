@@ -20,4 +20,11 @@ class App < ActiveRecord::Base
 
     return total_time
   end
+
+  def self.setDoorClient
+    puts 'Setting Doorclient model to App'
+    # doesn't really do anything.   This method is here
+    # because this class gets lazy loaded,  and doorkeeper doesn't get
+    # this is a bug in doorkeeper
+  end
 end

@@ -12,7 +12,7 @@ Doorkeeper.configure do
       puts "********************************************************"
       if params.has_key?(:android_id)
         puts "HERE: " + params[:android_id]
-        User.find_create_by_android_id(params[:android_id])
+        User.find_or_create_by_android_id(params[:android_id])
       else
         puts "****** params has no android_id *******"
         redirect_to(new_user_session_url(return_to: request.fullpath))
@@ -30,9 +30,8 @@ Doorkeeper.configure do
   resource_owner_from_credentials do |routes|
     #u = User.find_for_database_authentication(:username => params[:username])
     if params.has_key?(:android_id)
-      u = User.find_create_by_android_id(params[:android_id])
+      u = User.find_or_create_by_android_id(params[:android_id])
     end
-
 
     if u.password_required? && !(params.has_key?(:android_id))
       u if u && u.valid_password?(params[:password])

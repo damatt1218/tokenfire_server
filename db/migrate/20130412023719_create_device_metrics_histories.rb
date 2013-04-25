@@ -8,6 +8,8 @@ class CreateDeviceMetricsHistories < ActiveRecord::Migration
       t.string :Carrier
       t.string :AppVersion
       t.string :Location
+      t.string :Locale
+      t.integer :app_session_history_id
 
       t.timestamps
     end

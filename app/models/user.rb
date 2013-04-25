@@ -39,21 +39,19 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.find_create_by_android_id(android_id)
+  def self.find_or_create_by_android_id(android_id)
     device = Device.find_or_create_by_uuid(android_id)
     if device.user_id.nil?
-      user = User.find_or_create_by_username(android_id)
-      device.user = user
+      u = User.find_or_create_by_username(android_id)
+      device.user = u
       device.description = "Android"
       device.save
     end
-
     return device.user
-
   end
 
   def combine_accounts(android_id)
-    u = User.find_create_by_android_id(android_id)
+    u = User.find_or_create_by_android_id(android_id)
     device = Device.find_or_create_by_uuid(android_id)
 
     if device.user.id != self.id

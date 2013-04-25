@@ -4,6 +4,7 @@ class CreateAppUsages < ActiveRecord::Migration
       t.integer :account_id
       t.integer :app_id
       t.integer :usage_time
+      t.integer :last_deducted_session_id
 
       t.timestamps
     end

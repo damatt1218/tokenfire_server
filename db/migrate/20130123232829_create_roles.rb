@@ -4,10 +4,7 @@ class CreateRoles < ActiveRecord::Migration
       t.string :name
       t.timestamps
     end
-    Role.create!(:name => 'Admin')
-    Role.create!(:name => 'Developer')
-    Role.create!(:name => 'Member')
-    Role.create!(:name => 'Prospective Developer')
+
   end
 
   def self.down

@@ -11,6 +11,9 @@ end
 
 module MobileRewardz
   class Application < Rails::Application
+
+
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -64,8 +67,9 @@ module MobileRewardz
     config.to_prepare do
       # Base layout. Uses app/views/layouts/application.html.erb
       Doorkeeper::ApplicationController.layout "application"
+      App::setDoorClient
 
-      # Only Applications list
+      # Only Applications lists
       #Doorkeeper::ApplicationsController.layout "my_layout"
 
       # Only Authorization endpoint

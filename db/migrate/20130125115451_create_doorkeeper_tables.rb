@@ -8,7 +8,7 @@ class CreateDoorkeeperTables < ActiveRecord::Migration
       t.string   :redirect_uri,      :null => false
       t.datetime :created_at,        :null => false
       t.datetime :revoked_at
-      t.string   :scopes
+      t.string   :scope
     end
 
     add_index :oauth_access_grants, :token, :unique => true
@@ -21,7 +21,7 @@ class CreateDoorkeeperTables < ActiveRecord::Migration
       t.integer  :expires_in
       t.datetime :revoked_at
       t.datetime :created_at,        :null => false
-      t.string   :scopes
+      t.string   :scope
     end
 
     add_index :oauth_access_tokens, :token, :unique => true

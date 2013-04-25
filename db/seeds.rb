@@ -8,3 +8,14 @@
 
 
 #  Role.create(name: 'Prospective Developer')
+
+adminRole = Role.create!(:name => 'Admin')
+Role.create!(:name => 'Developer')
+Role.create!(:name => 'Member')
+Role.create!(:name => 'Prospective Developer')
+
+user = User.create!(:username => 'tokenfire_admin', :password => 'tokenfire', :password_confirmation => 'tokenfire')
+user.roles = [adminRole]
+
+
+

@@ -12,6 +12,7 @@ class AppUsage < ActiveRecord::Base
     self.usage_time ||= 0
   end
 
+
   # Method to set the currency in a user's account based on the usage time
   # Conversion takes place here.  Will want to adjust this later.
   def addCurrencyToAccount(account_id, usage_time)

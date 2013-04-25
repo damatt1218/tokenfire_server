@@ -5,6 +5,8 @@ class CreateAppSessionHistories < ActiveRecord::Migration
       t.string :sdkVersion
       t.datetime :eventTimeStamp
       t.integer :SessionDuration
+      t.integer :device_id
+      t.integer :app_usage_id
 
       t.timestamps
     end
