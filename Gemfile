@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 
+
 gem 'devise'
 gem 'cancan'
 gem 'doorkeeper', :git => 'git://github.com/applicake/doorkeeper.git', :branch => "1.0"
@@ -16,6 +17,7 @@ gem 'gcm_on_rails'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'pg'
+gem 'sqlite3'
 
 
 # Gems used only for assets and not required
