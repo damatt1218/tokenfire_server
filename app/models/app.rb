@@ -1,6 +1,9 @@
 class App < ActiveRecord::Base
   # Setup doorkeeper client extension
-  doorkeeper_client!
+  if Doorkeeper.client.nil?
+    doorkeeper_client!
+  end
+
 
   attr_accessible :name, :redirect_uri
   attr_accessible :description, :image, :name, :rating
