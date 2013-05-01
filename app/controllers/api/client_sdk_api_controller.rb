@@ -42,6 +42,9 @@ require 'json'
       return
     end
 
+    app = app.first
+
+
 
 
     # 2- Create a new app session history entry
@@ -62,6 +65,7 @@ require 'json'
     app_session_history.eventTimeStamp= parsedReport['timeStamp']
     app_session_history.sdkVersion = parsedReport['sdkVersion']
     app_session_history.SessionDuration = parsedReport['duration']
+    app_session_history.app_usage = AppUsage.find_or_create_by_app_id(app.id);
 
     # 3- Perform some validation..   we can't just trust every client, can we?
     # TODO:  finish this
@@ -97,6 +101,10 @@ require 'json'
       render json: app_session_history.errors, status: :unprocessable_entity
       return
     end
+
+
+    app_session_history.app_usage.update_usage_from_sessions
+
 
     # 6-  if the session time exceeds the currency ceiling for time,  create some currency
     # TODO:  finish this by adding currency

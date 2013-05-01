@@ -12,6 +12,18 @@ class AppUsage < ActiveRecord::Base
     self.usage_time ||= 0
   end
 
+  def update_usage_from_sessions
+    historyseconds = app_session_histories.where("sessionduration > 0").group("session_id").maximum("sessionduration")
+
+    self.usage_time = 0
+
+    historyseconds.each { |minutes|
+      self.usage_time += minutes[1] / 60
+    }
+
+    self.save
+  end
+
 
   # Method to set the currency in a user's account based on the usage time
   # Conversion takes place here.  Will want to adjust this later.
