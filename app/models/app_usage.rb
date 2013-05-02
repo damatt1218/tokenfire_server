@@ -15,13 +15,15 @@ class AppUsage < ActiveRecord::Base
   def update_usage_from_sessions
     historyseconds = app_session_histories.where("sessionduration > 0").group("session_id").maximum("sessionduration")
 
+    previousUsageTime = self.usage_time
     self.usage_time = 0
 
     historyseconds.each { |minutes|
       self.usage_time += minutes[1] / 60
     }
-
     self.save
+
+    addCurrencyToAccount(self.account_id, self.usage_time - previousUsageTime) if previousUsageTime < self.usage_time
   end
 
 
@@ -41,6 +43,17 @@ class AppUsage < ActiveRecord::Base
       account.balance = balance
       account.save
     end
+  end
+
+
+  def self.find_or_create_by_app_id_and_user_id(app_id, user_id)
+
+    userAccount = Account.find_by_user_id(user_id)
+
+    newUsage = AppUsage.where(:app_id => app_id, :account_id => userAccount.id).first_or_create()
+
+
+    return newUsage
   end
 
 end

@@ -65,7 +65,8 @@ require 'json'
     app_session_history.eventTimeStamp= parsedReport['timeStamp']
     app_session_history.sdkVersion = parsedReport['sdkVersion']
     app_session_history.SessionDuration = parsedReport['duration']
-    app_session_history.app_usage = AppUsage.find_or_create_by_app_id(app.id);
+    app_session_history.app_usage = AppUsage.find_or_create_by_app_id_and_user_id(app.id, sessionDevice.user_id)
+
 
     # 3- Perform some validation..   we can't just trust every client, can we?
     # TODO:  finish this
