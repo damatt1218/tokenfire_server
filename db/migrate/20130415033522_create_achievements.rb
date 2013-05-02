@@ -8,6 +8,7 @@ class CreateAchievements < ActiveRecord::Migration
       t.boolean :enabled
       t.boolean :repeatable
       t.string :availability
+      t.string :uid
       t.integer :app_id
 
       t.timestamps

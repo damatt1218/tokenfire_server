@@ -15,9 +15,19 @@ class Achievement < ActiveRecord::Base
                   # True if a user can acquire the achievements multiple times
                   :repeatable,
                   # Specify special rules to allow only some user to acquire the achievements
-                  :availability
+                  :availability,
+                  # Unique identifier for the achievement to be used in the RESTful API
+                  :uid
 
   # Relationships
   belongs_to :achievement_history
   belongs_to :app
+
+  after_initialize :defaults
+
+  def defaults
+    unless persisted?
+      self.uid ||= SecureRandom.urlsafe_base64(15)
+    end
+  end
 end

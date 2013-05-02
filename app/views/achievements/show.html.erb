@@ -24,6 +24,9 @@
   <h4>Availability:</h4>
   <p><code id="availability"><%= @achievement.availability %></code></p>
 
+  <h4>UID:</h4>
+  <p><code id="availability"><%= @achievement.uid %></code></p>
+
   <div>
     <%= link_to 'Edit', edit_app_achievement_path(@application, @achievement), :class => "btn primary" %>
     <%= link_to 'Back to App', app_path(@application), :class => "btn" %>

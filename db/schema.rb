@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20130415040050) do
     t.boolean  "enabled"
     t.boolean  "repeatable"
     t.string   "availability"
+    t.string   "uid"
     t.integer  "app_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false

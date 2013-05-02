@@ -11,6 +11,7 @@ MobileRewardz::Application.routes.draw do
 
   resources :apps do
     resources :achievements
+    resource :usage
   end
 
   scope :module => "oauth" do
@@ -34,6 +35,7 @@ MobileRewardz::Application.routes.draw do
     match 'accounts/get_profile', :to => 'accounts#getProfile'
     match 'rewards/featured_rewards', :to => 'rewards#featured_rewards'
     match 'apps/featured_apps', :to => 'apps#featured_apps'
+    match 'achievements/report', :to => 'achievement_histories#report', :via => :post
 
     resources :tokens, :only => [:create, :destroy]
     resources :rewards, :only => [:index, :show, :create, :update]
