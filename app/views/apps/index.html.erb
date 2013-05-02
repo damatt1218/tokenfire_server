@@ -13,8 +13,9 @@
     <tr>
       <th>Name</th>
       <th>Users</th>
-      <th>Total Usage Times</th>
-      <th></th>
+      <th>Total Usage Time (Minutes)</th>
+      <th>Analytics</th>
+      <th>App Key</th>
     </tr>
     </thead>
     <tbody>
@@ -23,7 +24,8 @@
           <td><%= link_to application.name, app_path(application) %></td>
           <td><%= application.accounts.count %></td>
           <td><%= application.getTotalUsageTime %></td>
-          <td><%= link_to 'OAuth Attributes', oauth_application_path(application) %></td>
+          <td><%= link_to 'View Statistics', '' %></td>
+          <td><%= link_to 'View Key', oauth_application_path(application) %></td>
         </tr>
     <% end %>
     </tbody>
