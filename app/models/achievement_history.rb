@@ -7,6 +7,6 @@ class AchievementHistory < ActiveRecord::Base
                   :value
 
   # Relationships
-  has_one :app
+  belongs_to :achievement
   belongs_to :device
 end

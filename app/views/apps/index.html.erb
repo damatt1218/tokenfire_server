@@ -24,7 +24,7 @@
           <td><%= link_to application.name, app_path(application) %></td>
           <td><%= application.accounts.count %></td>
           <td><%= application.getTotalUsageTime %></td>
-          <td><%= link_to 'View Statistics', '' %></td>
+          <td><%= link_to 'View Statistics', app_usage_path(application) %></td>
           <td><%= link_to 'View Key', oauth_application_path(application) %></td>
         </tr>
     <% end %>

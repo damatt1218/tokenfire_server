@@ -4,6 +4,7 @@ class CreateAchievementHistories < ActiveRecord::Migration
       t.datetime :acquired
       t.integer :value
       t.integer :device_id
+      t.integer :achievement_id
 
       t.timestamps
     end

@@ -20,7 +20,7 @@ class Achievement < ActiveRecord::Base
                   :uid
 
   # Relationships
-  belongs_to :achievement_history
+  has_many :achievement_history
   belongs_to :app
 
   after_initialize :defaults

@@ -23,15 +23,17 @@
       <th>Description</th>
       <th>Token value</th>
       <th>Cost</th>
+      <th>Times achieved</th>
     </tr>
     </thead>
     <tbody>
     <% @application.achievements.each do |achievement| %>
         <tr>
-          <td><%= link_to achievement.name, app_achievement_path(@application, achievement)%></td>
-          <td><%= achievement.description%></td>
-          <td><%= achievement.value%></td>
-          <td><%= achievement.cost%></td>
+          <td><%= link_to achievement.name, app_achievement_path(@application, achievement) %></td>
+          <td><%= achievement.description %></td>
+          <td><%= achievement.value %></td>
+          <td><%= achievement.cost %></td>
+          <td><%= achievement.achievement_history.count %></td>
           <td><%= link_to 'Edit', edit_app_achievement_path(@application, achievement) %></td>
         </tr>
     <% end %>

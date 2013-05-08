@@ -26,8 +26,9 @@ ActiveRecord::Schema.define(:version => 20130415040050) do
     t.datetime "acquired"
     t.integer  "value"
     t.integer  "device_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "achievement_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "achievements", :force => true do |t|
