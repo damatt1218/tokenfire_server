@@ -1,18 +1,62 @@
-<div class="span16">
+<header class="page-header">
+  <h1>Overview</h1>
+</header>
+
+<!-- KPI row -->
+<div class="row-fluid">
+  <!-- KPI #1 -->
+  <div class="well span4">
+    <p class="lead">Downloads</p>
+    <h3>1,242,830</h3>
+    <!-- if daily change is negative, should be text-error -->
+    <h3 class="text-success">+24,405</h3>
+  </div>
+  <!-- END KPI #1 -->
+  <!-- KPI #2 -->
+  <div class="well span4">
+    <p class="lead">Daily Active Users</p>
+    <h3>32,400</h3>
+    <!-- if daily change is negative, should be text-error -->
+    <h3 class="text-success">+1,405</h3>
+  </div>
+  <!-- END KPI #2 -->
+  <!-- KPI #3 -->
+  <div class="well span4">
+    <p class="lead">Something Else</p>
+    <h3>32,400</h3>
+    <!-- if daily change is negative, should be text-error -->
+    <h3 class="text-success">+1,405</h3>
+  </div>
+  <!-- END KPI #3 -->
+</div>
+
+<!-- Graphs -->
+<div class="row-fluid">
+
+</div>
+<!-- END Graphs -->
+
+<div class="row-fluid">
   <header class="page-header">
-    <h2>Your applications</h2>
+    <h3>Your Applications</h3>
   </header>
   <h1>
     Apps: <%= @applications.count %> &nbsp;&nbsp;
     Users: <%= @users %> &nbsp;&nbsp;
     Usage: <%= @usageTime %> min.
   </h1>
-
-  <table class="zebra-striped">
+  <p>
+    <%= link_to 'New Application', new_oauth_application_path, :class => "btn primary" %>
+    <%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn" %>
+  </p>
+  <table class="table table-bordered table-striped table-hover">
     <thead>
     <tr>
       <th>Name</th>
-      <th>Users</th>
+      <th>Total Users</th>
+      <th>DAU</th>
+      <th>Avg. Sessions / day</th>
+      <th>Avg. Session Length</th>
       <th>Total Usage Time (Minutes)</th>
       <th>Analytics</th>
       <th>App Key</th>
@@ -23,6 +67,9 @@
         <tr id="application_<%= application.id %>">
           <td><%= link_to application.name, app_path(application) %></td>
           <td><%= application.accounts.count %></td>
+          <td>Insert DAU</td>
+          <td>Insert avg sessions</td>
+          <td>avg. session legnth</td>
           <td><%= application.getTotalUsageTime %></td>
           <td><%= link_to 'View Statistics', app_usage_path(application) %></td>
           <td><%= link_to 'View Key', oauth_application_path(application) %></td>
@@ -30,6 +77,4 @@
     <% end %>
     </tbody>
   </table>
-  <%= link_to 'New Application', new_oauth_application_path, :class => "btn primary" %>
-  <%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn" %>
 </div>

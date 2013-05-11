@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Token Fire</title>
+  <%= stylesheet_link_tag    "doorkeeper/application" %>
+  <%= javascript_include_tag "doorkeeper/application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+
+<section id="main" class="container">
+  <div class="topbar">
+    <div class="fill">
+      <div class="container">
+        <span class="brand">
+          <% if user_signed_in? %>
+              Welcome <%= current_user.first_name %> <%= current_user.last_name %> (<%= current_user.company %>)!
+              Logged in as <strong><%= current_user.email %></strong>.<br>
+              <% if ((current_user.role? :admin) || (current_user.role? :developer)) %>
+                  <%=  link_to "Manage Applications", apps_path %> |
+              <% end %>
+              <% if current_user.role? :admin %>
+                  <%=  link_to "Manage Users", admin_users_path %> |
+              <% end %>
+              <%= link_to 'Edit profile', edit_user_registration_path %> |
+              <%= link_to "Logout", destroy_user_session_path, method: :get %>
+          <% else %>
+              <%= link_to "Sign up", new_user_registration_path %> |
+              <%= link_to "Login", new_user_session_path %>
+          <% end %>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="row">
+      <% flash.each do |key, message| %>
+          <div class="span16">
+            <div class="alert-message <%= key %>" data-alert><a class="close" href="#">×</a><p><%= message %></p></div>
+          </div>
+      <% end %>
+
+      <%= yield %>
+    </div>
+  </div>
+</section>
+
+
+</body>
+</html>

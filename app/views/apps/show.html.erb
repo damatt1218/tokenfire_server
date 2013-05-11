@@ -1,8 +1,67 @@
-<div class="span16">
-  <header class="page-header">
-    <h1>Application: <%= @application.name %></h1>
-  </header>
+<header class="page-header">
+  <h1><%= @application.name %> Details</h1>
+</header>
+
+<!-- KPIs  -->
+<div class="row-fluid">
+  <!-- KPI #1 -->
+  <div class="well span4">
+    <p class="lead">Downloads</p>
+    <h3>1,242,830</h3>
+    <!-- if daily change is negative, should be text-error -->
+    <h3 class="text-success">+24,405</h3>
+  </div>
+  <!-- /KPI #1 -->
+  <!-- KPI #2 -->
+  <div class="well span4">
+    <p class="lead">Daily Active Users</p>
+    <h3>32,400</h3>
+    <!-- if daily change is negative, should be text-error -->
+    <h3 class="text-success">+1,405</h3>
+  </div>
+  <!-- /KPI #2 -->
+  <!-- KPI #3 -->
+  <div class="well span4">
+    <p class="lead">Monthly Active Users</p>
+    <h3>32,400</h3>
+    <!-- if daily change is negative, should be text-error -->
+    <h3 class="text-success">+1,405</h3>
+  </div>
+  <!-- /KPI #3 -->
 </div>
+<!-- /KPIs  -->
+
+<!-- Graphs -->
+<div class="row-fluid">
+
+</div>
+<!-- /Graphs -->
+
+<!-- Session Analytics -->
+<div class="row-fluid">
+  <p>Average User Statistics</p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Average session time</th>
+        <th>Sessions per day</th>
+        <th>Sessions per month</th>
+        <th>Total playtime</th>
+        <th>Achievements completed</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>3:22</td>
+        <td>5</td>
+        <td>50</td>
+        <td>3:34:52</td>
+        <td>3/20</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- /Session Analytics -->
 
 <h1>
   Users: <%= @application.accounts.count %> &nbsp;&nbsp;
@@ -14,34 +73,35 @@
   <%= link_to 'View OAuth Attributes', oauth_application_path(@application), :class => "btn" %>
 </div>
 
-<h2>Achievements</h2>
-<div>
-  <table class="zebra-striped">
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Token value</th>
-      <th>Cost</th>
-      <th>Times achieved</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @application.achievements.each do |achievement| %>
-        <tr>
-          <td><%= link_to achievement.name, app_achievement_path(@application, achievement) %></td>
-          <td><%= achievement.description %></td>
-          <td><%= achievement.value %></td>
-          <td><%= achievement.cost %></td>
-          <td><%= achievement.achievement_history.count %></td>
-          <td><%= link_to 'Edit', edit_app_achievement_path(@application, achievement) %></td>
-        </tr>
-    <% end %>
-    </tbody>
-  </table>
+<div class="row-fluid">
+  <h2>Achievements</h2>
+
+  <%= link_to 'New Achievement', new_app_achievement_path(@application), :class => "btn primary" %>
 
   <div>
-    <%= link_to 'New Achievement', new_app_achievement_path(@application), :class => "btn primary" %>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Token value</th>
+          <th>Cost</th>
+          <th>Times achieved</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @application.achievements.each do |achievement| %>
+          <tr>
+            <td><%= link_to achievement.name, app_achievement_path(@application, achievement) %></td>
+            <td><%= achievement.description %></td>
+            <td><%= achievement.value %></td>
+            <td><%= achievement.cost %></td>
+            <td><%= achievement.achievement_history.count %></td>
+            <td><%= link_to 'Edit', edit_app_achievement_path(@application, achievement) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>
 
