@@ -1,80 +1,112 @@
 <header class="page-header">
   <h1>Overview</h1>
 </header>
+<% if @applications.count == 0 %>
+  <%= render 'apps/getting_started' %>
+<% else %>
+  <!-- KPI -->
+  <section>
+    <h4>Daily Statistics</h4>
+    <!-- KPI #1 -->
+    <div class="row-fluid">
+      <div class="well span12">
+      <div class="span4">
+        <div>
+          <i class="icon-download-alt icon-4x pull-left"></i>
+          <div>
+            <h4 class="media-heading">Downloads</h4>
+            <p class="lead">1,242,830</p>
+          </div>
+        </div>
+        <div>
+          Sparkline Graph
+        </div>
+      </div>
+      <!-- /KPI #1 -->
+      <!-- KPI #2 -->
+      <div class="span4">
+        <div>
+          <i class="icon-group icon-4x pull-left"></i>
+          <div>
+            <h4 class="media-heading">Daily Active Users</h4>
+            <p class="lead">32,400</p>
+          </div>
+          <div>
+            Sparkline Graph
+          </div>
+        </div>
+      </div>
+      <!-- /KPI #2 -->
+      <!-- KPI #3 -->
+      <div class="span4">
+        <div>
+          <i class="icon-money icon-4x pull-left"></i>
+          <div>
+            <h4 class="media-heading">Budget Remaining</h4>
+            <p class="lead">$3,200</p>
+          </div>
+          <div>
+            Sparkline Graph
+          </div>
+        </div>
+      <!-- /KPI #3 -->
+      </div>
+    </div>
+  </section>
+  <!-- /KPI -->
 
-<!-- KPI row -->
-<div class="row-fluid">
-  <!-- KPI #1 -->
-  <div class="well span4">
-    <p class="lead">Downloads</p>
-    <h3>1,242,830</h3>
-    <!-- if daily change is negative, should be text-error -->
-    <h3 class="text-success">+24,405</h3>
+  <!-- Graphs -->
+  <section class="row-fluid">
+    <h4>Graphs</h4>
+    <div>
+      <img src="http://placehold.it/900x300" alt="">
+    </div>
+  </section>
+  <!-- /Graphs -->
+  <!-- Applications -->
+  <section>
+  <h4>Applications</h4>
+  <div class="row-fluid">
+    <!--
+    <h1>
+      Apps: <%= @applications.count %> &nbsp;&nbsp;
+      Users: <%= @users %> &nbsp;&nbsp;
+      Usage: <%= @usageTime %> min.
+    </h1>
+    -->
+    <p>
+      <%= link_to 'Register New Application', new_oauth_application_path, :class => "btn btn-primary" %>
+      <%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn btn-primary" %>
+    </p>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Total Users</th>
+        <th>DAU</th>
+        <th>Avg. Sessions / day</th>
+        <th>Avg. Session Length</th>
+        <th>Total Usage Time (Minutes)</th>
+        <th>Analytics</th>
+        <th>App Key</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @applications.each do |application| %>
+          <tr id="application_<%= application.id %>">
+            <td><%= link_to application.name, app_path(application) %></td>
+            <td><%= application.accounts.count %></td>
+            <td>Insert DAU</td>
+            <td>Insert avg sessions</td>
+            <td>avg. session legnth</td>
+            <td><%= application.getTotalUsageTime %></td>
+            <td><%= link_to 'View Statistics', app_usage_path(application) %></td>
+            <td><%= link_to 'View Key', oauth_application_path(application) %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
   </div>
-  <!-- END KPI #1 -->
-  <!-- KPI #2 -->
-  <div class="well span4">
-    <p class="lead">Daily Active Users</p>
-    <h3>32,400</h3>
-    <!-- if daily change is negative, should be text-error -->
-    <h3 class="text-success">+1,405</h3>
-  </div>
-  <!-- END KPI #2 -->
-  <!-- KPI #3 -->
-  <div class="well span4">
-    <p class="lead">Something Else</p>
-    <h3>32,400</h3>
-    <!-- if daily change is negative, should be text-error -->
-    <h3 class="text-success">+1,405</h3>
-  </div>
-  <!-- END KPI #3 -->
-</div>
-
-<!-- Graphs -->
-<div class="row-fluid">
-
-</div>
-<!-- END Graphs -->
-
-<div class="row-fluid">
-  <header class="page-header">
-    <h3>Your Applications</h3>
-  </header>
-  <h1>
-    Apps: <%= @applications.count %> &nbsp;&nbsp;
-    Users: <%= @users %> &nbsp;&nbsp;
-    Usage: <%= @usageTime %> min.
-  </h1>
-  <p>
-    <%= link_to 'New Application', new_oauth_application_path, :class => "btn primary" %>
-    <%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn" %>
-  </p>
-  <table class="table table-bordered table-striped table-hover">
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th>Total Users</th>
-      <th>DAU</th>
-      <th>Avg. Sessions / day</th>
-      <th>Avg. Session Length</th>
-      <th>Total Usage Time (Minutes)</th>
-      <th>Analytics</th>
-      <th>App Key</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @applications.each do |application| %>
-        <tr id="application_<%= application.id %>">
-          <td><%= link_to application.name, app_path(application) %></td>
-          <td><%= application.accounts.count %></td>
-          <td>Insert DAU</td>
-          <td>Insert avg sessions</td>
-          <td>avg. session legnth</td>
-          <td><%= application.getTotalUsageTime %></td>
-          <td><%= link_to 'View Statistics', app_usage_path(application) %></td>
-          <td><%= link_to 'View Key', oauth_application_path(application) %></td>
-        </tr>
-    <% end %>
-    </tbody>
-  </table>
-</div>
+  </section>
+  <!-- /Applications -->
+<% end %>

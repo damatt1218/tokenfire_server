@@ -1,0 +1,45 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="brand" href="#">TokenFire</a>
+      <!-- nav-collapse -->
+      <div class="nav-collapse collapse">
+        <p class="navbar-text pull-right">
+          <% if current_user %>
+            Logged in as <%= current_user.username %> |
+            <%= link_to 'Edit profile', edit_user_registration_path %> |
+            <%= link_to "Logout", destroy_user_session_path, method: :get %>
+          <% else %>
+            <%= link_to "Sign up", new_user_registration_path %> |
+            <%= link_to "Login", new_user_session_path %>
+          <% end %>
+        </p>
+        <ul class="nav">
+          <li><%=  link_to "Dashboard", apps_path %></li>
+          <% if current_user and current_user.role? :admin %>
+            <li><%=  link_to "Users", admin_users_path %></li>
+          <% end %>
+          <li><a href="#documentation">Documentation</a></li>
+          <li>
+            <div class="btn-group">
+              <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
+                Select Application
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="#">App 1</a></li>
+                <li><a href="#">App 2</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <!--/.nav-collapse -->
+    </div>
+  </div>
+</nav>

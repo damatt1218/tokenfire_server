@@ -1,7 +1,6 @@
 module Admin
 
   class AdminController < ApplicationController
-    layout "admin"
     before_filter :verify_admin
 
     def current_ability

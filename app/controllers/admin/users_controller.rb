@@ -14,7 +14,7 @@ module Admin
     end
 
     # GET /users/1
-    # GET /users/1.json
+  # GET /users/1.json
     def show
       @user = User.find(params[:id])
 

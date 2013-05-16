@@ -3,7 +3,7 @@
     <h1><%= @application.name %> Achievements</h1>
   </header>
 </div>
-<table class="zebra-striped">
+<table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
     <th>Name</th>
@@ -28,3 +28,5 @@
 <div class="actions">
   <%= link_to 'New', new_app_achievement_path(@application), :class => "btn primary" %>
 </div>
+
+<%= link_to 'Back to Application', app_path(@application) %>

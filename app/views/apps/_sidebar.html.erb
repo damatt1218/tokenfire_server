@@ -1,0 +1,17 @@
+<div class="span3">
+  <div class="well sidebar-nav">
+    <ul class="nav nav-list">
+      <% if ((current_user.role? :admin) || (current_user.role? :developer)) %>
+      <li><%=  link_to "Overview", apps_path %></li>
+      <% end %>
+      <li class="nav-header">Applications</li>
+      <li><%= link_to 'Register New App', new_oauth_application_path %></li>
+      <% if @applications %>
+        <% @applications.each do |application| %>
+          <li><%= link_to application.name, app_path(application) %></li>
+        <% end %>
+      <% end %>
+
+    </ul>
+  </div>
+</div>
