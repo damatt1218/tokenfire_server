@@ -30,7 +30,9 @@
           <div>
             <h4 class="media-heading">Daily Active Users</h4>
             <p class="lead"><%= number_with_delimiter(@dau, :delimiter => ',')  %></p>
+            <!-- DAU Delta
             <h3 class="text-<%= @dau_delta < 0 ?  'error' : 'success' %>"><%= @formatted_dau_delta %></h3>
+            -->
           </div>
           <div>
             Sparkline Graph
@@ -110,3 +112,4 @@
   </div>
 </section>
 <!-- /Applications -->
+<% end %>
