@@ -4,5 +4,5 @@ class Device < ActiveRecord::Base
   #relationships
   belongs_to :user
   has_many :achievement_histories
-  has_many :app_session_histories
+  has_many :app_sessions
 end

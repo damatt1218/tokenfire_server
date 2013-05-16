@@ -6,22 +6,15 @@ class AppUsage < ActiveRecord::Base
   belongs_to :account
   belongs_to :app
 
-  has_many :app_session_histories
+  has_many :app_sessions
 
   def init
     self.usage_time ||= 0
   end
 
   def update_usage_from_sessions
-    history_seconds = app_session_histories.where('SessionDuration > 0').group(:session_id).maximum(:SessionDuration)
-
     previous_usage_time = self.usage_time
-    new_usage_time = 0
-
-    history_seconds.each { |minutes|
-      new_usage_time += minutes[1] / 60
-    }
-
+    new_usage_time = app_sessions.sum(:session_duration) / 60
 
     if previous_usage_time < new_usage_time
       self.usage_time = new_usage_time

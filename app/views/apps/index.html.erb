@@ -15,9 +15,9 @@
   <!-- KPI #2 -->
   <div class="well span4">
     <p class="lead">Daily Active Users</p>
-    <h3>32,400</h3>
+    <h3><%= number_with_delimiter(@dau, :delimiter => ',')  %></h3>
     <!-- if daily change is negative, should be text-error -->
-    <h3 class="text-success">+1,405</h3>
+    <h3 class="text-<%= @dau_delta < 0 ?  'error' : 'success' %>"><%= @formatted_dau_delta %></h3>
   </div>
   <!-- END KPI #2 -->
   <!-- KPI #3 -->
@@ -67,9 +67,9 @@
         <tr id="application_<%= application.id %>">
           <td><%= link_to application.name, app_path(application) %></td>
           <td><%= application.accounts.count %></td>
-          <td>Insert DAU</td>
-          <td>Insert avg sessions</td>
-          <td>avg. session legnth</td>
+          <td><%= application.getDailyActiveUsers(Date.today) %></td>
+          <td><%= application.getAverageSessionsPerDay %></td>
+          <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S')  %></td>
           <td><%= application.getTotalUsageTime %></td>
           <td><%= link_to 'View Statistics', app_usage_path(application) %></td>
           <td><%= link_to 'View Key', oauth_application_path(application) %></td>
