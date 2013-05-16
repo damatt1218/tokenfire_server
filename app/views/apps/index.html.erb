@@ -29,7 +29,8 @@
           <i class="icon-group icon-4x pull-left"></i>
           <div>
             <h4 class="media-heading">Daily Active Users</h4>
-            <p class="lead">32,400</p>
+            <p class="lead"><%= number_with_delimiter(@dau, :delimiter => ',')  %></p>
+            <h3 class="text-<%= @dau_delta < 0 ?  'error' : 'success' %>"><%= @formatted_dau_delta %></h3>
           </div>
           <div>
             Sparkline Graph
@@ -92,21 +93,20 @@
       </tr>
       </thead>
       <tbody>
-      <% @applications.each do |application| %>
-          <tr id="application_<%= application.id %>">
-            <td><%= link_to application.name, app_path(application) %></td>
-            <td><%= application.accounts.count %></td>
-            <td>Insert DAU</td>
-            <td>Insert avg sessions</td>
-            <td>avg. session legnth</td>
-            <td><%= application.getTotalUsageTime %></td>
-            <td><%= link_to 'View Statistics', app_usage_path(application) %></td>
-            <td><%= link_to 'View Key', oauth_application_path(application) %></td>
-          </tr>
-      <% end %>
+        <% @applications.each do |application| %>
+            <tr id="application_<%= application.id %>">
+              <td><%= link_to application.name, app_path(application) %></td>
+              <td><%= application.accounts.count %></td>
+              <td><%= application.getDailyActiveUsers(Date.today) %></td>
+              <td><%= application.getAverageSessionsPerDay %></td>
+              <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S')  %></td>
+              <td><%= application.getTotalUsageTime %></td>
+              <td><%= link_to 'View Statistics', app_usage_path(application) %></td>
+              <td><%= link_to 'View Key', oauth_application_path(application) %></td>
+            </tr>
+        <% end %>
       </tbody>
     </table>
   </div>
-  </section>
-  <!-- /Applications -->
-<% end %>
+</section>
+<!-- /Applications -->

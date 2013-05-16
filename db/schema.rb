@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130415040050) do
+ActiveRecord::Schema.define(:version => 20130516024643) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",    :default => 0.0
@@ -46,14 +46,23 @@ ActiveRecord::Schema.define(:version => 20130415040050) do
   end
 
   create_table "app_session_histories", :force => true do |t|
-    t.string   "session_id"
-    t.string   "sdkVersion"
-    t.datetime "eventTimeStamp"
-    t.integer  "SessionDuration"
+    t.string   "app_session_id"
+    t.datetime "event_timestamp"
+    t.integer  "reported_duration"
+    t.integer  "event_type"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  create_table "app_sessions", :force => true do |t|
+    t.string   "reported_session_id"
+    t.datetime "session_start"
+    t.integer  "session_duration"
+    t.string   "sdk_version"
     t.integer  "device_id"
     t.integer  "app_usage_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
   end
 
   create_table "app_usages", :force => true do |t|
