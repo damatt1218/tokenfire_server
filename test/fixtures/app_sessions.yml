@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  session_start: 2013-05-15 19:46:43
+  session_duration: 1
+
+two:
+  session_start: 2013-05-15 19:46:43
+  session_duration: 1
