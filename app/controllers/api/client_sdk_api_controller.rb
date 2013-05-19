@@ -112,7 +112,7 @@ require 'json'
     end
 
 
-    app_session.app_usage.update_usage_from_sessions
+    app.update_analytics
 
   end
 

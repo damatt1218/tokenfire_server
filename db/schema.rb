@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130516024643) do
+ActiveRecord::Schema.define(:version => 20130518213447) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",    :default => 0.0
@@ -43,6 +43,18 @@ ActiveRecord::Schema.define(:version => 20130516024643) do
     t.integer  "app_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+  end
+
+  create_table "app_daily_summaries", :force => true do |t|
+    t.integer  "app_id"
+    t.date     "summary_date"
+    t.integer  "dau_count"
+    t.integer  "session_count"
+    t.integer  "device_count"
+    t.integer  "total_duration"
+    t.integer  "average_duration"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
   create_table "app_session_histories", :force => true do |t|

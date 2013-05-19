@@ -15,20 +15,21 @@ class App < ActiveRecord::Base
   has_many :accounts, through: :app_usages
   has_many :app_sessions, through: :app_usages
   has_many :achievements
+  has_many :app_daily_summaries
   belongs_to :account
 
-  def   getDailyActiveUsers(dau_date)
+  def update_analytics
+      # force an update of todays rollup stats for this app
+      AppDailySummary.update_for_date(self, Date.today)
 
-    # looks weird,  but the times are entered in utc,  and this is the only
-    # way I can get the utc time of the dates we want to query
-    start_time = dau_date.to_time.to_datetime.beginning_of_day.utc
-    end_time = start_time + 1.days
+      self.app_usages.each do |app_usage|
+        app_usage.update_usage_from_sessions
+      end
+  end
 
-   filtered_usages = app_usages.where(:app_sessions => {:session_start => start_time..end_time})
-      .includes(:app_sessions)
-      .group(:account_id)
+  def getDailyActiveUsers(dau_date)
 
-    return filtered_usages.length
+    return app_daily_summaries.where(:summary_date => dau_date).length
   end
 
   def getAverageSessionsPerDay
@@ -44,7 +45,8 @@ class App < ActiveRecord::Base
   end
 
   def getAverageSessionLength
-    average_session_length = app_sessions.average(:session_duration).to_i
+   average_session_length = app_daily_summaries.average(:average_duration).to_i
+
 
     return average_session_length
   end
@@ -57,13 +59,8 @@ class App < ActiveRecord::Base
   end
 
   def getTotalUsageTime
-    total_time = 0
 
-    for app_usages in self.app_usages do
-      total_time += app_usages.usage_time
-    end
-
-    return total_time
+    return app_daily_summaries.sum(:total_duration)
   end
 
   def self.setDoorClient
