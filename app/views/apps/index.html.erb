@@ -1,6 +1,7 @@
 <header class="page-header">
   <h1>Overview</h1>
 </header>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 <% if @applications.count == 0 %>
   <%= render 'apps/getting_started' %>
 <% else %>
@@ -10,50 +11,65 @@
     <!-- KPI #1 -->
     <div class="row-fluid">
       <div class="well span12">
-      <div class="span4">
-        <div>
-          <i class="icon-download-alt icon-4x pull-left"></i>
-          <div>
-            <h4 class="media-heading">Downloads</h4>
-            <p class="lead">1,242,830</p>
+          <div class="span4">
+            <div>
+              <i class="icon-download-alt icon-4x pull-left"></i>
+              <div>
+                <h4 class="media-heading">Downloads</h4>
+                <p class="lead">1,242,830</p>
+              </div>
+            </div>
+            <div>
+              Sparkline Graph
+            </div>
+          </div>
+          <!-- /KPI #1 -->
+          <!-- KPI #2 -->
+          <div class="span4">
+            <div>
+              <i class="icon-group icon-4x pull-left"></i>
+              <div>
+                <h4 class="media-heading">Daily Active Users</h4>
+                <p class="lead"><%= number_with_delimiter(@dau, :delimiter => ',')  %></p>
+                <!-- DAU Delta
+                <h3 class="text-<%= @dau_delta < 0 ?  'error' : 'success' %>"><%= @formatted_dau_delta %></h3>
+                -->
+              </div>
+              <div id="dau_graph">
+              </div>
+              <script type="text/javascript">
+                  d3.json("<%=request.url %>/dau_data.json", function(json) {
+                      var h = 16,
+                      w = json.length * 2;
+                      var svg = d3.select("dau_graph")
+                      .append("svg:svg")
+                      .attr("height", h)
+                      .attr("width", w);
+
+                      var node = svg.selectAll("g.tick")
+                      .data(json)
+                      .enter().append("svg:g")
+                      .attr("class", "tick");
+                  });
+              </script>
+            </div>
+          </div>
+          <!-- /KPI #2 -->
+          <!-- KPI #3 -->
+          <div class="span4">
+            <div>
+              <i class="icon-money icon-4x pull-left"></i>
+              <div>
+                <h4 class="media-heading">Budget Remaining</h4>
+                <p class="lead">$3,200</p>
+              </div>
+              <div>
+                Sparkline Graph
+              </div>
+            </div>
+          <!-- /KPI #3 -->
           </div>
         </div>
-        <div>
-          Sparkline Graph
-        </div>
-      </div>
-      <!-- /KPI #1 -->
-      <!-- KPI #2 -->
-      <div class="span4">
-        <div>
-          <i class="icon-group icon-4x pull-left"></i>
-          <div>
-            <h4 class="media-heading">Daily Active Users</h4>
-            <p class="lead"><%= number_with_delimiter(@dau, :delimiter => ',')  %></p>
-            <!-- DAU Delta
-            <h3 class="text-<%= @dau_delta < 0 ?  'error' : 'success' %>"><%= @formatted_dau_delta %></h3>
-            -->
-          </div>
-          <div>
-            Sparkline Graph
-          </div>
-        </div>
-      </div>
-      <!-- /KPI #2 -->
-      <!-- KPI #3 -->
-      <div class="span4">
-        <div>
-          <i class="icon-money icon-4x pull-left"></i>
-          <div>
-            <h4 class="media-heading">Budget Remaining</h4>
-            <p class="lead">$3,200</p>
-          </div>
-          <div>
-            Sparkline Graph
-          </div>
-        </div>
-      <!-- /KPI #3 -->
-      </div>
     </div>
   </section>
   <!-- /KPI -->
@@ -79,7 +95,7 @@
     -->
     <p>
       <%= link_to 'Register New Application', new_oauth_application_path, :class => "btn btn-primary" %>
-      <%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn btn-primary" %>
+      <!--<%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn btn-primary" %> //-->
     </p>
     <table class="table table-bordered table-striped table-hover">
       <thead>

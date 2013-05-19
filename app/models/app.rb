@@ -22,9 +22,7 @@ class App < ActiveRecord::Base
       # force an update of todays rollup stats for this app
       AppDailySummary.update_for_date(self, Date.today)
 
-      self.app_usages.each do |app_usage|
-        app_usage.update_usage_from_sessions
-      end
+      self.app_usages.each { |app_usage| app_usage.update_usage_from_sessions }
   end
 
   def getDailyActiveUsers(dau_date)
