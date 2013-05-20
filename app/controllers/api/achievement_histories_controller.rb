@@ -111,7 +111,7 @@ module Api
           # ignored
         end
 
-        has_achievement = achievement_history.nil?
+        has_achievement = !achievement_history.nil?
 
         user_achievement_info = UserAchievementInfo.new
         user_achievement_info.populate(achievement, has_achievement)
