@@ -1,59 +1,43 @@
-<header class="page-header">
-  <h1>Overview</h1>
-</header>
 <% if @applications.count == 0 %>
   <%= render 'apps/getting_started' %>
 <% else %>
+  <header class="page-header">
+    <h1>Overview</h1>
+  </header>
   <!-- KPI -->
   <section>
     <h4>Daily Statistics</h4>
     <!-- KPI #1 -->
     <div class="row-fluid">
-      <div class="well span12">
-      <div class="span4">
+      <div class="span4 well">
+        <i class="icon-download-alt icon-4x pull-left"></i>
         <div>
-          <i class="icon-download-alt icon-4x pull-left"></i>
-          <div>
-            <h4 class="media-heading">Downloads</h4>
-            <p class="lead">1,242,830</p>
-          </div>
-        </div>
-        <div>
-          Sparkline Graph
+          <h4 class="media-heading">Downloads</h4>
+          <p class="lead">1,242,830</p>
         </div>
       </div>
       <!-- /KPI #1 -->
       <!-- KPI #2 -->
-      <div class="span4">
+      <div class="span4 well">
         <div>
           <i class="icon-group icon-4x pull-left"></i>
-          <div>
-            <h4 class="media-heading">Daily Active Users</h4>
-            <p class="lead"><%= number_with_delimiter(@dau, :delimiter => ',')  %></p>
-            <!-- DAU Delta
-            <h3 class="text-<%= @dau_delta < 0 ?  'error' : 'success' %>"><%= @formatted_dau_delta %></h3>
-            -->
-          </div>
-          <div>
-            Sparkline Graph
-          </div>
+          <h4 class="media-heading">Daily Active Users</h4>
+          <p class="lead"><%= number_with_delimiter(@dau, :delimiter => ',')  %></p>
+          <!-- DAU Delta
+          <h3 class="text-<%= @dau_delta < 0 ?  'error' : 'success' %>"><%= @formatted_dau_delta %></h3>
+          -->
         </div>
       </div>
       <!-- /KPI #2 -->
       <!-- KPI #3 -->
-      <div class="span4">
+      <div class="span4 well">
+        <i class="icon-money icon-4x pull-left"></i>
         <div>
-          <i class="icon-money icon-4x pull-left"></i>
-          <div>
-            <h4 class="media-heading">Budget Remaining</h4>
-            <p class="lead">$3,200</p>
-          </div>
-          <div>
-            Sparkline Graph
-          </div>
+          <h4 class="media-heading">Budget Remaining</h4>
+          <p class="lead">$3,200</p>
         </div>
-      <!-- /KPI #3 -->
       </div>
+      <!-- /KPI #3 -->
     </div>
   </section>
   <!-- /KPI -->
@@ -62,54 +46,47 @@
   <section class="row-fluid">
     <h4>Graphs</h4>
     <div>
-      <img src="http://placehold.it/900x300" alt="">
+      <img src="http://placehold.it/1200x300" alt="">
     </div>
   </section>
   <!-- /Graphs -->
   <!-- Applications -->
   <section>
-  <h4>Applications</h4>
-  <div class="row-fluid">
-    <!--
-    <h1>
-      Apps: <%= @applications.count %> &nbsp;&nbsp;
-      Users: <%= @users %> &nbsp;&nbsp;
-      Usage: <%= @usageTime %> min.
-    </h1>
-    -->
-    <p>
-      <%= link_to 'Register New Application', new_oauth_application_path, :class => "btn btn-primary" %>
-      <%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn btn-primary" %>
-    </p>
-    <table class="table table-bordered table-striped table-hover">
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>Total Users</th>
-        <th>DAU</th>
-        <th>Avg. Sessions / day</th>
-        <th>Avg. Session Length</th>
-        <th>Total Usage Time (Minutes)</th>
-        <th>Analytics</th>
-        <th>App Key</th>
-      </tr>
-      </thead>
-      <tbody>
-        <% @applications.each do |application| %>
-            <tr id="application_<%= application.id %>">
-              <td><%= link_to application.name, app_path(application) %></td>
-              <td><%= application.accounts.count %></td>
-              <td><%= application.getDailyActiveUsers(Date.today) %></td>
-              <td><%= application.getAverageSessionsPerDay %></td>
-              <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S')  %></td>
-              <td><%= application.getTotalUsageTime %></td>
-              <td><%= link_to 'View Statistics', app_usage_path(application) %></td>
-              <td><%= link_to 'View Key', oauth_application_path(application) %></td>
-            </tr>
+    <h4>Applications</h4>
+    <div class="row-fluid">
+      <p>
+        <%= link_to 'Register New Application', new_oauth_application_path, :class => "btn btn-primary" %>
+        <% if current_user.role? :admin %>
+          <%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn btn-primary" %>
         <% end %>
-      </tbody>
-    </table>
-  </div>
-</section>
+      </p>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Total Users</th>
+          <th>DAU</th>
+          <th>Avg. Sessions / day</th>
+          <th>Avg. Session Length</th>
+          <th>Analytics</th>
+          <th>App Key</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% @applications.each do |application| %>
+              <tr id="application_<%= application.id %>">
+                <td><%= application.name %></td>
+                <td><%= application.accounts.count %></td>
+                <td><%= application.getDailyActiveUsers(Date.today) %></td>
+                <td><%= application.getAverageSessionsPerDay %></td>
+                <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
+                <td><%= link_to 'View Statistics', app_path(application) %></td>
+                <td><%= link_to 'View Key', oauth_application_path(application) %></td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </section>
 <!-- /Applications -->
 <% end %>

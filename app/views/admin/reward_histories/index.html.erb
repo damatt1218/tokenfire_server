@@ -1,8 +1,8 @@
-<div class="span16">
 <header class="page-header">
-  <h2>Pending Rewards</h2>
+  <h1>Pending Rewards</h1>
 </header>
-<table class="zebra-striped">
+<div class="row-fluid">
+<table class="table table-bordered">
   <thead>
   <tr>
     <th>ID</th>
@@ -21,6 +21,7 @@
         <td><%= reward_history.created_at %></td>
         <td>
           <%= link_to "Process", edit_admin_reward_history_path(reward_history) %>
+          REJECT
         </td>
       </tr>
   <% end -%>

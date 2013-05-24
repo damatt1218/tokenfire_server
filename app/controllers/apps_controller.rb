@@ -5,7 +5,11 @@ class AppsController < ApplicationController
   # user and a summary of statistics
   #  /apps
   def index
-    @applications = App.find_all_by_account_id(current_user.account.id)
+    if current_user.role? :admin
+      @applications = App.all
+    else
+      @applications = App.find_all_by_account_id(current_user.account.id)
+    end
 
     # This should be pre-calculate when we start to get a real amount of data
     @users = 0
@@ -29,11 +33,14 @@ class AppsController < ApplicationController
   #  /apps/<id>
   def show
     @application = App.find(params[:id])
-    if(@application.account.id != current_user.account.id)
-      redirect_to '/'
+    @dau = @application.getDailyActiveUsers(Date.today)
+
+    unless current_user.role? :admin
+      if(@application.account.id != current_user.account.id)
+        redirect_to '/'
+      end
     end
   end
-
 
   def format_delta(delta_number)
     result = number_with_delimiter(delta_number, :delimiter => ',')

@@ -1,9 +1,47 @@
+html, body {
+  height: 100%;
+}
+
 body {
-    padding-top: 60px;
+  background-image: url(bg-tile.png);
+}
+
+#main {
+  padding-top: 60px;
+}
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -4em;
+}
+
+.push, footer {
+  height: 4em;
+}
+
+footer {
+  text-align: center;
+  background-color: white;
+  border-top: 1px solid rgba(0, 0, 0, 0.175);
 }
 
 h3 {
   margin: 0px;
   padding: 0px;
   line-height: 30px;
+}
+
+.page-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+}
+
+.table tr,
+.table td {
+  background-color: white;
+}
+
+.well {
+  background-color: white;
 }

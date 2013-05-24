@@ -9,7 +9,7 @@
   <%= stylesheet_link_tag "bootstrap" %>
   <%= stylesheet_link_tag "custom" %>
   <%= stylesheet_link_tag "bootstrap-responsive" %>
-  <%= javascript_include_tag "bootstrap" %>
+  <%= javascript_include_tag "application" %>
 
   <!-- Font Awesome -->
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.min.css" rel="stylesheet">
@@ -19,15 +19,17 @@
   <!-- navbar -->
   <%= render 'layouts/navbar' %>
   <!-- /navbar -->
-  <div class="container">
-    <div class="row">
-      <!-- Content -->
-      <div>
-        <%= render 'shared/errors' %>
-        <%= yield %>
-      </div>
-      <!-- /Content -->
+  <div class="wrapper">
+    <div id="main" class="container">
+    <!-- Content -->
+      <%= render 'shared/errors' %>
+      <%= yield %>
+    <!-- /Content -->
     </div>
+    <div class="push"></div>
   </div>
+  <!-- footer -->
+  <%= render 'layouts/footer' %>
+  <!-- /footer -->
 </body>
 </html>
