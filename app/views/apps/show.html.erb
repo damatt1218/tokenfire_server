@@ -62,15 +62,17 @@
   <table class="table table-bordered">
     <thead>
     <tr>
-      <th>Sessions per day</th>
-      <th>Sessions per month</th>
-      <th>Session time</th>
+      <th>Total Users</th>
+      <th>Avg. Sessions per day</th>
+      <th>Avg. Sessions per month</th>
+      <th>Avg. Session time</th>
       <th>Total playtime</th>
       <th>Total Achievements</th>
     </tr>
     </thead>
     <tbody>
     <tr>
+      <td><%= @application.accounts.length %></td>
       <td><%= @application.getAverageSessionsPerDay %></td>
       <td><%= @application.getAverageSessionsPerDay %></td>
       <td><%= Time.at(@application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
