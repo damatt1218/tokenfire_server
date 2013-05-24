@@ -7,6 +7,8 @@ class AppUsage < ActiveRecord::Base
   belongs_to :app
 
   has_many :app_sessions
+  has_many :devices, through: :app_sessions
+
 
   def init
     self.usage_time ||= 0

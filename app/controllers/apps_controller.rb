@@ -42,6 +42,16 @@ class AppsController < ApplicationController
     end
   end
 
+
+  # Provides Daily Action Users JSON for all applications to be displayed as a chart
+  # using a client side charting framework
+  def dau_data
+
+  end
+
+  private
+
+  # Helper function to format delta numbers with +/- and commas
   def format_delta(delta_number)
     result = number_with_delimiter(delta_number, :delimiter => ',')
 
