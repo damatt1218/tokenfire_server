@@ -49,6 +49,18 @@ class App < ActiveRecord::Base
     return average_session_length
   end
 
+  def getAverageSessionsPerMonth
+
+    months_app_active = (Time.zone.now - created_at).to_i / 1.month
+
+    # count the current Month
+    months_app_active += 1
+
+    average_sessions = getTotalSessionCount / months_app_active
+
+    return average_sessions
+  end
+
   def getTotalSessionCount
 
     total_sessions = app_sessions.count

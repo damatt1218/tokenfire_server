@@ -56,6 +56,31 @@
 
 </div>
 <!-- /Graphs -->
+<!-- Session Analytics -->
+<div class="row-fluid">
+  <h4>Application Statistics</h4>
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>Sessions per day</th>
+      <th>Sessions per month</th>
+      <th>Session time</th>
+      <th>Total playtime</th>
+      <th>Total Achievements</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><%= @application.getAverageSessionsPerDay %></td>
+      <td><%= @application.getAverageSessionsPerDay %></td>
+      <td><%= Time.at(@application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
+      <td><%= Time.at(@application.getTotalUsageTime).gmtime.strftime('%R:%S') %></td>
+      <td>3/20 fake</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<!-- /Session Analytics -->
 
 <!-- Session Analytics -->
 <div class="row-fluid">
@@ -72,10 +97,10 @@
     </thead>
     <tbody>
       <tr>
-        <td><%= @application.getAverageSessionsPerDay %></td>
-        <td>5 fake</td>
-        <td><%= Time.at(@application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
-        <td>insert total playtime</td>
+        <td><%= @application.getAverageSessionsPerDay / @application.accounts.length %></td>
+        <td><%= @application.getAverageSessionsPerDay / @application.accounts.length %></td>
+        <td><%= Time.at(@application.getAverageSessionLength / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
+        <td><%= Time.at(@application.getTotalUsageTime / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
         <td>3/20 fake</td>
       </tr>
     </tbody>

@@ -46,6 +46,7 @@ class AppsController < ApplicationController
   # Provides Daily Action Users JSON for all applications to be displayed as a chart
   # using a client side charting framework
   def dau_data
+    render :status => 200, :json => 'test:1'
 
   end
 
