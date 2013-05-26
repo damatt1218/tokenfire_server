@@ -58,7 +58,20 @@ class AppsController < ApplicationController
       .group([:summary_date])
       .count(:dau_count)
 
-    render :status => 200, :json => result
+
+    # annoying,  but an OrderedHash doesn't show up as an object array in json,
+    # so we have to convert it.
+    result_array = Array.new
+
+    result.each do |key|
+      internal_hash = Hash.new
+      internal_hash['date'] = key[0]
+      internal_hash['user_count'] = key[1]
+      result_array.push(internal_hash)
+    end
+
+
+    render :status => 200, :json => result_array
 
   end
 

@@ -102,34 +102,77 @@
 
             $('#graphCarousel').carousel('cycle');
 
-            var ajaxDataRenderer = function(url, plot, options) {
-                var ret = null ;
-                $.ajax({
-                    // have to use synchronous here, else the function
-                    // will return before the data is fetched
-                    async: false,
-                    url: url,
-                    dataType:"json",
-                    success: function(data) {
-                        ret = data;
-                    }
+            d3.json('<%= url_for :controller => 'apps', :action => 'dau_data' %>', function(error, json_data) {
+
+                if (error) return console.warn(error);
+
+                var parseDate = d3.time.format("%Y-%m-%d").parse;
+
+                json_data.forEach(function(d) {
+                    d.date = parseDate(d.date);
+                    d.user_count = +d.user_count;
+                });
+
+                var graph_div = $('#dauGraph')
+
+                 var margin = {top: 10, right: 30, bottom: 70, left: 30},
+                        width = graph_div.width() - margin.left - margin.right,
+                        height = graph_div.height()- margin.top - margin.bottom;
 
 
-                }).responseText;
-                return ret;
-            };
+
+                var x = d3.time.scale()
+                        .range([0, width]);
+
+                var y = d3.scale.linear()
+                        .range([height, 0]);
+
+                var xAxis = d3.svg.axis()
+                        .scale(x)
+                        .orient("bottom");
+
+                var yAxis = d3.svg.axis()
+                        .scale(y)
+                        .orient("left");
+
+                var line = d3.svg.line()
+                        .x(function(d) { return x(d.date); })
+                        .y(function(d) { return y(d.user_count); });
+
+                var svg = d3.select("#dauGraph").append("svg")
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("height", height + margin.top + margin.bottom)
+                        .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
-            var dau_url = '<%= url_for(:only_path => false)%>/dau_data';
 
-            var plot1 = $.jqplot('dauGraph', dau_url, {
-                dataRenderer: ajaxDataRenderer,
-                dataRendererOptions: {
-                    unusedOptionalUrl: dau_url
-                },
-                axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer}},
-                series:[{lineWidth:4, markerOptions:{style:'square'}}]
-            });
+
+                    x.domain(d3.extent(json_data, function(d) { return d.date; }));
+                    y.domain(d3.extent(json_data, function(d) { return d.user_count; }));
+
+                    svg.append("g")
+                            .attr("class", "x axis")
+                            .attr("transform", "translate(0," + height + ")")
+                            .call(xAxis);
+
+                    svg.append("g")
+                            .attr("class", "y axis")
+                            .call(yAxis)
+                            .append("text")
+                            .attr("transform", "rotate(-90)")
+                            .attr("y", 6)
+                            .attr("dy", ".71em")
+                            .style("text-anchor", "end")
+                            .text("Users");
+
+                    svg.append("path")
+                            .datum(json_data)
+                            .attr("class", "line")
+                            .attr("d", line);
+                });
+
+
         });
     </script>
   <!-- /Graphs -->
