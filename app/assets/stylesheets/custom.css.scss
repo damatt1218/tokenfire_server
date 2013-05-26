@@ -45,3 +45,20 @@ h3 {
 .well {
   background-color: white;
 }
+
+.carousel-caption {
+  margin: 0;
+  line-height: 1.25;
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0,0,0,.4);
+}
+
+
+.bigGraph {
+  width: 1168px;
+  height: 290px;
+
+  overflow:hidden;
+  display:block;
+  border:1px solid lightgray;
+}

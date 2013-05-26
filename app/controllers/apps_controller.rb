@@ -46,7 +46,19 @@ class AppsController < ApplicationController
   # Provides Daily Action Users JSON for all applications to be displayed as a chart
   # using a client side charting framework
   def dau_data
-    render :status => 200, :json => 'test:1'
+
+    if current_user.role? :admin
+      applications = App.all
+    else
+      applications = App.find_all_by_account_id(current_user.account.id)
+    end
+
+    result = AppDailySummary.select([:summary_date])
+      .where(:app_id => applications)
+      .group([:summary_date])
+      .count(:dau_count)
+
+    render :status => 200, :json => result
 
   end
 

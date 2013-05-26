@@ -9,12 +9,12 @@ MobileRewardz::Application.routes.draw do
     controllers :applications => 'apps/custom_applications'
   end
 
-
+  match 'apps/dau_data', :to => 'apps#dau_data', :via => :get
   resources :apps do
     resources :achievements
     resource :usage
 
-    match 'dau_data', :to => 'apps#dau_data', :via => :get
+
   end
 
   scope :module => "oauth" do

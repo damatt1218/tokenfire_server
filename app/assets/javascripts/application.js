@@ -12,5 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jqplot
+//= require jqplot/plugins/dateAxisRenderer
 //= require_tree .
-//= require d3
+

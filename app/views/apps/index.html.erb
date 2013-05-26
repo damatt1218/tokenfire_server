@@ -45,12 +45,93 @@
   <!-- /KPI -->
 
   <!-- Graphs -->
-  <section class="row-fluid">
-    <h4>Graphs</h4>
-    <div>
-      <img src="http://placehold.it/1200x300" alt="">
-    </div>
+    <section class="row-fluid">
+      <h4>Graphs</h4>
+    <!-- carousel -->
+    <div id="graphCarousel" class="carousel slide">
+      <div class="carousel-inner">
+        <div class="item active">
+          <div id="dauGraph" class="bigGraph"></div>
+          <div class="carousel-caption">
+            DAU per day
+          </div>
+        </div>
+        <div class="item">
+          <img src="http://placehold.it/1200x300" alt="Graph 2">
+          <div class="carousel-caption">
+            Graph 2
+          </div>
+        </div>
+        <div class="item">
+          <img src="http://placehold.it/1200x300" alt="Graph 3">
+          <div class="carousel-caption">
+            Graph 3
+          </div>
+        </div>
+        <div class="item">
+          <img src="http://placehold.it/1200x300" alt="Graph 4">
+          <div class="carousel-caption">
+            Graph 4
+          </div>
+        </div>
+        <div class="item">
+          <img src="http://placehold.it/1200x300" alt="Graph 5">
+          <div class="carousel-caption">
+            Graph 5
+          </div>
+        </div>
+        <div class="item">
+          <img src="http://placehold.it/1200x300" alt="Graph 6">
+          <div class="carousel-caption">
+            Graph 6
+          </div>
+        </div>
+      </div>
+      <!-- Carousel nav -->
+      <a class="carousel-control left" href="#graphCarousel" data-slide="prev">‹</a>
+      <a class="carousel-control right" href="#graphCarousel" data-slide="next">›</a>
+    </div><!-- /.carousel -->
+
   </section>
+    <script type="text/javascript">
+      // set up the carousel and make automatically cycle through the graphs
+        $(document).ready(function () {
+            $('#graphCarousel').carousel({
+                interval: 5000
+            });
+
+            $('#graphCarousel').carousel('cycle');
+
+            var ajaxDataRenderer = function(url, plot, options) {
+                var ret = null ;
+                $.ajax({
+                    // have to use synchronous here, else the function
+                    // will return before the data is fetched
+                    async: false,
+                    url: url,
+                    dataType:"json",
+                    success: function(data) {
+                        ret = data;
+                    }
+
+
+                }).responseText;
+                return ret;
+            };
+
+
+            var dau_url = '<%= url_for(:only_path => false)%>/dau_data';
+
+            var plot1 = $.jqplot('dauGraph', dau_url, {
+                dataRenderer: ajaxDataRenderer,
+                dataRendererOptions: {
+                    unusedOptionalUrl: dau_url
+                },
+                axes:{xaxis:{renderer:$.jqplot.DateAxisRenderer}},
+                series:[{lineWidth:4, markerOptions:{style:'square'}}]
+            });
+        });
+    </script>
   <!-- /Graphs -->
 
   <!-- Applications -->

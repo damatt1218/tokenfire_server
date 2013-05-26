@@ -33,7 +33,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
-gem "d3-rails"
+gem 'jqplot-rails'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
