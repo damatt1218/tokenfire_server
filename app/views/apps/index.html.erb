@@ -113,6 +113,8 @@
                     d.user_count = +d.user_count;
                 });
 
+                json_data.sort(function(a,b) {return b.date - a.date;});
+
                 var graph_div = $('#dauGraph')
 
                  var margin = {top: 10, right: 30, bottom: 70, left: 30},
@@ -133,7 +135,6 @@
 
                 var xAxis = d3.svg.axis()
                         .scale(x)
-                        .ticks(d3.time.days, 1)
                         .orient("bottom");
 
                 var yAxis = d3.svg.axis()
@@ -141,6 +142,7 @@
                         .orient("left");
 
                 var line = d3.svg.line()
+                        .interpolate('monotone')
                         .x(function(d) {
                             console.log('Plotting X value for data point: ' + d.date + '.');
 
