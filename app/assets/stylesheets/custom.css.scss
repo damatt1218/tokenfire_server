@@ -62,3 +62,19 @@ h3 {
   display:block;
   border:1px solid lightgray;
 }
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2;
+
+}

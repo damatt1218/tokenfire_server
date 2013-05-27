@@ -56,7 +56,7 @@ class AppsController < ApplicationController
     result = AppDailySummary.select([:summary_date])
       .where(:app_id => applications)
       .group([:summary_date])
-      .count(:dau_count)
+      .sum(:dau_count)
 
 
     # annoying,  but an OrderedHash doesn't show up as an object array in json,
@@ -65,7 +65,7 @@ class AppsController < ApplicationController
 
     result.each do |key|
       internal_hash = Hash.new
-      internal_hash['date'] = key[0]
+      internal_hash['report_date'] = key[0]
       internal_hash['user_count'] = key[1]
       result_array.push(internal_hash)
     end

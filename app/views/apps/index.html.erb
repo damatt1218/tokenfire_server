@@ -109,7 +109,7 @@
                 var parseDate = d3.time.format("%Y-%m-%d").parse;
 
                 json_data.forEach(function(d) {
-                    d.date = parseDate(d.date);
+                    d.date = parseDate(d.report_date);
                     d.user_count = +d.user_count;
                 });
 
@@ -120,15 +120,20 @@
                         height = graph_div.height()- margin.top - margin.bottom;
 
 
+                var max_user_count =    d3.max(json_data, function(d) { return d.user_count; });
+
 
                 var x = d3.time.scale()
+                        .domain(d3.extent(json_data, function(d) { return d.date; }))
                         .range([0, width]);
 
                 var y = d3.scale.linear()
+                        .domain([0, max_user_count * 2])
                         .range([height, 0]);
 
                 var xAxis = d3.svg.axis()
                         .scale(x)
+                        .ticks(d3.time.days, 1)
                         .orient("bottom");
 
                 var yAxis = d3.svg.axis()
@@ -136,20 +141,22 @@
                         .orient("left");
 
                 var line = d3.svg.line()
-                        .x(function(d) { return x(d.date); })
-                        .y(function(d) { return y(d.user_count); });
+                        .x(function(d) {
+                            console.log('Plotting X value for data point: ' + d.date + '.');
+
+                            return x(d.date);
+                        })
+                        .y(function(d) {
+
+                            console.log('Plotting Y value for data point: ' + d.user_count + '.');
+                            return y(d.user_count);
+                        });
 
                 var svg = d3.select("#dauGraph").append("svg")
                         .attr("width", width + margin.left + margin.right)
                         .attr("height", height + margin.top + margin.bottom)
                         .append("g")
                         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-
-
-                    x.domain(d3.extent(json_data, function(d) { return d.date; }));
-                    y.domain(d3.extent(json_data, function(d) { return d.user_count; }));
 
                     svg.append("g")
                             .attr("class", "x axis")
