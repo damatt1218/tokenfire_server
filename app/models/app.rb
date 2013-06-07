@@ -10,6 +10,7 @@ class App < ActiveRecord::Base
   attr_accessible :description, :image, :name, :rating
 
   # relationships
+  has_many :downloads
   has_many :app_usages
 
   has_many :accounts, through: :app_usages

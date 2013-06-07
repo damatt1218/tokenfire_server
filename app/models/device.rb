@@ -5,4 +5,5 @@ class Device < ActiveRecord::Base
   belongs_to :user
   has_many :achievement_histories
   has_many :app_sessions
+  has_many :downloads
 end

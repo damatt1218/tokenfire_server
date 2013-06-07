@@ -41,6 +41,7 @@ MobileRewardz::Application.routes.draw do
     match 'apps/featured_apps', :to => 'apps#featured_apps'
     match 'achievements/report', :to => 'achievement_histories#report', :via => :post
     match 'achievements/status', :to => 'achievement_histories#status', :via => :get
+    match 'downloads/initial_app_launch', :to => 'downloads#initial_app_launch'
 
     resources :tokens, :only => [:create, :destroy]
     resources :rewards, :only => [:index, :show, :create, :update]
