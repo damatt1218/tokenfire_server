@@ -17,7 +17,7 @@ gem 'gcm_on_rails'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'pg'
-gem 'sqlite3'
+# gem 'sqlite3'
 
 
 # Gems used only for assets and not required
