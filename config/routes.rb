@@ -1,5 +1,11 @@
 MobileRewardz::Application.routes.draw do
 
+  get 'support/home'
+  get 'support/about_us'
+  get 'support/api_setup'
+  get 'support/contact_us'
+  get 'support/dev_terms'
+
   use_doorkeeper
 
   resources :device_metrics_histories
