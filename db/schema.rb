@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130518213447) do
+ActiveRecord::Schema.define(:version => 20130701173321) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",    :default => 0.0
@@ -58,12 +58,14 @@ ActiveRecord::Schema.define(:version => 20130518213447) do
   end
 
   create_table "app_session_histories", :force => true do |t|
-    t.string   "app_session_id"
-    t.datetime "event_timestamp"
-    t.integer  "reported_duration"
-    t.integer  "event_type"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.string   "session_id"
+    t.string   "sdkVersion"
+    t.datetime "eventTimeStamp"
+    t.integer  "SessionDuration"
+    t.integer  "device_id"
+    t.integer  "app_usage_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   create_table "app_sessions", :force => true do |t|
@@ -81,9 +83,8 @@ ActiveRecord::Schema.define(:version => 20130518213447) do
     t.integer  "account_id"
     t.integer  "app_id"
     t.integer  "usage_time"
-    t.integer  "last_deducted_session_id"
-    t.datetime "created_at",               :null => false
-    t.datetime "updated_at",               :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   add_index "app_usages", ["account_id", "app_id"], :name => "index_app_usages_on_account_id_and_app_id"
@@ -129,6 +130,17 @@ ActiveRecord::Schema.define(:version => 20130518213447) do
 
   add_index "devices", ["user_id"], :name => "index_devices_on_user_id"
   add_index "devices", ["uuid"], :name => "index_devices_on_uuid", :unique => true
+
+  create_table "downloads", :force => true do |t|
+    t.integer  "device_id"
+    t.integer  "app_id"
+    t.boolean  "pending"
+    t.datetime "link_click_time"
+    t.datetime "initial_launch_time"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.integer  "app_download_id"
+  end
 
   create_table "gcm_devices", :force => true do |t|
     t.string   "registration_id",    :null => false
@@ -179,6 +191,15 @@ ActiveRecord::Schema.define(:version => 20130518213447) do
   add_index "oauth_access_tokens", ["refresh_token"], :name => "index_oauth_access_tokens_on_refresh_token", :unique => true
   add_index "oauth_access_tokens", ["resource_owner_id"], :name => "index_oauth_access_tokens_on_resource_owner_id"
   add_index "oauth_access_tokens", ["token"], :name => "index_oauth_access_tokens_on_token", :unique => true
+
+  create_table "offer_histories", :force => true do |t|
+    t.integer  "transaction_id"
+    t.string   "company"
+    t.integer  "amount"
+    t.integer  "device_id"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
 
   create_table "reward_histories", :force => true do |t|
     t.integer  "account_id"

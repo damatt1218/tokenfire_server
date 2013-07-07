@@ -30,6 +30,14 @@ sandbox_app.uid = '6533f4c7beb3e2054984092401674aa2ea198d291c2e9e642c652209fe1cd
 sandbox_app.secret = 'b6df5911a6548a762623812910673749e39dcfecddc9afad2e00557ac0de186a'
 sandbox_app.save
 
+# Option to initialize db with a fake reward
+if false
+  reward = Reward.find_or_create_by_name!('Test Reward')
+  reward.cost = 100
+  reward.description = "This is where the reward description goes"
+  reward.image = "http://placekitten.com/60/60"
+  reward.save
+end
 
 # Optionally seed the database with fake session data to drive reports
 if false

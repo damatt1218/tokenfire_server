@@ -2,7 +2,7 @@ module Api
 
   require 'json'
 
-  class DownloadsController
+  class DownloadsController  < ApplicationController
     # doorkeeper_for :all
     respond_to :json, :xml
 

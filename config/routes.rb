@@ -1,5 +1,7 @@
 MobileRewardz::Application.routes.draw do
 
+  use_doorkeeper
+
   resources :device_metrics_histories
 
   resources :app_session_histories
@@ -36,7 +38,10 @@ MobileRewardz::Application.routes.draw do
     match 'client_api/post_session_history', :to => 'client_sdk_api#post_session_history'
     match 'app_usages/increment_time', :to => 'app_usages#incrementTimeSpent'
     match 'app_usages/get_usage', :to => 'app_usages#getUsageTime'
+    match 'accounts/adColony_Video_Complete', :to => 'accounts#adcolonyVideoComplete'
     match 'accounts/get_profile', :to => 'accounts#getProfile'
+    match 'accounts/get_histories', :to => 'accounts#getHistories'
+    match 'accounts/tapjoy_offer_complete', :to => 'accounts#tapjoyOfferComplete'
     match 'rewards/featured_rewards', :to => 'rewards#featured_rewards'
     match 'apps/featured_apps', :to => 'apps#featured_apps'
     match 'achievements/report', :to => 'achievement_histories#report', :via => :post

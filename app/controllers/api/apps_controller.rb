@@ -3,7 +3,7 @@ module Api
   require 'json'
 
   class AppsController < ApplicationController
-    doorkeeper_for :all
+    doorkeeper_for :all, :except => :featured_apps
     respond_to :json, :xml
 
     # GET /api/apps.json - Gets all apps stored in the datasource
