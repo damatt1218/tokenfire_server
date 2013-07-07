@@ -2,7 +2,7 @@ MobileRewardz::Application.routes.draw do
 
   get 'support/home'
   get 'support/about_us'
-  get 'support/api_setup'
+  get 'support/android_sdk_setup'
   get 'support/contact_us'
   get 'support/dev_terms'
 
