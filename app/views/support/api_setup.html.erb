@@ -1,2 +1,179 @@
-<h1>How to set up the TokenFire API</h1>
-<p>This page will contain instructions on how to set up and configure the Tokenfire SDK.</p>
+<%= stylesheet_link_tag 'support' %>
+<div class="support_text_block_major">
+  <h1>Welcome to the TokenFire SDK!</h1>
+  <div class="support_text_block_minor">
+    <p>Thank you for choosing to integrate with the TokenFire mobile analytics and rewards platform!  Our goal is to provide
+       you the tools to analyze your application usage and the metrics to fine tune your advertising, in-application achievements, in application purchases, and cross-promote between similar genres in a global platform. The <strong><em>Android TokenFire SDK</em></strong> provides the ability for developers to easily integrate the TokenFire analytics and achievement tracking platform to their android applications in an easy to use and non-invasive way. </p>
+
+    <p>We hope you enjoy these capabilities and feel free to <%= link_to 'drop us a line', :controller => 'support', :action => 'contact_us' %> if you have additional feature requests, need help integrating the platform, and/or want to chat to cure boredom with our happy crowd of <a href='mailto:tseech@gmail.com'>lonely developers!</a></p>
+  </div>
+</div>
+
+<div class="support_text_block_major">
+  <h2>TokenFire Android SDK Usage instructions</h2>
+  <div class="support_text_block_minor">
+    <p>The SDK is provided to developers as both source code in a github repository and as a .jar file which is easily linked to with any application using the Android 8 SDK or higher. By including the <strong><em>TokenFire SDK</em></strong> into your application, you enable the capture of all session information including application startup, background, and exit logging.  Device Metrics are also captured and stored in the TokenFire analytics services which can be used for rollups and reporting by manufacturer, model, OS version, screen sizes and etc. </p>
+
+    <p>TokenFire currency can be paid to users of your application based upon amount of time spent in applications automatically with SDK enabled applications. </p>
+
+    <p>Achievement API's provide application level access to which achievements are available to a given application as well as report which achievements have been met on a certain device. </p>
+
+    <p>By using these API's, reward metrics are available for analytics and reporting for each application and can be weighed against session usage information which allows you to fine tune difficulty of achievements versus time spent in applications and drive users to ultimately spend more time in your applications.</p>
+
+    <p>Analytic data is captured in the background and reported periodically to the TokenFire services while your application is in the foreground.   Support for online and offline modes are built in so that information can still be captured even when the device does not have an active internet connection.  This information is then uploaded once the connection to the services are re-established.</p>
+  </div>
+  <h3>Obtaining the SDK</h3>
+  <div class="support_text_block_minor">
+    <p>TBD</p>
+  </div>
+</div>
+
+
+<div class="support_text_block_major">
+  <h2>Integrating the SDK into your application</h2>
+
+  <div class="support_text_block_minor">
+    <p>The TokenFire Android SDK is provided as a JAR file which is included in your application as a library. It is assumed that the developer knows how to include libraries into their applications and will not be covered by these instructions.</p>
+
+    <p>Simple integration can be performed in 3 steps:</p>
+
+    <ol>
+      <li><a href="#manifestprep">Preparing your <strong><em>AndroidManifest.xml</em></strong></a></li>
+      <li><a href="#mainactivity">Extending the <strong>MainActivity</strong> with <strong>TokenFireActivity</strong></a></li>
+      <li><a href="#setappkey" >Setting the <strong>ApplicationID</strong> and <strong>SecretKey</strong></a></li>
+    </ol><p><strong><em>The TokenFire SDK</em></strong> supports Android SDK versions 8 and above. While its possible that the <strong><em>TokenFire SDK</em></strong> can execute on lower versions of the Android SDK,  these versions will not be officially supported and have not been tested extensively.***</p>
+
+
+  </div>
+
+  <p><a name="manifestprep"></a></p>
+  <h3>1 - Preparing your AndroidManifest.xml</h3>
+  <div class="support_text_block_minor">
+    <p>The Android manifest file provides essential information to application stores as to your individual program as well as permissions that must be granted and accepted by the end user before your application is allowed to execute.   As with most analytic utilities, modifications to your manifest file must be made to allow the SDK to capture and communicate with the backend servers.</p>
+    <p>We developed the SDK to require minimal permissions in order to operate, therefore providing your application near seamless and transparent integration.  The <strong><em>TokenFire SDK</em></strong> only requires that your application be granted the <strong>android.permission.INTERNET</strong> and <strong>android.permission.ACCESS_NETWORK_STATE</strong> permissions.</p>
+    <p>The <strong><em>TokenFire SDK</em></strong> makes use of android <em>service</em> configurations in order to monitor usage in the background. The <em>com.tokenfire.clientsdk.android.restful.RESTService</em> allows asynchronous background reporting of <em>Achievements</em> and <em>SessionUsage</em> and the <em>com.tokenfire.clientsdk.android.auth.AuthService</em> allows for device/application identification and authorization to the TokenFire servers.</p>
+    <p>Additionally, if your application provides Achievement support,  the <em>com.tokenfire.clientsdk.android.AchievementsActivity</em> will need to be added to your manifest file.</p>
+    <br />
+    <p>An example manifest may look like:</p>
+
+<div class="highlight"><pre><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;manifest</span> <span class="na">xmlns:android=</span><span class="s">"http://schemas.android.com/apk/res/android"</span>
+          <span class="na">package=</span><span class="s">"com.tokenfire.clientsdk.android.test_client"</span>
+          <span class="na">android:versionCode=</span><span class="s">"1"</span>
+          <span class="na">android:versionName=</span><span class="s">"1.0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">"android.permission.INTERNET"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">"android.permission.ACCESS_NETWORK_STATE"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;uses-sdk</span> <span class="na">android:minSdkVersion=</span><span class="s">"8"</span> <span class="na">android:targetSdkVersion=</span><span class="s">"17"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;application</span> <span class="na">android:label=</span><span class="s">"@string/app_name"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;service</span> <span class="na">android:name=</span><span class="s">"com.tokenfire.clientsdk.android.restful.RESTService"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;service</span> <span class="na">android:name=</span><span class="s">"com.tokenfire.clientsdk.android.auth.AuthService"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">"com.tokenfire.clientsdk.android.AchievementsActivity"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;activity</span>
+                <span class="na">android:name=</span><span class="s">"MyMainActivity"</span>
+                <span class="na">android:label=</span><span class="s">"@string/app_name"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;intent-filter&gt;</span>
+                <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">"android.intent.action.MAIN"</span><span class="nt">/&gt;</span>
+                <span class="nt">&lt;category</span> <span class="na">android:name=</span><span class="s">"android.intent.category.LAUNCHER"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;/intent-filter&gt;</span>
+        <span class="nt">&lt;/activity&gt;</span>
+    <span class="nt">&lt;/application&gt;</span>
+<span class="nt">&lt;/manifest&gt;</span>
+</pre></div>
+  </div>
+
+
+<p><a name="mainactivity"></a></p>
+<h3>2 - Extending the MainActivity with TokenFireActivity</h3>
+  <div class="support_text_block_minor">
+    <p>Adding analytics to your application is as simple as changing which class your <strong>MainActivity</strong> inherits from, and passing in your <em>Application Key</em> and <em>Seed</em>.  The <strong><em>com.tokenfire.clientsdk.android.TokenFireActivity</em></strong> class inherits from the Android Activity class for the purpose of adding hooks into the <em>OnCreate</em>, <strong>OnResume</strong>, <strong>OnPause</strong>, and <strong>OnClose</strong> methods before calling the superclass implementations.   This is all transparent to the developer in that no implementation details are modified and your app should behave as it did before the change.</p>
+
+<div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyMainActivity</span> <span class="kd">extends</span> <span class="n">TokenFireActivity</span> <span class="o">{</span>
+    <span class="c1">//... Do application specific stuff here</span>
+<span class="o">}</span>
+</pre></div>
+
+    <p>When overriding <em>Activity</em> methods, be sure to always invoke the super methods to ensure that TokenFire is able to receive and process these lifecycle events:</p>
+
+<div class="highlight"><pre><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+
+    <span class="c1">//... Do application specific stuff</span>
+<span class="o">}</span>
+</pre></div>
+
+    <p><strong><em>It is important that you only ever create one instance of your *MainActivity</em> class.  If multiple <em>TokenFireActivity</em> instances are create, unintentionally behavior may occur or you may experience application stability issues.</strong>*</p>
+  </div>
+
+
+<p><a name="setappkey"></a></p>
+
+<h3>3 - Setting the ApplicationID and SecretKey</h3>
+  <div class="support_text_block_minor">
+    <p>The <strong><em>TokenFire SDK</em></strong> uses an <strong>ApplicationID</strong> and <strong>SecretKey</strong> provided by the TokenFire Server during application provisioning.   These values are unique per application and will not change over time.</p>
+    <p>To set your <strong>ApplicationID</strong> and <strong>SecretKey</strong>, pass the supplied values to the <strong>TokenFireMainActivity</strong> during initialization.  It is recommended that these values be provided at the beginning of your <strong><em>OnCreate</em></strong> method before initializing any application specific <strong><em>Activities</em></strong> or <strong><em>Services</em></strong>.</p>
+
+<div class="highlight"><pre><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onCreate</span><span class="o">(</span><span class="n">Bundle</span> <span class="n">savedInstanceState</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="kd">super</span><span class="o">.</span><span class="na">setApplicationID</span><span class="o">(</span><span class="s">"00DEADBEEF0000S3CR3T00000DEADBEEF0000S3CR3T00000DEADBEEF0000S3CR3T00"</span><span class="o">);</span>
+    <span class="kd">super</span><span class="o">.</span><span class="na">setApplicationSecret</span><span class="o">(</span><span class="s">"00DEADBEEF0000S3CR3T00000DEADBEEF0000S3CR3T00000DEADBEEF0000S3CR3T00"</span><span class="o">);</span>
+
+    <span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+    <span class="n">setContentView</span><span class="o">(</span><span class="n">R</span><span class="o">.</span><span class="na">layout</span><span class="o">.</span><span class="na">main</span><span class="o">);</span>
+
+    <span class="c1">//... Do application specific stuff here</span>
+
+<span class="o">}</span>
+</pre></div>
+   </div>
+</div>
+
+<div class="support_text_block_major">
+  <h2>Achievements</h2>
+  <div class="support_text_block_minor">
+    <p>Application achievements are created and managed on the TokenFire website. Every achievement has an associated UID that can be found on the achievement's details page. This UID is used to report that a user has accomplished an achievement.</p>
+  </div>
+
+  <h3>Reporting that the user has accomplished an Achievement</h3>
+  <div class="support_text_block_minor">
+    <p>Reporting the accomplishment of an achievement is easy. The <em>TokenFireActivity</em> (which your <strong><em>MainActivity</em></strong> must inherit from) provides a <code>reportAchievement(String achievementUID)</code> method. Simply call the method with the UID of the achievement that has been accomplished and you are done. You don't even need to worry if you are connected to the network. The <em>TokenFireActivity</em> provides guaranteed delivery.</p>
+  </div>
+
+  <h3>Showing the user a list of Achievements</h3>
+  <div class="support_text_block_minor">
+    <p>So, you want to show the user what achievements they have accomplished and what is still available. That's pretty easy too. You have two options, either request the data and display it as you please or use the built in <code>AchievementActivity</code> to display them.</p>
+
+    <h4>Retrieving a list of Achievements</h4>
+    <div class="support_text_block_minor">
+        <p>The <strong>TokenFireActivity</strong> (which your <strong>MainActivity</strong> must inherit from) provides a <code>getAchievements(AchievementInfoRequestCallback callback)</code> method. Invoke it, and when the operation is complete, the <code>success(UserAchievementInfo[] achievements)</code> method in your callback will be invoked. (Unless there is some error, then the <code>error(int code, String error)</code> method will be invoked.)</p>
+        <p>The <strong>UserAchievementInfo</strong> objects provided will contain the achievement's name, description, token value, if it's repeatable, and if it has already been achieved. Now you can display it as you please.</p>
+    </div>
+
+    <h4>Using the AchievementsActivity</h4>
+    <div class="support_text_block_minor">
+      <p>The <strong><em>TokenFire SDK</em></strong> includes an activity to display all the application achievements. The view allows the user to see which achievements have been accomplished and which ones have not, and the token value for each. To use the <strong>AchievementsActivity</strong> you must add the activity to your AndroidManifest by adding the following line:</p>
+
+<div class="highlight"><pre><span class="nt">&lt;activity</span> <span class="na">android:name=</span><span class="s">"com.tokenfire.clientsdk.android.AchievementsActivity"</span><span class="nt">/&gt;</span>
+</pre></div>
+
+    <p>Then you simply start the activity as you would any other activity. Kinda like <br>
+  this:</p>
+
+<div class="highlight"><pre><span class="n">startActivity</span><span class="o">(</span><span class="k">new</span> <span class="n">Intent</span><span class="o">(</span><span class="n">YourAppActivity</span><span class="o">.</span><span class="na">this</span><span class="o">,</span> <span class="n">AchievementsActivity</span><span class="o">.</span><span class="na">class</span><span class="o">))</span>
+</pre></div>
+    </div>
+  </div>
+
+  <h3>Achievements</h3>
+  <div class="support_text_block_minor">
+    <ul>
+      <li>  All the methods you need are part of the <strong>TokenFireActivity</strong></li>
+      <li>  Report achievement by calling <code>reportAchievement(String achievementUID)</code></li>
+      <li>  Get list of achievements by calling <code>getAchievements(AchievementInfoRequestCallback callback)</code></li>
+      <li>  Use the <code>AchievementsActivity</code> to display a list of achievements</li>
+      <li>  Profit</li>
+    </ul>
+  </div>
+</div>
