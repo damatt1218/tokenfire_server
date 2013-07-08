@@ -9,6 +9,35 @@
   </h1>
 </header>
 
+<h4>Pending Developers</h4>
+
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th><b>Username</b></th>
+      <th><b>Email</b></th>
+      <th><b>Created at</b></th>
+      <th><b>Actions</b></th>
+    </tr>
+  </thead>
+  <tbody>
+<% @pending_developers.each do |pending_developer| %>
+    <tr>
+      <td><%= pending_developer.id %></td>
+      <td><%= link_to pending_developer.username, admin_user_path(pending_developer) %></td>
+      <td><%= pending_developer.email %></td>
+      <td><%= pending_developer.created_at %></td>
+      <td>
+        APPROVE DENY
+        <%= link_to "Destroy", admin_user_path(pending_developer), :method => :delete, :confirm => "Are you sure?" %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<h4>All Users</h4>
 <table class="table table-bordered table-striped table-hover">
   <thead>
     <tr>

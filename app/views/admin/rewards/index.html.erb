@@ -1,0 +1,38 @@
+<header class="page-header">
+  <h1>Manage Rewards
+    <small class="pull-right"><%= link_to "Create Reward", new_admin_reward_path, :class => "btn btn-info" %></small>
+  </h1>
+</header>
+
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Cost</th>
+        <th>Expiration</th>
+        <th>Quantity</th>
+        <th>Created At</th>
+        <th>Featured Value</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @rewards.each do |reward| %>
+        <tr>
+          <td><%= link_to reward.name, admin_reward_path(reward) %></td>
+          <td><%= reward.description %></td>
+          <td><%= reward.cost %></td>
+          <td><%= reward.expiration %></td>
+          <td><%= reward.quantity %></td>
+          <td><%= reward.created_at %></td>
+          <td><%= reward.featured_value %></td>
+          <td><%= link_to "Edit", edit_admin_reward_path(reward) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+Featured Rewards: <% @featured_rewards.each do |featured_reward| %>
+  <%= featured_reward.name %>
+<% end %>

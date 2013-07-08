@@ -38,6 +38,7 @@ MobileRewardz::Application.routes.draw do
   devise_for :users, :controllers => {:registrations => "users/registrations", :sessions => "users/sessions"}
   #resources :users
 
+  # Routing for API
   namespace :api do
 
     match 'client_api/validate_app_id', :to => 'client_sdk_api#validate_app_id'
@@ -62,11 +63,14 @@ MobileRewardz::Application.routes.draw do
     resources :accounts, :only => [:index, :show]
   end
 
+
   namespace :admin do
-    match '/' => 'users#index'
-    match 'rewards/pending_redeemed', :to => 'reward_histories#index'
+    resources :rewards
     resources :users
     resources :reward_histories
+    match '/' => 'users#index'
+    match 'rewards/pending_redeemed', :to => 'reward_histories#index'
+
   end
 
 

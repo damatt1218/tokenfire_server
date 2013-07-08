@@ -1,0 +1,21 @@
+<%= f.label :name %>
+<%= f.text_field :name %>
+
+<%= f.label :description %>
+<%= f.text_field :description%>
+
+<%= f.label :cost %>
+<%= f.text_field :cost %>
+
+<%= f.label :quantity %>
+<%= f.text_field :quantity %>
+
+<% if current_user.role? :admin %>
+  <%= f.label :featured_value %>
+  <%= f.text_field :featured_value %>
+<% end %>
+
+<div>
+  <%= f.submit "Save", :class => 'btn btn-primary' %> or
+  <%= link_to "Cancel", admin_rewards_path %>
+</div>

@@ -2,6 +2,7 @@
   <h1>
     <%= @application.name.capitalize %>
     <small class="pull-right">
+      <%= link_to 'App Key', oauth_application_path(@application), :class => "btn btn-info" %>
       <%= link_to 'Edit', edit_oauth_application_path(@application), :class => "btn btn-info" %>
       <% if current_user.role? :admin %>
           <%= link_to 'View OAuth Attributes', oauth_application_path(@application), :class => "btn btn-info" %>
@@ -106,37 +107,17 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-      <td>
-        <%=
-            if (@application.accounts.length > 0)
-              @application.getAverageSessionsPerDay / @application.accounts.length
-            end
-        %>
-      </td>
-      <td>
-        <%=
-            if (@application.accounts.length > 0)
-              @application.getAverageSessionsPerDay / @application.accounts.length
-            end
-        %>
-      </td>
-      <td>
-        <%=
-            if (@application.accounts.length > 0)
-              Time.at(@application.getAverageSessionLength / @application.accounts.length).gmtime.strftime('%R:%S')
-            end
-        %>
-      </td>
-      <td>
-        <%=
-            if (@application.accounts.length > 0)
-              Time.at(@application.getTotalUsageTime / @application.accounts.length).gmtime.strftime('%R:%S')
-            end
-        %>
-      </td>
-      <td>3/20 fake</td>
-    </tr>
+      <tr>
+        <% if @application.accounts.length == 0 %>
+          <td colspan=5>No Downloads Yet</td>
+        <% else %>
+          <td><%= @application.getAverageSessionsPerDay / @application.accounts.length %></td>
+          <td><%= @application.getAverageSessionsPerDay / @application.accounts.length %></td>
+          <td><%= Time.at(@application.getAverageSessionLength / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
+          <td><%= Time.at(@application.getTotalUsageTime / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
+          <td>3/20 fake</td>
+        <% end %>
+      </tr>
     </tbody>
   </table>
 </div>

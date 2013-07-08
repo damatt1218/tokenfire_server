@@ -6,6 +6,15 @@ module Admin
     # GET /users.json
     def index
       @users = User.all
+      @pending_developers = []
+      prospective_developer = Role.find_by_name("Prospective Developer")
+
+      # Is this too intensive?
+      @users.each do |user|
+        if user.roles.include?(prospective_developer)
+          @pending_developers << user
+        end
+      end
 
       respond_to do |format|
         format.html # index.html.erb
@@ -14,7 +23,7 @@ module Admin
     end
 
     # GET /users/1
-  # GET /users/1.json
+    # GET /users/1.json
     def show
       @user = User.find(params[:id])
 
