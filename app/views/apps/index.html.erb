@@ -35,7 +35,7 @@
         <i class="icon-money icon-4x pull-left"></i>
         <div>
           <h4 class="media-heading">Budget Remaining</h4>
-          <p class="lead">$3,200</p>
+          <p class="lead">-----------</p>
         </div>
       </div>
       <!-- /KPI #3 -->
@@ -52,43 +52,15 @@
         <div class="item active">
           <div id="dauGraph" class="bigGraph"></div>
           <div class="carousel-caption">
-            DAU per day
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x300" alt="Graph 2">
-          <div class="carousel-caption">
-            Graph 2
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x300" alt="Graph 3">
-          <div class="carousel-caption">
-            Graph 3
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x300" alt="Graph 4">
-          <div class="carousel-caption">
-            Graph 4
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x300" alt="Graph 5">
-          <div class="carousel-caption">
-            Graph 5
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x300" alt="Graph 6">
-          <div class="carousel-caption">
-            Graph 6
+            DAU
           </div>
         </div>
       </div>
-      <!-- Carousel nav -->
+
+      <!-- Carousel nav
       <a class="carousel-control left" href="#graphCarousel" data-slide="prev">‹</a>
       <a class="carousel-control right" href="#graphCarousel" data-slide="next">›</a>
+      -->
     </div><!-- /.carousel -->
 
   </section>
@@ -210,7 +182,7 @@
         <tbody>
           <% @applications.each do |application| %>
               <tr id="application_<%= application.id %>">
-                <td><%= application.name %></td>
+                <td><%= link_to application.name, app_path(application) %></td>
                 <td><%= application.accounts.count %></td>
                 <td><%= application.getDailyActiveUsers(Date.today) %></td>
                 <td><%= application.getAverageSessionsPerDay %></td>

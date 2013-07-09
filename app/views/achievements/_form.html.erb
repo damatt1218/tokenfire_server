@@ -1,62 +1,28 @@
 <fieldset>
-    <% if @achievement.errors.any? %>
-        <div class="alert-message error" data-alert><a class="close" href="#">×</a><p>Whoops! Check your form for possible errors</p></div>
-    <% end %>
+  <% if @achievement.errors.any? %>
+    <div class="alert-message error" data-alert><a class="close" href="#">×</a><p>Whoops! Check your form for possible errors</p></div>
+  <% end %>
 
+  <%= f.label :name %>
+  <%= f.text_field :name, :class => 'span8' %>
 
-    <div class="clearfix">
-      <%= f.label :name %>
-      <div class="input">
-        <%= f.text_field :name %>
-      </div>
-    </div>
+  <%= f.label :description %>
+  <%= f.text_area :description, :rows => '3', :class => 'span8'  %>
 
-    <div class="clearfix">
-      <%= f.label :description %>
-      <div class="input">
-        <%= f.text_field :description %>
-      </div>
-    </div>
+  <%= f.label :cost %>
+  <%= f.text_field :cost %>
+  <i>Value of achievement upon completion.</i>
 
-    <div class="clearfix">
-      <%= f.label :value %>
-      <div class="input">
-        <%= f.text_field :value %>
-      </div>
-    </div>
+<p>
+  <%= f.label :enabled, :class => 'checkbox inline' %>
+   <%= f.check_box :enabled %>
+  <%= f.label :repeatable, :class => 'checkbox inline' %>
+   <%= f.check_box :repeatable%>
+</p>
 
-    <div class="clearfix">
-      <%= f.label :cost %>
-      <div class="input">
-        <%= f.text_field :cost %>
-      </div>
-    </div>
+  <div class="actions">
+    <%= f.submit :Submit, :class => "btn btn-primary" %>
+    <%= link_to 'Cancel', app_path(@application), :class => 'btn' %>
 
-    <div class="clearfix">
-      <%= f.label :enabled %>
-      <div class="input">
-        <%= f.check_box :enabled %>
-      </div>
-    </div>
-
-    <div class="clearfix">
-      <%= f.label :repeatable %>
-      <div class="input">
-        <%= f.check_box :repeatable %>
-      </div>
-    </div>
-
-    <div class="clearfix">
-      <%= f.label :availability %>
-      <div class="input">
-        <%= f.text_field :availability %>
-      </div>
-    </div>
-
-
-    <div class="clearfix"></div>
-
-    <div class="actions">
-      <%= f.submit :Submit, :class => "btn primary" %>
-    </div>
-  </fieldset>
+  </div>
+</fieldset>

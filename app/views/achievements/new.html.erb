@@ -1,9 +1,12 @@
-<div class="span16">
-  <header class="page-header"><h2>New achievement for <%= @application.name %></h2></header>
+<div class="row">
+  <div class="well span8 offset2">
+
+    <%= form_for :achievement, :url => app_achievements_path(@achievement.app_id), :html => { :method => :post } do |f| %>
+      <legend>New Achievement for <%= @application.name.capitalize %></legend>
+      <%= render 'form', :achievement => @achievement, :f => f %>
+    <% end %>
+
+  </div>
 </div>
 
-<div class="span12">
-  <%= form_for :achievement, :url => app_achievements_path(@achievement.app_id), :html => { :method => :post } do |f| %>
-      <%= render 'form', :achievement => @achievement, :f => f %>
-  <% end %>
-</div>
+

@@ -1,11 +1,12 @@
-<div class="span16">
-  <header class="page-header"><h2>Edit achievement</h2></header>
-</div>
+<div class="row">
+  <div class="well span8 offset2">
 
-<div class="span12">
-  <%= form_for :achievement, :url => app_achievement_path(@application,@achievement), :html => { :method => :put } do |f| %>
+    <%= form_for :achievement, :url => app_achievement_path(@application,@achievement), :html => { :method => :put } do |f| %>
+      <legend>Edit <%= @achievement.name %></legend>
       <%= render 'form', :achievement => @achievement, :f => f %>
-  <% end %>
+    <% end %>
+
+  </div>
 </div>
 
 

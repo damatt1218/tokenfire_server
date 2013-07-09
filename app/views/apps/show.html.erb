@@ -25,7 +25,7 @@
         <div>
           <h4 class="media-heading">Downloads</h4>
 
-          <p class="lead">1,242,830 fake</p>
+          <p class="lead">CREATE TOTAL DOWNLOADS</p>
         </div>
       </div>
     </div>
@@ -51,7 +51,7 @@
         <div>
           <h4 class="media-heading">MAU</h4>
 
-          <p class="lead">$3,200 fake</p>
+          <p class="lead">CREATE MAU CALCULATION</p>
         </div>
       </div>
       <!-- /KPI #3 -->
@@ -76,48 +76,22 @@
       <th>Avg. Sessions per month</th>
       <th>Avg. Session time</th>
       <th>Total playtime</th>
-      <th>Total Achievements</th>
+      <th>Avg. Achievements</th>
     </tr>
     </thead>
     <tbody>
     <tr>
+      <% if @application.accounts.length == 0 %>
+        <td colspan=6>No Downloads Yet</td>
+      <% else %>
       <td><%= @application.accounts.length %></td>
-      <td><%= @application.getAverageSessionsPerDay %></td>
-      <td><%= @application.getAverageSessionsPerDay %></td>
-      <td><%= Time.at(@application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
-      <td><%= Time.at(@application.getTotalUsageTime).gmtime.strftime('%R:%S') %></td>
-      <td>3/20 fake</td>
+      <td><%= @application.getAverageSessionsPerDay / @application.accounts.length %></td>
+      <td><%= @application.getAverageSessionsPerDay / @application.accounts.length %></td>
+      <td><%= Time.at(@application.getAverageSessionLength / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
+      <td><%= Time.at(@application.getTotalUsageTime / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
+      <td>3/20 FAKE CREATE REAL</td>
+      <% end %>
     </tr>
-    </tbody>
-  </table>
-</div>
-<!-- /Session Analytics -->
-
-<!-- Session Analytics -->
-<div class="row-fluid">
-  <h4>Average User Statistics</h4>
-  <table class="table table-bordered">
-    <thead>
-    <tr>
-      <th>Sessions per day</th>
-      <th>Sessions per month</th>
-      <th>Session time</th>
-      <th>Total playtime</th>
-      <th>Achievements</th>
-    </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <% if @application.accounts.length == 0 %>
-          <td colspan=5>No Downloads Yet</td>
-        <% else %>
-          <td><%= @application.getAverageSessionsPerDay / @application.accounts.length %></td>
-          <td><%= @application.getAverageSessionsPerDay / @application.accounts.length %></td>
-          <td><%= Time.at(@application.getAverageSessionLength / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
-          <td><%= Time.at(@application.getTotalUsageTime / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
-          <td>3/20 fake</td>
-        <% end %>
-      </tr>
     </tbody>
   </table>
 </div>
@@ -133,23 +107,23 @@
       <thead>
       <tr>
         <th>Name</th>
-        <th>Description</th>
-        <th>Cost</th>
+        <th>Cost (USD)</th>
         <th>Avg. time to complete</th>
         <th>Percent of Users</th>
         <th>Times achieved</th>
+        <th>Achievement UID</th>
         <th>Actions</th>
       </tr>
       </thead>
       <tbody>
       <% @application.achievements.each do |achievement| %>
           <tr>
-            <td><%= link_to achievement.name, app_achievement_path(@application, achievement) %></td>
-            <td><%= achievement.description %></td>
+            <td><%= achievement.name %></td>
             <td><%= achievement.cost %></td>
-            <td></td>
-            <td></td>
+            <td>CREATE CALC</td>
+            <td>CREATE CALC</td>
             <td><%= achievement.achievement_history.count %></td>
+            <td><%= achievement.uid %></td>
             <td><%= link_to 'Edit', edit_app_achievement_path(@application, achievement) %></td>
           </tr>
       <% end %>

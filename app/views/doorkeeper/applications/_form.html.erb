@@ -8,18 +8,12 @@
   <%= errors_for application, :name %>
 </div>
 
-<%= f.label :redirect_uri %>
-  <%= f.text_field :redirect_uri %>
-  <%= errors_for application, :redirect_uri %>
-  <% if Doorkeeper.configuration.test_redirect_uri %>
-    <span class="help-block">Use <%= Doorkeeper.configuration.test_redirect_uri %> for local tests</span>
-  <% end %>
-
 <%= f.label :description %>
 <%= f.text_field :description %>
 
 <%= f.label :image %>
 <%= f.text_field :image %>
+NEED TO ADD IMAGE UPLOADER FOR ICON
 
 <p>
   <%= f.submit :Submit, :class => "btn btn-primary" %>

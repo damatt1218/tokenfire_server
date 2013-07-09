@@ -1,28 +1,27 @@
-<div class="container">
-  <div class="row">
-    <div class="well span4 offset4 centered">
-    <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-      <fieldset>
-        <legend>Sign In</legend>
-        <%= f.label :username %>
-        <%= f.text_field :username, :autofocus => true %>
+<div class="row">
+  <div class="well span4 offset4 centered">
+  <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+    <fieldset>
+      <legend>Sign In</legend>
 
-        <%= f.label :password %>
-        <%= f.password_field :password %>
+      <%= f.label :username %>
+      <%= f.text_field :username, :autofocus => true %>
 
-        <% if devise_mapping.rememberable? -%>
-          <%= f.label :remember_me do %>
-            <%= f.check_box :remember_me %> Remember me
-          <% end %>
-        <% end -%>
+      <%= f.label :password %>
+      <%= f.password_field :password %>
 
-        <p>
-          <%= f.submit "Sign In", :class => 'btn btn-primary' %>
-        </p>
-      </fieldset>
-    <% end %>
+      <% if devise_mapping.rememberable? -%>
+        <%= f.label :remember_me do %>
+          <%= f.check_box :remember_me %> Remember me
+        <% end %>
+      <% end -%>
 
-    <%= render "devise/shared/links" %>
-    </div>
+      <p>
+        <%= f.submit "Sign In", :class => 'btn btn-primary' %>
+      </p>
+    </fieldset>
+  <% end %>
+
+  <%= render "devise/shared/links" %>
   </div>
 </div>
