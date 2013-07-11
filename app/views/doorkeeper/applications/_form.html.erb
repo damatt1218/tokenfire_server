@@ -25,6 +25,13 @@
   <%= f.text_field :url %>
 </p>
 
+<% if current_user.role? :admin %>
+  <p>
+    <%= f.label :disabled, :class => 'checkbox inline' %>
+    <%= f.check_box :disabled %>
+  </p>
+<% end %>
+
 <%= f.hidden_field :redirect_uri, :value => "http://localhost" %>
 
 
