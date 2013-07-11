@@ -177,6 +177,9 @@
           <th>Avg. Session Length</th>
           <th>Analytics</th>
           <th>App Key</th>
+          <% if current_user.role? :admin %>
+            <th>Is Disabled</th>
+          <% end %>
         </tr>
         </thead>
         <tbody>
@@ -189,6 +192,9 @@
                 <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
                 <td><%= link_to 'View Statistics', app_path(application) %></td>
                 <td><%= link_to 'View Key', oauth_application_path(application) %></td>
+                <% if current_user.role? :admin %>
+                    <td><%= application.disabled %></td>
+                <% end %>
               </tr>
           <% end %>
         </tbody>

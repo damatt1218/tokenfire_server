@@ -1,0 +1,11 @@
+<div>Achievement ID: <%= @achievement.id %><br>
+  Achievement: <%= @achievement.name %><br>
+  App: <%= @achievement.app.name %><br>
+  Created At: <%= @achievement.created_at %></div>
+
+<div><%= check_box_tag "achievement[accepted]", 1, @achievement.accepted %>
+  <%= f.label :accepted %></div>
+
+
+<div><%= f.submit "Save" %> or
+  <%= link_to "Cancel", admin_achievements_path %></div>

@@ -7,7 +7,7 @@ class App < ActiveRecord::Base
 
 
   attr_accessible :name, :redirect_uri
-  attr_accessible :description, :image, :name, :rating
+  attr_accessible :description, :image, :name, :rating, :remote_image_url, :url, :disabled
 
   # relationships
   has_many :downloads
@@ -18,6 +18,8 @@ class App < ActiveRecord::Base
   has_many :achievements
   has_many :app_daily_summaries
   belongs_to :account
+
+  mount_uploader :image, ImageUploader
 
   def update_analytics
       # force an update of todays rollup stats for this app

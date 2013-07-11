@@ -18,6 +18,7 @@ MobileRewardz::Application.routes.draw do
   end
 
   match 'apps/dau_data', :to => 'apps#dau_data', :via => :get
+  match 'apps/disable/:id', :to => 'apps#disable', :via => :get, :as => :apps_disable
   resources :apps do
     resources :achievements
     resource :usage
@@ -68,6 +69,7 @@ MobileRewardz::Application.routes.draw do
     resources :rewards
     resources :users
     resources :reward_histories
+    resources :achievements
     match '/' => 'users#index'
     match 'rewards/pending_redeemed', :to => 'reward_histories#index'
 

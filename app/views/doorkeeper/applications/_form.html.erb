@@ -1,5 +1,6 @@
 <% if application.errors.any? %>
   <div class="alert-message error" data-alert><a class="close" href="#">×</a><p>Whoops! Check your form for possible errors</p></div>
+
 <% end %>
 
 <%= f.label :name %>
@@ -11,9 +12,21 @@
 <%= f.label :description %>
 <%= f.text_field :description %>
 
-<%= f.label :image %>
-<%= f.text_field :image %>
-NEED TO ADD IMAGE UPLOADER FOR ICON
+<p>
+  <%= f.label :image, "Image (please upload a 96 x 96 icon)" %>
+  <%= image_tag application.image_url.to_s %><br>
+  <%= f.file_field :image %><br>
+  <%= f.label :remote_image_url, "or image URL" %>
+  <%= f.text_field :remote_image_url %>
+</p>
+
+<p>
+  <%= f.label :url %>
+  <%= f.text_field :url %>
+</p>
+
+<%= f.hidden_field :redirect_uri, :value => "http://localhost" %>
+
 
 <p>
   <%= f.submit :Submit, :class => "btn btn-primary" %>

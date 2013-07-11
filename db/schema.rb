@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130701173321) do
+ActiveRecord::Schema.define(:version => 20130711093336) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",    :default => 0.0
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20130701173321) do
     t.integer  "app_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.boolean  "accepted"
   end
 
   create_table "app_daily_summaries", :force => true do |t|
@@ -94,13 +95,15 @@ ActiveRecord::Schema.define(:version => 20130701173321) do
     t.text     "description"
     t.string   "image"
     t.integer  "rating"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
     t.string   "uid"
     t.string   "secret"
     t.string   "redirect_uri"
     t.integer  "account_id"
     t.integer  "featured_value", :default => 0
+    t.string   "url"
+    t.boolean  "disabled",       :default => false
   end
 
   add_index "apps", ["account_id"], :name => "index_apps_on_account_id"

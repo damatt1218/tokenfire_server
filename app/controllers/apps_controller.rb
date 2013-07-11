@@ -8,7 +8,8 @@ class AppsController < ApplicationController
     if current_user.role? :admin
       @applications = App.all
     else
-      @applications = App.find_all_by_account_id(current_user.account.id)
+      @applications = App.where(:account_id => current_user.account.id,
+                                :disabled => false)
     end
 
     # This should be pre-calculate when we start to get a real amount of data
@@ -34,6 +35,10 @@ class AppsController < ApplicationController
   def show
     @application = App.find(params[:id])
     @dau = @application.getDailyActiveUsers(Date.today)
+    @pending_achievements = Achievement.where(:app_id => @application.id,
+                                              :accepted => false)
+    @accepted_achievements = Achievement.where(:app_id => @application.id,
+                                               :accepted => true)
 
     unless current_user.role? :admin
       if(@application.account.id != current_user.account.id)
@@ -42,6 +47,17 @@ class AppsController < ApplicationController
     end
   end
 
+  # Allows "soft deletion" of apps instead of destroying the object altogether
+  # /apps/disable/<id>
+  def disable
+    @application = App.find(params[:id])
+    if (@application.account_id == current_user.account.id) || (current_user.role? :admin)
+      @application.disabled = true
+      @application.save
+    end
+
+    redirect_to apps_path
+  end
 
   # Provides Daily Action Users JSON for all applications to be displayed as a chart
   # using a client side charting framework

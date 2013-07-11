@@ -7,7 +7,7 @@
       <% if current_user.role? :admin %>
           <%= link_to 'View OAuth Attributes', oauth_application_path(@application), :class => "btn btn-info" %>
       <% end %>
-      <%= link_to 'Delete', oauth_application_path(@application), :class => "btn btn-info", :data => {:confirm => 'Are you sure?'}, :method => :delete %>
+      <%= link_to 'Delete', apps_disable_path(@application), :class => "btn btn-info", :data => {:confirm => 'Are you sure?'} %>
     </small>
   </h1>
 </header>
@@ -102,6 +102,8 @@
 
   <p><%= link_to 'New Achievement', new_app_achievement_path(@application), :class => "btn btn-primary" %></p>
 
+  <h5>Accepted Achievements</h5>
+
   <div>
     <table class="table table-bordered table-striped table-hover">
       <thead>
@@ -116,7 +118,38 @@
       </tr>
       </thead>
       <tbody>
-      <% @application.achievements.each do |achievement| %>
+      <% @accepted_achievements.each do |achievement| %>
+          <tr>
+            <td><%= achievement.name %></td>
+            <td><%= achievement.cost %></td>
+            <td>CREATE CALC</td>
+            <td>CREATE CALC</td>
+            <td><%= achievement.achievement_history.count %></td>
+            <td><%= achievement.uid %></td>
+            <td><%= link_to 'Edit', edit_app_achievement_path(@application, achievement) %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <h5>Achievements Under Review</h5>
+
+  <div>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Cost (USD)</th>
+        <th>Avg. time to complete</th>
+        <th>Percent of Users</th>
+        <th>Times achieved</th>
+        <th>Achievement UID</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @pending_achievements.each do |achievement| %>
           <tr>
             <td><%= achievement.name %></td>
             <td><%= achievement.cost %></td>
