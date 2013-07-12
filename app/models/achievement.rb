@@ -17,9 +17,7 @@ class Achievement < ActiveRecord::Base
                   # Specify special rules to allow only some user to acquire the achievements
                   :availability,
                   # Unique identifier for the achievement to be used in the RESTful API
-                  :uid,
-                  # True if the achievement has been accepted as a valid achievement by an admin
-                  :accepted
+                  :uid
 
   # Relationships
   has_many :achievement_history

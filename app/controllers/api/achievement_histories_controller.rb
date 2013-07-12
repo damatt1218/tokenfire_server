@@ -98,7 +98,7 @@ module Api
         #   next
         # end
 
-        unless achievement.enabled && achievement.accepted
+        unless achievement.enabled
           next
         end
 

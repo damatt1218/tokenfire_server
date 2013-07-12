@@ -69,7 +69,6 @@ MobileRewardz::Application.routes.draw do
     resources :rewards
     resources :users
     resources :reward_histories
-    resources :achievements
     match '/' => 'users#index'
     match 'rewards/pending_redeemed', :to => 'reward_histories#index'
 

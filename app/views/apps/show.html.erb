@@ -25,7 +25,7 @@
         <div>
           <h4 class="media-heading">Downloads</h4>
 
-          <p class="lead">CREATE TOTAL DOWNLOADS</p>
+          <p class="lead"><%= number_with_delimiter(@downloads_count, :delimiter => ',') %></p>
         </div>
       </div>
     </div>
@@ -102,8 +102,6 @@
 
   <p><%= link_to 'New Achievement', new_app_achievement_path(@application), :class => "btn btn-primary" %></p>
 
-  <h5>Accepted Achievements</h5>
-
   <div>
     <table class="table table-bordered table-striped table-hover">
       <thead>
@@ -118,38 +116,7 @@
       </tr>
       </thead>
       <tbody>
-      <% @accepted_achievements.each do |achievement| %>
-          <tr>
-            <td><%= achievement.name %></td>
-            <td><%= achievement.cost %></td>
-            <td>CREATE CALC</td>
-            <td>CREATE CALC</td>
-            <td><%= achievement.achievement_history.count %></td>
-            <td><%= achievement.uid %></td>
-            <td><%= link_to 'Edit', edit_app_achievement_path(@application, achievement) %></td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
-
-  <h5>Achievements Under Review</h5>
-
-  <div>
-    <table class="table table-bordered table-striped table-hover">
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>Cost (USD)</th>
-        <th>Avg. time to complete</th>
-        <th>Percent of Users</th>
-        <th>Times achieved</th>
-        <th>Achievement UID</th>
-        <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% @pending_achievements.each do |achievement| %>
+      <% @application.achievements.each do |achievement| %>
           <tr>
             <td><%= achievement.name %></td>
             <td><%= achievement.cost %></td>

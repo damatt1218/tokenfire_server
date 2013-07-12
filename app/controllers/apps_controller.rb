@@ -35,10 +35,9 @@ class AppsController < ApplicationController
   def show
     @application = App.find(params[:id])
     @dau = @application.getDailyActiveUsers(Date.today)
-    @pending_achievements = Achievement.where(:app_id => @application.id,
-                                              :accepted => false)
-    @accepted_achievements = Achievement.where(:app_id => @application.id,
-                                               :accepted => true)
+    @downloads_count = Download.where(:app_download_id  => @application.id,
+                                      :pending => false).count
+
 
     unless current_user.role? :admin
       if(@application.account.id != current_user.account.id)
