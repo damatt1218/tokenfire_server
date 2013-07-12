@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130712072715) do
+ActiveRecord::Schema.define(:version => 20130712084131) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",    :default => 0.0
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(:version => 20130712072715) do
     t.string   "url"
     t.boolean  "disabled",       :default => false
     t.boolean  "accepted",       :default => false
+    t.boolean  "submitted",      :default => false
   end
 
   add_index "apps", ["account_id"], :name => "index_apps_on_account_id"

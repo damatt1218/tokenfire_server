@@ -7,7 +7,7 @@ class App < ActiveRecord::Base
 
 
   attr_accessible :name, :redirect_uri
-  attr_accessible :description, :image, :name, :rating, :remote_image_url, :url, :disabled, :accepted
+  attr_accessible :description, :image, :name, :rating, :remote_image_url, :url, :disabled, :accepted, :submitted
 
   # relationships
   has_many :downloads

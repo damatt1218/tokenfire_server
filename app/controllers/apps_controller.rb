@@ -9,15 +9,24 @@ class AppsController < ApplicationController
       @accepted_applications = App.where(:accepted => true,
                                          :disabled =>false)
       @pending_applications = App.where(:accepted => false,
-                                         :disabled => false)
+                                        :submitted => false,
+                                        :disabled => false)
       @deleted_applications = App.where(:disabled => true)
+      @submitted_applications = App.where(:submitted => true,
+                                          :accepted => false,
+                                          :disabled => false)
     else
       @accepted_applications = App.where(:account_id => current_user.account.id,
                                          :accepted => true,
                                          :disabled => false)
       @pending_applications = App.where(:account_id => current_user.account.id,
                                         :accepted => false,
+                                        :submitted => false,
                                         :disabled => false)
+      @submitted_applications = App.where(:account_id => current_user.account.id,
+                                          :submitted => true,
+                                          :accepted => false,
+                                          :disabled => false)
     end
 
     # This should be pre-calculate when we start to get a real amount of data
@@ -87,6 +96,18 @@ class AppsController < ApplicationController
     @application = App.find(params[:id])
     if current_user.role? :admin
       @application.accepted = true
+      @application.save
+    end
+
+    redirect_to apps_path
+  end
+
+  # Submits apps for review
+  # /apps/submit/<id>
+  def submit
+    @application = App.find(params[:id])
+    if (@application.account_id == current_user.account.id) || (current_user.role? :admin)
+      @application.submitted = true
       @application.save
     end
 

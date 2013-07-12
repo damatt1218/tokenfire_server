@@ -9,12 +9,15 @@
           <% if @application.accepted == false %>
               <%= link_to 'Accept Application', apps_accept_path(@application), :class => "btn btn-info" %>
           <% end %>
+          <% if @application.disabled == true %>
+              <%= link_to 'Restore', apps_restore_path(@application), :class => "btn btn-info" %>
+          <% end %>
       <% end %>
       <% if @application.disabled == false %>
+        <% if @application.submitted == false %>
+          <%= link_to 'Submit For Review', apps_submit_path(@application), :class => "btn btn-info" %>
+        <% end %>
         <%= link_to 'Delete', apps_disable_path(@application), :class => "btn btn-info", :data => {:confirm => 'Are you sure?'} %>
-      <% end %>
-      <% if (current_user.role? :admin) && (@application.disabled == true) %>
-        <%= link_to 'Restore', apps_restore_path(@application), :class => "btn btn-info" %>
       <% end %>
     </small>
   </h1>
