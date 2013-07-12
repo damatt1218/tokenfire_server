@@ -22,6 +22,8 @@ MobileRewardz::Application.routes.draw do
   match 'apps/restore/:id', :to => 'apps#restore', :via => :get, :as => :apps_restore
   match 'apps/accept/:id', :to => 'apps#accept', :via => :get, :as => :apps_accept
   resources :apps do
+    match 'achievements/:id/soft_delete', :to => 'achievements#softDelete', :as => :soft_delete_app_achievement
+    match 'achievements/:id/restore', :to => 'achievements#restore', :as => :restore_app_achievement
     resources :achievements
     resource :usage
 

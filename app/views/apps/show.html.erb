@@ -124,7 +124,7 @@
       </tr>
       </thead>
       <tbody>
-      <% @application.achievements.each do |achievement| %>
+      <% @application.achievements.where(:soft_deleted => false).each do |achievement| %>
           <tr>
             <td><%= achievement.name %></td>
             <td><%= achievement.cost %></td>
@@ -137,6 +137,36 @@
       <% end %>
       </tbody>
     </table>
+
+    <% if current_user.role? :admin %>
+        <h5>Deleted Applications</h5>
+        <table class="table table-bordered table-striped table-hover">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Cost (USD)</th>
+            <th>Avg. time to complete</th>
+            <th>Percent of Users</th>
+            <th>Times achieved</th>
+            <th>Achievement UID</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @application.achievements.where(:soft_deleted => true).each do |achievement| %>
+              <tr>
+                <td><%= achievement.name %></td>
+                <td><%= achievement.cost %></td>
+                <td>CREATE CALC</td>
+                <td>CREATE CALC</td>
+                <td><%= achievement.achievement_history.count %></td>
+                <td><%= achievement.uid %></td>
+                <td><%= link_to 'Edit', edit_app_achievement_path(@application, achievement) %></td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+    <% end %>
   </div>
 </div>
 

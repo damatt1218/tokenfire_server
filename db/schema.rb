@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130712061108) do
+ActiveRecord::Schema.define(:version => 20130712072715) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",    :default => 0.0
@@ -41,8 +41,9 @@ ActiveRecord::Schema.define(:version => 20130712061108) do
     t.string   "availability"
     t.string   "uid"
     t.integer  "app_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.boolean  "soft_deleted", :default => false
   end
 
   create_table "app_daily_summaries", :force => true do |t|

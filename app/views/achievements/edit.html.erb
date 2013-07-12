@@ -6,6 +6,13 @@
       <%= render 'form', :achievement => @achievement, :f => f %>
     <% end %>
 
+    <% if @achievement.soft_deleted == false %>
+        <%= link_to 'Delete', app_soft_delete_app_achievement_path(@application, @achievement), :class => "btn btn-info", :data => {:confirm => 'Are you sure?'} %>
+    <% end %>
+    <% if (@achievement.soft_deleted == true) && (current_user.role? :admin) %>
+        <%= link_to 'Restore', app_restore_app_achievement_path(@application, @achievement), :class => "btn btn-info"  %>
+    <% end %>
+
   </div>
 </div>
 
