@@ -26,6 +26,7 @@ class AppsController < ApplicationController
     @dau = 0
     @dau_delta = 0
     @formatted_dau_delta = '0'
+    @downloads = 0
 
     @accepted_applications.each do |app|
        @users += app.accounts.count
@@ -33,6 +34,8 @@ class AppsController < ApplicationController
 
       @dau = app.getDailyActiveUsers(Date.today)
       @dau_delta += @dau - app.getDailyActiveUsers(Date.today - 1.days)
+      @downloads += Download.where(:app_download_id  => app.id,
+                                   :pending => false).count
     end
 
     @formatted_dau_delta = format_delta(@dau_delta)
