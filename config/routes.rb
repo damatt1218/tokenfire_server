@@ -19,6 +19,8 @@ MobileRewardz::Application.routes.draw do
 
   match 'apps/dau_data', :to => 'apps#dau_data', :via => :get
   match 'apps/disable/:id', :to => 'apps#disable', :via => :get, :as => :apps_disable
+  match 'apps/restore/:id', :to => 'apps#restore', :via => :get, :as => :apps_restore
+  match 'apps/accept/:id', :to => 'apps#accept', :via => :get, :as => :apps_accept
   resources :apps do
     resources :achievements
     resource :usage

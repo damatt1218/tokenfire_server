@@ -6,10 +6,18 @@ class AppsController < ApplicationController
   #  /apps
   def index
     if current_user.role? :admin
-      @applications = App.all
+      @accepted_applications = App.where(:accepted => true,
+                                         :disabled =>false)
+      @pending_applications = App.where(:accepted => false,
+                                         :disabled => false)
+      @deleted_applications = App.where(:disabled => true)
     else
-      @applications = App.where(:account_id => current_user.account.id,
-                                :disabled => false)
+      @accepted_applications = App.where(:account_id => current_user.account.id,
+                                         :accepted => true,
+                                         :disabled => false)
+      @pending_applications = App.where(:account_id => current_user.account.id,
+                                        :accepted => false,
+                                        :disabled => false)
     end
 
     # This should be pre-calculate when we start to get a real amount of data
@@ -19,7 +27,7 @@ class AppsController < ApplicationController
     @dau_delta = 0
     @formatted_dau_delta = '0'
 
-    @applications.each do |app|
+    @accepted_applications.each do |app|
        @users += app.accounts.count
        @usageTime += app.getTotalUsageTime
 
@@ -52,6 +60,30 @@ class AppsController < ApplicationController
     @application = App.find(params[:id])
     if (@application.account_id == current_user.account.id) || (current_user.role? :admin)
       @application.disabled = true
+      @application.save
+    end
+
+    redirect_to apps_path
+  end
+
+  # Allows admins to restore "soft deleted" apps
+  # /apps/restore/<id>
+  def restore
+    @application = App.find(params[:id])
+    if current_user.role? :admin
+      @application.disabled = false
+      @application.save
+    end
+
+    redirect_to apps_path
+  end
+
+  # Allows admins to accept apps
+  # /apps/accept/<id>
+  def accept
+    @application = App.find(params[:id])
+    if current_user.role? :admin
+      @application.accepted = true
       @application.save
     end
 

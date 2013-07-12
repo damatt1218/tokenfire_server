@@ -1,4 +1,4 @@
-<% if @applications.count == 0 %>
+<% if @accepted_applications.count == 0 && @pending_applications.count == 0 %>
   <%= render 'apps/getting_started' %>
 <% else %>
   <header class="page-header">
@@ -167,6 +167,8 @@
           <%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn btn-primary" %>
         <% end %>
       </p>
+
+      <h5>Accepted Applications</h5>
       <table class="table table-bordered table-striped table-hover">
         <thead>
         <tr>
@@ -177,13 +179,10 @@
           <th>Avg. Session Length</th>
           <th>Analytics</th>
           <th>App Key</th>
-          <% if current_user.role? :admin %>
-            <th>Is Disabled</th>
-          <% end %>
         </tr>
         </thead>
         <tbody>
-          <% @applications.each do |application| %>
+          <% @accepted_applications.each do |application| %>
               <tr id="application_<%= application.id %>">
                 <td><%= link_to application.name, app_path(application) %></td>
                 <td><%= application.accounts.count %></td>
@@ -192,13 +191,68 @@
                 <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
                 <td><%= link_to 'View Statistics', app_path(application) %></td>
                 <td><%= link_to 'View Key', oauth_application_path(application) %></td>
-                <% if current_user.role? :admin %>
-                    <td><%= application.disabled %></td>
-                <% end %>
               </tr>
           <% end %>
         </tbody>
       </table>
+
+      <h5>Pending Applications</h5>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Total Users</th>
+          <th>DAU</th>
+          <th>Avg. Sessions / day</th>
+          <th>Avg. Session Length</th>
+          <th>Analytics</th>
+          <th>App Key</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @pending_applications.each do |application| %>
+            <tr id="application_<%= application.id %>">
+              <td><%= link_to application.name, app_path(application) %></td>
+              <td><%= application.accounts.count %></td>
+              <td><%= application.getDailyActiveUsers(Date.today) %></td>
+              <td><%= application.getAverageSessionsPerDay %></td>
+              <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
+              <td><%= link_to 'View Statistics', app_path(application) %></td>
+              <td><%= link_to 'View Key', oauth_application_path(application) %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+
+      <% if current_user.role? :admin %>
+          <h5>Deleted Applications</h5>
+          <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Total Users</th>
+              <th>DAU</th>
+              <th>Avg. Sessions / day</th>
+              <th>Avg. Session Length</th>
+              <th>Analytics</th>
+              <th>App Key</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @deleted_applications.each do |application| %>
+                <tr id="application_<%= application.id %>">
+                  <td><%= link_to application.name, app_path(application) %></td>
+                  <td><%= application.accounts.count %></td>
+                  <td><%= application.getDailyActiveUsers(Date.today) %></td>
+                  <td><%= application.getAverageSessionsPerDay %></td>
+                  <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
+                  <td><%= link_to 'View Statistics', app_path(application) %></td>
+                  <td><%= link_to 'View Key', oauth_application_path(application) %></td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+      <% end %>
     </div>
   </section>
 <!-- /Applications -->

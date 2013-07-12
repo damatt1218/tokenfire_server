@@ -6,8 +6,16 @@
       <%= link_to 'Edit', edit_oauth_application_path(@application), :class => "btn btn-info" %>
       <% if current_user.role? :admin %>
           <%= link_to 'View OAuth Attributes', oauth_application_path(@application), :class => "btn btn-info" %>
+          <% if @application.accepted == false %>
+              <%= link_to 'Accept Application', apps_accept_path(@application), :class => "btn btn-info" %>
+          <% end %>
       <% end %>
-      <%= link_to 'Delete', apps_disable_path(@application), :class => "btn btn-info", :data => {:confirm => 'Are you sure?'} %>
+      <% if @application.disabled == false %>
+        <%= link_to 'Delete', apps_disable_path(@application), :class => "btn btn-info", :data => {:confirm => 'Are you sure?'} %>
+      <% end %>
+      <% if (current_user.role? :admin) && (@application.disabled == true) %>
+        <%= link_to 'Restore', apps_restore_path(@application), :class => "btn btn-info" %>
+      <% end %>
     </small>
   </h1>
 </header>
