@@ -60,9 +60,9 @@
         <i class="icon-money icon-4x pull-left"></i>
 
         <div>
-          <h4 class="media-heading">MAU</h4>
+          <h4 class="media-heading">Monthly Active Users</h4>
 
-          <p class="lead">CREATE MAU CALCULATION</p>
+          <p class="lead"><%= number_with_delimiter(@mau, :delimiter => ',') %></p>
         </div>
       </div>
       <!-- /KPI #3 -->
@@ -108,6 +108,7 @@
 </div>
 <!-- /Session Analytics -->
 
+<!-- Session Analytics -->
 <div class="row-fluid">
   <h4>Achievements</h4>
 

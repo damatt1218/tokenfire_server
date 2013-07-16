@@ -34,6 +34,7 @@ class AppsController < ApplicationController
     @usageTime = 0
     @dau = 0
     @dau_delta = 0
+    @mau = 0
     @formatted_dau_delta = '0'
     @downloads = 0
 
@@ -41,6 +42,7 @@ class AppsController < ApplicationController
        @users += app.accounts.count
        @usageTime += app.getTotalUsageTime
 
+      @mau += app.getMonthlyActiveUsers(Date.today)
       @dau = app.getDailyActiveUsers(Date.today)
       @dau_delta += @dau - app.getDailyActiveUsers(Date.today - 1.days)
       @downloads += Download.where(:app_download_id  => app.id,
@@ -57,6 +59,7 @@ class AppsController < ApplicationController
     @dau = @application.getDailyActiveUsers(Date.today)
     @downloads_count = Download.where(:app_download_id  => @application.id,
                                       :pending => false).count
+    @mau = @application.getMonthlyActiveUsers(Date.today)
 
 
     unless current_user.role? :admin
