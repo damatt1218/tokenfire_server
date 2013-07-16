@@ -2,11 +2,23 @@
   <h1>
     <%= @application.name.capitalize %>
     <small class="pull-right">
+      <%= link_to 'App Key', oauth_application_path(@application), :class => "btn btn-info" %>
       <%= link_to 'Edit', edit_oauth_application_path(@application), :class => "btn btn-info" %>
       <% if current_user.role? :admin %>
           <%= link_to 'View OAuth Attributes', oauth_application_path(@application), :class => "btn btn-info" %>
+          <% if @application.accepted == false %>
+              <%= link_to 'Accept Application', apps_accept_path(@application), :class => "btn btn-info" %>
+          <% end %>
+          <% if @application.disabled == true %>
+              <%= link_to 'Restore', apps_restore_path(@application), :class => "btn btn-info" %>
+          <% end %>
       <% end %>
-      <%= link_to 'Delete', oauth_application_path(@application), :class => "btn btn-info", :data => {:confirm => 'Are you sure?'}, :method => :delete %>
+      <% if @application.disabled == false %>
+        <% if @application.submitted == false %>
+          <%= link_to 'Submit For Review', apps_submit_path(@application), :class => "btn btn-info" %>
+        <% end %>
+        <%= link_to 'Delete', apps_disable_path(@application), :class => "btn btn-info", :data => {:confirm => 'Are you sure?'} %>
+      <% end %>
     </small>
   </h1>
 </header>
@@ -24,7 +36,7 @@
         <div>
           <h4 class="media-heading">Downloads</h4>
 
-          <p class="lead">1,242,830 fake</p>
+          <p class="lead"><%= number_with_delimiter(@downloads_count, :delimiter => ',') %></p>
         </div>
       </div>
     </div>
@@ -75,17 +87,21 @@
       <th>Avg. Sessions per month</th>
       <th>Avg. Session time</th>
       <th>Total playtime</th>
-      <th>Total Achievements</th>
+      <th>Avg. Achievements</th>
     </tr>
     </thead>
     <tbody>
     <tr>
+      <% if @application.accounts.length == 0 %>
+        <td colspan=6>No Downloads Yet</td>
+      <% else %>
       <td><%= @application.accounts.length %></td>
-      <td><%= @application.getAverageSessionsPerDay %></td>
-      <td><%= @application.getAverageSessionsPerDay %></td>
-      <td><%= Time.at(@application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
-      <td><%= Time.at(@application.getTotalUsageTime).gmtime.strftime('%R:%S') %></td>
-      <td>3/20 fake</td>
+      <td><%= @application.getAverageSessionsPerDay / @application.accounts.length %></td>
+      <td><%= @application.getAverageSessionsPerDay / @application.accounts.length %></td>
+      <td><%= Time.at(@application.getAverageSessionLength / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
+      <td><%= Time.at(@application.getTotalUsageTime / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
+      <td>3/20 FAKE CREATE REAL</td>
+      <% end %>
     </tr>
     </tbody>
   </table>
@@ -93,55 +109,6 @@
 <!-- /Session Analytics -->
 
 <!-- Session Analytics -->
-<div class="row-fluid">
-  <h4>Average User Statistics</h4>
-  <table class="table table-bordered">
-    <thead>
-    <tr>
-      <th>Sessions per day</th>
-      <th>Sessions per month</th>
-      <th>Session time</th>
-      <th>Total playtime</th>
-      <th>Achievements</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td>
-        <%=
-            if (@application.accounts.length > 0)
-              @application.getAverageSessionsPerDay / @application.accounts.length
-            end
-        %>
-      </td>
-      <td>
-        <%=
-            if (@application.accounts.length > 0)
-              @application.getAverageSessionsPerDay / @application.accounts.length
-            end
-        %>
-      </td>
-      <td>
-        <%=
-            if (@application.accounts.length > 0)
-              Time.at(@application.getAverageSessionLength / @application.accounts.length).gmtime.strftime('%R:%S')
-            end
-        %>
-      </td>
-      <td>
-        <%=
-            if (@application.accounts.length > 0)
-              Time.at(@application.getTotalUsageTime / @application.accounts.length).gmtime.strftime('%R:%S')
-            end
-        %>
-      </td>
-      <td>3/20 fake</td>
-    </tr>
-    </tbody>
-  </table>
-</div>
-<!-- /Session Analytics -->
-
 <div class="row-fluid">
   <h4>Achievements</h4>
 
@@ -152,28 +119,58 @@
       <thead>
       <tr>
         <th>Name</th>
-        <th>Description</th>
-        <th>Cost</th>
+        <th>Cost (USD)</th>
         <th>Avg. time to complete</th>
         <th>Percent of Users</th>
         <th>Times achieved</th>
+        <th>Achievement UID</th>
         <th>Actions</th>
       </tr>
       </thead>
       <tbody>
-      <% @application.achievements.each do |achievement| %>
+      <% @application.achievements.where(:soft_deleted => false).each do |achievement| %>
           <tr>
-            <td><%= link_to achievement.name, app_achievement_path(@application, achievement) %></td>
-            <td><%= achievement.description %></td>
+            <td><%= achievement.name %></td>
             <td><%= achievement.cost %></td>
-            <td></td>
-            <td></td>
+            <td>CREATE CALC</td>
+            <td>CREATE CALC</td>
             <td><%= achievement.achievement_history.count %></td>
+            <td><%= achievement.uid %></td>
             <td><%= link_to 'Edit', edit_app_achievement_path(@application, achievement) %></td>
           </tr>
       <% end %>
       </tbody>
     </table>
+
+    <% if current_user.role? :admin %>
+        <h5>Deleted Applications</h5>
+        <table class="table table-bordered table-striped table-hover">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Cost (USD)</th>
+            <th>Avg. time to complete</th>
+            <th>Percent of Users</th>
+            <th>Times achieved</th>
+            <th>Achievement UID</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @application.achievements.where(:soft_deleted => true).each do |achievement| %>
+              <tr>
+                <td><%= achievement.name %></td>
+                <td><%= achievement.cost %></td>
+                <td>CREATE CALC</td>
+                <td>CREATE CALC</td>
+                <td><%= achievement.achievement_history.count %></td>
+                <td><%= achievement.uid %></td>
+                <td><%= link_to 'Edit', edit_app_achievement_path(@application, achievement) %></td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+    <% end %>
   </div>
 </div>
 

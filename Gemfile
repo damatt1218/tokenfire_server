@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 
-
 gem 'devise'
 gem 'cancan'
 gem 'doorkeeper', :git => 'git://github.com/applicake/doorkeeper.git', :branch => "1.0"
@@ -19,6 +18,9 @@ gem 'gcm_on_rails'
 gem 'pg'
 # gem 'sqlite3'
 
+gem 'carrierwave'
+# gem 'rmagick'
+
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -34,6 +36,11 @@ end
 
 gem 'jquery-rails'
 gem 'd3-rails'
+
+# Added for local testing
+group :development do
+  gem 'sqlite3'
+end
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

@@ -1,8 +1,12 @@
-<div class="span16">
-  <header class="page-header">
-    <h1><%= @application.name %> Achievements</h1>
-  </header>
-</div>
+<header class="page-header">
+  <h1>
+    <%= @application.name %> Achievements
+    <small class="pull-right">
+      <%= link_to 'New', new_app_achievement_path(@application), :class => "btn btn-info" %>
+    </small>
+  </h1>
+</header>
+
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
@@ -10,23 +14,24 @@
     <th>Description</th>
     <th>Token value</th>
     <th>Cost</th>
+    <th>Actions</th>
   </tr>
   </thead>
   <tbody>
-  <% @application.achievements.each do |achievement| %>
-      <tr>
-        <td><%= achievement.name%></td>
-        <td><%= achievement.description%></td>
-        <td><%= achievement.value%></td>
-        <td><%= achievement.cost%></td>
-        <td><%= link_to 'Edit', edit_app_achievement_path(achievement.app_id, achievement) %></td>
-      </tr>
-  <% end %>
+    <% @application.achievements.where(:soft_deleted => false).each do |achievement| %>
+        <tr>
+          <td><%= achievement.name%></td>
+          <td><%= achievement.description%></td>
+          <td><%= achievement.value%></td>
+          <td><%= achievement.cost%></td>
+          <td><%= link_to 'Edit', edit_app_achievement_path(achievement.app_id, achievement) %></td>
+        </tr>
+    <% end %>
   </tbody>
 </table>
 
 <div class="actions">
-  <%= link_to 'New', new_app_achievement_path(@application), :class => "btn primary" %>
+
 </div>
 
-<%= link_to 'Back to Application', app_path(@application) %>
+<%= link_to 'Back to Application', app_path(@application), :class => 'btn' %>

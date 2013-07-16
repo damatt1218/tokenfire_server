@@ -1,5 +1,6 @@
 <% if application.errors.any? %>
   <div class="alert-message error" data-alert><a class="close" href="#">×</a><p>Whoops! Check your form for possible errors</p></div>
+
 <% end %>
 
 <%= f.label :name %>
@@ -8,18 +9,31 @@
   <%= errors_for application, :name %>
 </div>
 
-<%= f.label :redirect_uri %>
-  <%= f.text_field :redirect_uri %>
-  <%= errors_for application, :redirect_uri %>
-  <% if Doorkeeper.configuration.test_redirect_uri %>
-    <span class="help-block">Use <%= Doorkeeper.configuration.test_redirect_uri %> for local tests</span>
-  <% end %>
-
 <%= f.label :description %>
 <%= f.text_field :description %>
 
-<%= f.label :image %>
-<%= f.text_field :image %>
+<p>
+  <%= f.label :image, "Image (please upload a 96 x 96 icon)" %>
+  <%= image_tag application.image_url.to_s %><br>
+  <%= f.file_field :image %><br>
+  <%= f.label :remote_image_url, "or image URL" %>
+  <%= f.text_field :remote_image_url %>
+</p>
+
+<p>
+  <%= f.label :url %>
+  <%= f.text_field :url %>
+</p>
+
+<% if current_user.role? :admin %>
+  <p>
+    <%= f.label :disabled, :class => 'checkbox inline' %>
+    <%= f.check_box :disabled %>
+  </p>
+<% end %>
+
+<%= f.hidden_field :redirect_uri, :value => "http://localhost" %>
+
 
 <p>
   <%= f.submit :Submit, :class => "btn btn-primary" %>

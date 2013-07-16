@@ -17,7 +17,9 @@ class Achievement < ActiveRecord::Base
                   # Specify special rules to allow only some user to acquire the achievements
                   :availability,
                   # Unique identifier for the achievement to be used in the RESTful API
-                  :uid
+                  :uid,
+                  # True if the user has "deleted" the achievement.  Will be a soft delete
+                  :soft_deleted
 
   # Relationships
   has_many :achievement_history

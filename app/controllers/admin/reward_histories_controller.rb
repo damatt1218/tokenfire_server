@@ -3,7 +3,9 @@ module Admin
 
     # GET /reward_histories
     def index
-      @reward_histories = RewardHistory.find_all_by_processed(false)
+      @pending_rewards = RewardHistory.find_all_by_processed(false)
+      @fulfilled_rewards = RewardHistory.find_all_by_processed(true)
+
       respond_to do |format|
         format.html # index.html.erb
       end

@@ -1,29 +1,37 @@
-<div class="span16">
-  <header class="page-header">
-    <h2>Sign up</h2>
-  </header>
+<div class="row">
+  <div class="well span4 offset4 centered">
 
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+      <fieldset>
+        <legend>Sign Up</legend>
+        <%= devise_error_messages! %>
 
-  <div class="clearfix"><%= f.label :username %>
-    <div class="input"><%= f.text_field :username, :autofocus => true %></div></div>
+        <%= f.label :username %>
+        <%= f.text_field :username, :autofocus => true %>
 
-  <div class="clearfix"><%= f.label :email %>
-    <div class="input"><%= f.email_field :email %></div></div>
+        <%= f.label :email %>
+        <%= f.email_field :email %>
 
-  <div class="clearfix"><%= f.label :password %>
-    <div class="input"><%= f.password_field :password %></div></div>
+        <%= f.label :password %>
+        <%= f.password_field :password %>
 
-  <div class="clearfix"><%= f.label :password_confirmation %>
-    <div class="input"><%= f.password_field :password_confirmation %></div></div>
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation %>
 
-  <%= render :partial => "devise/shared/fields", :locals => {:f => f} %>
+        <%= render :partial => "devise/shared/fields", :locals => {:f => f} %>
 
-  <%= f.hidden_field :registered, :value => true %>
+        <%= f.hidden_field :registered, :value => true %>
 
-  <div class="actions"><%= f.submit "Sign up" %></div>
-<% end %>
+        <p>
+          <%= f.submit "Sign up", :class => 'btn btn-primary' %>
+        </p>
 
-<%= render "devise/shared/links" %>
+      </fieldset>
+    <% end %>
+
+    <%= render "devise/shared/links" %>
+
+  </div>
 </div>
+
+

@@ -18,7 +18,13 @@ MobileRewardz::Application.routes.draw do
   end
 
   match 'apps/dau_data', :to => 'apps#dau_data', :via => :get
+  match 'apps/disable/:id', :to => 'apps#disable', :via => :get, :as => :apps_disable
+  match 'apps/restore/:id', :to => 'apps#restore', :via => :get, :as => :apps_restore
+  match 'apps/accept/:id', :to => 'apps#accept', :via => :get, :as => :apps_accept
+  match 'apps/submit/:id', :to => 'apps#submit', :as => :apps_submit
   resources :apps do
+    match 'achievements/:id/soft_delete', :to => 'achievements#softDelete', :as => :soft_delete_app_achievement
+    match 'achievements/:id/restore', :to => 'achievements#restore', :as => :restore_app_achievement
     resources :achievements
     resource :usage
 
@@ -38,6 +44,7 @@ MobileRewardz::Application.routes.draw do
   devise_for :users, :controllers => {:registrations => "users/registrations", :sessions => "users/sessions"}
   #resources :users
 
+  # Routing for API
   namespace :api do
 
     match 'client_api/validate_app_id', :to => 'client_sdk_api#validate_app_id'
@@ -62,11 +69,14 @@ MobileRewardz::Application.routes.draw do
     resources :accounts, :only => [:index, :show]
   end
 
+
   namespace :admin do
-    match '/' => 'users#index'
-    match 'rewards/pending_redeemed', :to => 'reward_histories#index'
+    resources :rewards
     resources :users
     resources :reward_histories
+    match '/' => 'users#index'
+    match 'rewards/pending_redeemed', :to => 'reward_histories#index'
+
   end
 
 

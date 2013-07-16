@@ -78,6 +78,38 @@ class AchievementsController < ApplicationController
     end
   end
 
+  # Soft deletes an existing achievement
+  # /apps/:app_id/achievements/:id/soft_delete
+  #   :app_id is the id of the app the achievement will be associated with
+  #   :id is the id of the achievement to update
+  def softDelete
+    if hasAccess
+      achievement = Achievement.find(params[:id])
+      achievement.soft_deleted = true;
+      achievement.save
+      redirect_to app_path(params[:app_id])
+    else
+      redirect_to '/'
+    end
+
+  end
+
+  # Restores a soft deleted, existing achievement
+  # /apps/:app_id/achievements/:id/restore
+  #   :app_id is the id of the app the achievement will be associated with
+  #   :id is the id of the achievement to update
+  def restore
+    if isAdmin && hasAccess
+      achievement = Achievement.find(params[:id])
+      achievement.soft_deleted = false;
+      achievement.save
+      redirect_to app_path(params[:app_id])
+    else
+      redirect_to '/'
+    end
+
+  end
+
   # Checks permissions to see if the requesting user has access to the data requested
   # If the user has access:
   #   - The @application field will be populated (if the :app_id parameter is available)

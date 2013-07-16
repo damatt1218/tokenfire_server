@@ -1,10 +1,9 @@
-<% if @applications.count == 0 %>
+<% if @accepted_applications.count == 0 && @pending_applications.count == 0 && @submitted_applications == 0 %>
   <%= render 'apps/getting_started' %>
 <% else %>
   <header class="page-header">
     <h1>Overview</h1>
   </header>
-  <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 
   <!-- KPI -->
   <section>
@@ -15,7 +14,7 @@
         <i class="icon-download-alt icon-4x pull-left"></i>
         <div>
           <h4 class="media-heading">Downloads</h4>
-          <p class="lead">1,242,830</p>
+          <p class="lead"><%= number_with_delimiter(@downloads, :delimiter => ',')  %></p>
         </div>
       </div>
       <!-- /KPI #1 -->
@@ -36,7 +35,7 @@
         <i class="icon-money icon-4x pull-left"></i>
         <div>
           <h4 class="media-heading">Budget Remaining</h4>
-          <p class="lead">$3,200</p>
+          <p class="lead">-----------</p>
         </div>
       </div>
       <!-- /KPI #3 -->
@@ -53,43 +52,15 @@
         <div class="item active">
           <div id="dauGraph" class="bigGraph"></div>
           <div class="carousel-caption">
-            DAU per day
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x300" alt="Graph 2">
-          <div class="carousel-caption">
-            Graph 2
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x300" alt="Graph 3">
-          <div class="carousel-caption">
-            Graph 3
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x300" alt="Graph 4">
-          <div class="carousel-caption">
-            Graph 4
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x300" alt="Graph 5">
-          <div class="carousel-caption">
-            Graph 5
-          </div>
-        </div>
-        <div class="item">
-          <img src="http://placehold.it/1200x300" alt="Graph 6">
-          <div class="carousel-caption">
-            Graph 6
+            DAU
           </div>
         </div>
       </div>
-      <!-- Carousel nav -->
+
+      <!-- Carousel nav
       <a class="carousel-control left" href="#graphCarousel" data-slide="prev">‹</a>
       <a class="carousel-control right" href="#graphCarousel" data-slide="next">›</a>
+      -->
     </div><!-- /.carousel -->
 
   </section>
@@ -196,6 +167,8 @@
           <%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn btn-primary" %>
         <% end %>
       </p>
+
+      <h5>Accepted Applications</h5>
       <table class="table table-bordered table-striped table-hover">
         <thead>
         <tr>
@@ -209,9 +182,9 @@
         </tr>
         </thead>
         <tbody>
-          <% @applications.each do |application| %>
+          <% @accepted_applications.each do |application| %>
               <tr id="application_<%= application.id %>">
-                <td><%= application.name %></td>
+                <td><%= link_to application.name, app_path(application) %></td>
                 <td><%= application.accounts.count %></td>
                 <td><%= application.getDailyActiveUsers(Date.today) %></td>
                 <td><%= application.getAverageSessionsPerDay %></td>
@@ -222,7 +195,96 @@
           <% end %>
         </tbody>
       </table>
+
+      <h5>Pending Applications</h5>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Total Users</th>
+          <th>DAU</th>
+          <th>Avg. Sessions / day</th>
+          <th>Avg. Session Length</th>
+          <th>Analytics</th>
+          <th>App Key</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @pending_applications.each do |application| %>
+            <tr id="application_<%= application.id %>">
+              <td><%= link_to application.name, app_path(application) %></td>
+              <td><%= application.accounts.count %></td>
+              <td><%= application.getDailyActiveUsers(Date.today) %></td>
+              <td><%= application.getAverageSessionsPerDay %></td>
+              <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
+              <td><%= link_to 'View Statistics', app_path(application) %></td>
+              <td><%= link_to 'View Key', oauth_application_path(application) %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+
+      <h5>Submitted Applications</h5>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Total Users</th>
+          <th>DAU</th>
+          <th>Avg. Sessions / day</th>
+          <th>Avg. Session Length</th>
+          <th>Analytics</th>
+          <th>App Key</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @submitted_applications.each do |application| %>
+            <tr id="application_<%= application.id %>">
+              <td><%= link_to application.name, app_path(application) %></td>
+              <td><%= application.accounts.count %></td>
+              <td><%= application.getDailyActiveUsers(Date.today) %></td>
+              <td><%= application.getAverageSessionsPerDay %></td>
+              <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
+              <td><%= link_to 'View Statistics', app_path(application) %></td>
+              <td><%= link_to 'View Key', oauth_application_path(application) %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+
+      <% if current_user.role? :admin %>
+          <h5>Deleted Applications</h5>
+          <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Total Users</th>
+              <th>DAU</th>
+              <th>Avg. Sessions / day</th>
+              <th>Avg. Session Length</th>
+              <th>Analytics</th>
+              <th>App Key</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @deleted_applications.each do |application| %>
+                <tr id="application_<%= application.id %>">
+                  <td><%= link_to application.name, app_path(application) %></td>
+                  <td><%= application.accounts.count %></td>
+                  <td><%= application.getDailyActiveUsers(Date.today) %></td>
+                  <td><%= application.getAverageSessionsPerDay %></td>
+                  <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
+                  <td><%= link_to 'View Statistics', app_path(application) %></td>
+                  <td><%= link_to 'View Key', oauth_application_path(application) %></td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
+      <% end %>
     </div>
   </section>
 <!-- /Applications -->
+
+<!-- Javascript -->
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 <% end %>

@@ -6,9 +6,27 @@ class AppsController < ApplicationController
   #  /apps
   def index
     if current_user.role? :admin
-      @applications = App.all
+      @accepted_applications = App.where(:accepted => true,
+                                         :disabled =>false)
+      @pending_applications = App.where(:accepted => false,
+                                        :submitted => false,
+                                        :disabled => false)
+      @deleted_applications = App.where(:disabled => true)
+      @submitted_applications = App.where(:submitted => true,
+                                          :accepted => false,
+                                          :disabled => false)
     else
-      @applications = App.find_all_by_account_id(current_user.account.id)
+      @accepted_applications = App.where(:account_id => current_user.account.id,
+                                         :accepted => true,
+                                         :disabled => false)
+      @pending_applications = App.where(:account_id => current_user.account.id,
+                                        :accepted => false,
+                                        :submitted => false,
+                                        :disabled => false)
+      @submitted_applications = App.where(:account_id => current_user.account.id,
+                                          :submitted => true,
+                                          :accepted => false,
+                                          :disabled => false)
     end
 
     # This should be pre-calculate when we start to get a real amount of data
@@ -18,14 +36,17 @@ class AppsController < ApplicationController
     @dau_delta = 0
     @mau = 0
     @formatted_dau_delta = '0'
+    @downloads = 0
 
-    @applications.each do |app|
+    @accepted_applications.each do |app|
        @users += app.accounts.count
        @usageTime += app.getTotalUsageTime
 
       @mau += app.getMonthlyActiveUsers(Date.today)
       @dau = app.getDailyActiveUsers(Date.today)
       @dau_delta += @dau - app.getDailyActiveUsers(Date.today - 1.days)
+      @downloads += Download.where(:app_download_id  => app.id,
+                                   :pending => false).count
     end
 
     @formatted_dau_delta = format_delta(@dau_delta)
@@ -36,7 +57,10 @@ class AppsController < ApplicationController
   def show
     @application = App.find(params[:id])
     @dau = @application.getDailyActiveUsers(Date.today)
+    @downloads_count = Download.where(:app_download_id  => @application.id,
+                                      :pending => false).count
     @mau = @application.getMonthlyActiveUsers(Date.today)
+
 
     unless current_user.role? :admin
       if(@application.account.id != current_user.account.id)
@@ -45,6 +69,53 @@ class AppsController < ApplicationController
     end
   end
 
+  # Allows "soft deletion" of apps instead of destroying the object altogether
+  # /apps/disable/<id>
+  def disable
+    @application = App.find(params[:id])
+    if (@application.account_id == current_user.account.id) || (current_user.role? :admin)
+      @application.disabled = true
+      @application.save
+    end
+
+    redirect_to apps_path
+  end
+
+  # Allows admins to restore "soft deleted" apps
+  # /apps/restore/<id>
+  def restore
+    @application = App.find(params[:id])
+    if current_user.role? :admin
+      @application.disabled = false
+      @application.save
+    end
+
+    redirect_to apps_path
+  end
+
+  # Allows admins to accept apps
+  # /apps/accept/<id>
+  def accept
+    @application = App.find(params[:id])
+    if current_user.role? :admin
+      @application.accepted = true
+      @application.save
+    end
+
+    redirect_to apps_path
+  end
+
+  # Submits apps for review
+  # /apps/submit/<id>
+  def submit
+    @application = App.find(params[:id])
+    if (@application.account_id == current_user.account.id) || (current_user.role? :admin)
+      @application.submitted = true
+      @application.save
+    end
+
+    redirect_to apps_path
+  end
 
   # Provides Daily Action Users JSON for all applications to be displayed as a chart
   # using a client side charting framework
