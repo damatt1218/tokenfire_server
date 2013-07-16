@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 
-gem 'devise'
+gem 'devise', '~> 3.0'
 gem 'cancan'
 gem 'doorkeeper', :git => 'git://github.com/applicake/doorkeeper.git', :branch => "1.0"
 
@@ -21,6 +21,7 @@ gem 'pg'
 gem 'carrierwave'
 # gem 'rmagick'
 
+gem 'httparty'
 
 # Gems used only for assets and not required
 # in production environments by default.
