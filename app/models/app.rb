@@ -31,6 +31,10 @@ class App < ActiveRecord::Base
     return app_daily_summaries.where(:summary_date => dau_date).length
   end
 
+  def getMonthlyActiveUsers(mau_date)
+    return app_daily_summaries.where(:summary_date => mau_date.beginning_of_month..mau_date.end_of_month).length
+  end
+
   def getAverageSessionsPerDay
     days_app_active = (Time.zone.now - created_at).to_i / 1.day
 

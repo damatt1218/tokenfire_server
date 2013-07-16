@@ -16,12 +16,14 @@ class AppsController < ApplicationController
     @usageTime = 0
     @dau = 0
     @dau_delta = 0
+    @mau = 0
     @formatted_dau_delta = '0'
 
     @applications.each do |app|
        @users += app.accounts.count
        @usageTime += app.getTotalUsageTime
 
+      @mau += app.getMonthlyActiveUsers(Date.today)
       @dau = app.getDailyActiveUsers(Date.today)
       @dau_delta += @dau - app.getDailyActiveUsers(Date.today - 1.days)
     end
@@ -34,6 +36,7 @@ class AppsController < ApplicationController
   def show
     @application = App.find(params[:id])
     @dau = @application.getDailyActiveUsers(Date.today)
+    @mau = @application.getMonthlyActiveUsers(Date.today)
 
     unless current_user.role? :admin
       if(@application.account.id != current_user.account.id)
