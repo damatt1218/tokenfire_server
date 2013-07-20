@@ -32,7 +32,12 @@ group :assets do
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
 
-  gem 'uglifier', '>= 1.0.3'
+  # uglifier failing when compressing assets. See https://github.com/rails/rails/issues/2847
+  #   and http://stackoverflow.com/questions/7877180/ror-precompiling-assets-fail-while-rake-assetsprecompile-on-basically-empty-a
+  # gem 'uglifier', '>= 1.0.3'
+
+  # Use the closure compiler instead
+  gem 'closure-compiler'
 end
 
 gem 'jquery-rails'
