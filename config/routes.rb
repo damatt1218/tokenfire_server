@@ -55,6 +55,7 @@ MobileRewardz::Application.routes.draw do
     match 'accounts/get_profile', :to => 'accounts#getProfile'
     match 'accounts/get_histories', :to => 'accounts#getHistories'
     match 'accounts/tapjoy_offer_complete', :to => 'accounts#tapjoyOfferComplete'
+    match 'accounts/sponsorpay_offer_complete', :to => 'accounts#sponsorPayOfferComplete'
     match 'rewards/featured_rewards', :to => 'rewards#featured_rewards'
     match 'apps/featured_apps', :to => 'apps#featured_apps'
     match 'achievements/report', :to => 'achievement_histories#report', :via => :post
