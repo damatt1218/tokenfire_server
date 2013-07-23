@@ -1,5 +1,12 @@
 class Download < ActiveRecord::Base
-  attr_accessible :device_id, :app_id, :pending, :link_click_time, :initial_launch_time, :app_download_id
+  attr_accessible :device_id,
+                  # ID of the app that originated this download (referrer)
+                  :app_id,
+                  :pending,
+                  :link_click_time,
+                  :initial_launch_time,
+                  # ID of the downloaded app
+                  :app_download_id
 
   # Relationships
   belongs_to :device
