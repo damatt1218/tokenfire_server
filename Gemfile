@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 
-gem 'devise'
+gem 'devise', '~> 3.0'
 gem 'cancan'
 gem 'doorkeeper', :git => 'git://github.com/applicake/doorkeeper.git', :branch => "1.0"
 
@@ -18,6 +18,10 @@ gem 'gcm_on_rails'
 gem 'pg'
 # gem 'sqlite3'
 
+gem 'carrierwave'
+# gem 'rmagick'
+
+gem 'httparty'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -28,7 +32,12 @@ group :assets do
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
 
-  gem 'uglifier', '>= 1.0.3'
+  # uglifier failing when compressing assets. See https://github.com/rails/rails/issues/2847
+  #   and http://stackoverflow.com/questions/7877180/ror-precompiling-assets-fail-while-rake-assetsprecompile-on-basically-empty-a
+  # gem 'uglifier', '>= 1.0.3'
+
+  # Use the closure compiler instead
+  gem 'closure-compiler'
 end
 
 gem 'jquery-rails'

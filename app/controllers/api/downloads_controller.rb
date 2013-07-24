@@ -63,7 +63,7 @@ module Api
       refering_app = App.find_by_name(refering_app_pkg)
 
       download = Download.find_or_create_by_device_id_app_id_and_app_download_id(
-          device_id, refering_app.id, download_app.id)
+          device_id, refering_app.id, app.id)
 
       if !download.initial_launch_time
         download.initial_launch_time = Time.now
@@ -72,7 +72,7 @@ module Api
       end
 
       if download
-        render status: 200
+        render status: 200, text: ""
       else
         render status: 401, json: {error: "Invalid download"}
       end

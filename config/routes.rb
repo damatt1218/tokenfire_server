@@ -18,7 +18,13 @@ MobileRewardz::Application.routes.draw do
   end
 
   match 'apps/dau_data', :to => 'apps#dau_data', :via => :get
+  match 'apps/disable/:id', :to => 'apps#disable', :via => :get, :as => :apps_disable
+  match 'apps/restore/:id', :to => 'apps#restore', :via => :get, :as => :apps_restore
+  match 'apps/accept/:id', :to => 'apps#accept', :via => :get, :as => :apps_accept
+  match 'apps/submit/:id', :to => 'apps#submit', :as => :apps_submit
   resources :apps do
+    match 'achievements/:id/soft_delete', :to => 'achievements#softDelete', :as => :soft_delete_app_achievement
+    match 'achievements/:id/restore', :to => 'achievements#restore', :as => :restore_app_achievement
     resources :achievements
     resource :usage
 
@@ -49,6 +55,7 @@ MobileRewardz::Application.routes.draw do
     match 'accounts/get_profile', :to => 'accounts#getProfile'
     match 'accounts/get_histories', :to => 'accounts#getHistories'
     match 'accounts/tapjoy_offer_complete', :to => 'accounts#tapjoyOfferComplete'
+    match 'accounts/sponsorpay_offer_complete', :to => 'accounts#sponsorPayOfferComplete'
     match 'rewards/featured_rewards', :to => 'rewards#featured_rewards'
     match 'apps/featured_apps', :to => 'apps#featured_apps'
     match 'achievements/report', :to => 'achievement_histories#report', :via => :post

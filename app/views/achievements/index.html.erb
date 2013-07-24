@@ -18,7 +18,7 @@
   </tr>
   </thead>
   <tbody>
-    <% @application.achievements.each do |achievement| %>
+    <% @application.achievements.where(:soft_deleted => false).each do |achievement| %>
         <tr>
           <td><%= achievement.name%></td>
           <td><%= achievement.description%></td>

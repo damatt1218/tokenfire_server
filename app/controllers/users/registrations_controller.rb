@@ -30,7 +30,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       combine_accounts = false
     end
 
-    build_resource
+    build_resource(sign_up_params)
 
     if add_prospective_dev_role
       resource.add_role_id(4)
