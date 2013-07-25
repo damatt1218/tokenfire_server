@@ -37,7 +37,7 @@ class AchievementsController < ApplicationController
 
       # Save the new achievement
       if @achievement.save
-        redirect_to app_achievements_url params[:app_id]
+        redirect_to app_url(params[:app_id]), :flash => { :notice => "Achievement successfully created." }
       end
     end
   end
@@ -51,7 +51,7 @@ class AchievementsController < ApplicationController
     if hasAccess
       # Do the update
       if @achievement.update_attributes(params[:achievement])
-        redirect_to app_achievement_url params[:app_id]
+        redirect_to app_url(params[:app_id]), :flash => { :notice => "Achievement successfully updated." }
       end
     end
   end
@@ -87,7 +87,7 @@ class AchievementsController < ApplicationController
       achievement = Achievement.find(params[:id])
       achievement.soft_deleted = true;
       achievement.save
-      redirect_to app_path(params[:app_id])
+      redirect_to app_path(params[:app_id]), :flash => { :notice => "Achievement successfully deleted." }
     else
       redirect_to '/'
     end
@@ -103,7 +103,7 @@ class AchievementsController < ApplicationController
       achievement = Achievement.find(params[:id])
       achievement.soft_deleted = false;
       achievement.save
-      redirect_to app_path(params[:app_id])
+      redirect_to app_path(params[:app_id]), :flash => { :notice => "Achievement successfully restored." }
     else
       redirect_to '/'
     end
