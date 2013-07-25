@@ -16,9 +16,9 @@ module Apps
 
     # This create function is limited to developers and admins roles only.
     def create
-      @application  = App.new(params[:application])
+      @application  =  Doorkeeper.client.new(params[:application])
 
-      @application.account = current_user.account
+      @application.account_id = current_user.account.id
 
       if @application.save
         redirect_to apps_url, :notice => t('doorkeeper.flash.applications.create.notice')

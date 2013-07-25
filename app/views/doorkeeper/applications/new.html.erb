@@ -2,7 +2,7 @@
 <div class="well span5 offset3">
   <legend>New Application</legend>
 
-  <%= form_for :application, :url => oauth_applications_path, :html => { :method => :post} do |f| %>
+  <%= form_for :application, :url => create_app_path, :html => { :method => :post} do |f| %>
     <%= render 'form', :application => @application, :f => f %>
   <% end %>
 </div>

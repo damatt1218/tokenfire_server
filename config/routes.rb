@@ -17,6 +17,7 @@ MobileRewardz::Application.routes.draw do
     controllers :applications => 'apps/custom_applications'
   end
 
+
   match 'apps/dau_data', :to => 'apps#dau_data', :via => :get
   match 'apps/disable/:id', :to => 'apps#disable', :via => :get, :as => :apps_disable
   match 'apps/restore/:id', :to => 'apps#restore', :via => :get, :as => :apps_restore
@@ -37,6 +38,7 @@ MobileRewardz::Application.routes.draw do
 
   scope :module => 'apps' do
     match 'oauth/usage_info', :to => 'apps#getUsageInfo'
+    match 'create_app', :to=> 'custom_applications#create'
 
   end
 
