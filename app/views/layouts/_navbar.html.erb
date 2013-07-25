@@ -24,7 +24,7 @@
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <% if current_user.account.apps.count > 1 %>
+                <% if current_user.account.apps.count > 0 %>
                   <% current_user.account.apps.each do |application| %>
                     <li><%= link_to application.name, app_path(application) %></li>
                   <% end %>

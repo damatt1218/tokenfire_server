@@ -84,8 +84,9 @@ ActiveRecord::Schema.define(:version => 20130712084131) do
     t.integer  "account_id"
     t.integer  "app_id"
     t.integer  "usage_time"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer  "last_deducted_session_id"
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
   end
 
   add_index "app_usages", ["account_id", "app_id"], :name => "index_app_usages_on_account_id_and_app_id"
