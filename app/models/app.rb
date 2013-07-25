@@ -30,11 +30,19 @@ class App < ActiveRecord::Base
 
   def getDailyActiveUsers(dau_date)
 
-    return app_daily_summaries.where(:summary_date => dau_date).length
+    return app_daily_summaries.where(:summary_date => dau_date).sum(:dau_count)
   end
 
   def getMonthlyActiveUsers(mau_date)
-    return app_daily_summaries.where(:summary_date => mau_date.beginning_of_month..mau_date.end_of_month).length
+    monthly_users = 0
+    app_sessions.where(:session_start => mau_date.beginning_of_month..mau_date.end_of_month)
+                     .uniq.pluck(:device_id).each do |device_id|
+      if Device.find_by_id(device_id).hasDownloadWithAppDownloadId(self.id) == true
+        monthly_users += 1
+      end
+    end
+    return monthly_users
+    #return app_daily_summaries.where(:summary_date => mau_date.beginning_of_month..mau_date.end_of_month).length
   end
 
   def getAverageSessionsPerDay
@@ -70,7 +78,15 @@ class App < ActiveRecord::Base
 
   def getTotalSessionCount
 
-    total_sessions = app_sessions.count
+    # total_sessions = app_sessions.count
+    total_sessions = 0
+
+    #need to count all app_sessions whose device has a download whose app_download_id is this app_id
+    app_sessions.each do |session|
+      if (session.device.hasDownloadWithAppDownloadId(self.id))
+        total_session += 1
+      end
+    end
 
     return total_sessions
   end
@@ -82,11 +98,10 @@ class App < ActiveRecord::Base
 
   def getAverageAchievements
     achievement_count = AchievementHistory.joins(:achievement).where("app_id = ?", self.id).count
-    # devices_with_app = Download.where(:app_download_id  => self.id,
-    #                                   :pending => false).count
+    devices_with_app = Download.where(:app_download_id  => self.id,
+                                       :pending => false).count
 
     average_achievements = 0.0
-    devices_with_app = accounts.length
 
     if devices_with_app > 0
       average_achievements = 1.0 * achievement_count / devices_with_app
@@ -102,8 +117,6 @@ class App < ActiveRecord::Base
     achievement_histories = AchievementHistory.where(:achievement_id => achievement.id)
     achievement_histories.each do |history|
       sessions = app_sessions.where("session_start < ?", history.acquired)
-      puts "*** sessions count"
-      puts sessions.count
       session_total += sessions.sum(:session_duration)
     end
 

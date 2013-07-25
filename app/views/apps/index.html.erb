@@ -185,7 +185,8 @@
           <% @accepted_applications.each do |application| %>
               <tr id="application_<%= application.id %>">
                 <td><%= link_to application.name, app_path(application) %></td>
-                <td><%= application.accounts.count %></td>
+                <td><%= Download.where(:app_download_id  => application.id,
+                                       :pending => false).count %></td>
                 <td><%= application.getDailyActiveUsers(Date.today) %></td>
                 <td><%= application.getAverageSessionsPerDay %></td>
                 <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>

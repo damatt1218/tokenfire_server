@@ -92,14 +92,14 @@
     </thead>
     <tbody>
     <tr>
-      <% if @application.accounts.length == 0 %>
+      <% if @downloads_count == 0 %>
         <td colspan=6>No Downloads Yet</td>
       <% else %>
-      <td><%= @application.accounts.length %></td>
-      <td><%= @application.getAverageSessionsPerDay / @application.accounts.length %></td>
-      <td><%= @application.getAverageSessionsPerMonth / @application.accounts.length %></td>
-      <td><%= Time.at(@application.getAverageSessionLength / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
-      <td><%= Time.at(@application.getTotalUsageTime / @application.accounts.length).gmtime.strftime('%R:%S') %></td>
+      <td><%= @downloads_count %></td>
+      <td><%= @application.getAverageSessionsPerDay %></td>
+      <td><%= @application.getAverageSessionsPerMonth %></td>
+      <td><%= Time.at(@application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
+      <td><%= Time.at(@application.getTotalUsageTime).gmtime.strftime('%R:%S') %></td>
       <td><%= @application.getAverageAchievements %>/<%= @application.achievements.length %></td>
       <% end %>
     </tr>
@@ -134,8 +134,8 @@
             <td><%= achievement.cost %></td>
             <td><%= @application.getAverageDurationForAchievement(achievement) %></td>
             <td>
-              <% if @application.accounts.length > 0 %>
-                <%= 100.0 * achievement.achievement_history.count / @application.accounts.length %>
+              <% if @downloads_count > 0 %>
+                <%= 100.0 * achievement.achievement_history.count / @downloads_count %>
               <% else %>
                 0
               <% end%>
@@ -168,8 +168,15 @@
               <tr>
                 <td><%= achievement.name %></td>
                 <td><%= achievement.cost %></td>
-                <td>CREATE CALC</td>
-                <td>CREATE CALC</td>
+                <td><%= @application.getAverageDurationForAchievement(achievement) %></td>
+                <td>
+                  <% if @downloads_count > 0 %>
+                      <%= 100.0 * achievement.achievement_history.count / @downloads_count %>
+                  <% else %>
+                      0
+                  <% end%>
+                  %
+                </td>
                 <td><%= achievement.achievement_history.count %></td>
                 <td><%= achievement.uid %></td>
                 <td><%= link_to 'Edit', edit_app_achievement_path(@application, achievement) %></td>

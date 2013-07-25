@@ -38,7 +38,10 @@ class AppDailySummary < ActiveRecord::Base
 
   def update_dau_count
 
-    self.dau_count = self.users.where(:app_sessions => {:session_start => @query_start_datetime..@query_end_datetime}).length
+    self.dau_count =  self.devices.where(:app_sessions => {:session_start => @query_start_datetime..@query_end_datetime},
+                                         :downloads => {:app_download_id => self.app_id}).length
+
+    # self.dau_count = self.users.where(:app_sessions => {:session_start => @query_start_datetime..@query_end_datetime}).length
 
         #app_usages.where(:app_sessions => {:session_start => start_time..end_time})
         #
@@ -60,10 +63,26 @@ class AppDailySummary < ActiveRecord::Base
   end
 
   def update_duration
-    self.total_duration = self.app_sessions.where(:session_start => @query_start_datetime..@query_end_datetime)
-      .sum(:session_duration) / 60
-    self.average_duration = self.app_sessions.where(:session_start => @query_start_datetime..@query_end_datetime)
-      .average(:session_duration) / 60
+    #self.total_duration = self.app_sessions.where(:session_start => @query_start_datetime..@query_end_datetime)
+    #  .sum(:session_duration) / 60
+    #self.average_duration = self.app_sessions.where(:session_start => @query_start_datetime..@query_end_datetime)
+    #  .average(:session_duration) / 60
+
+    self.average_duration = 0
+    self.total_duration = 0
+    total_session = 0
+    self.app_sessions.where(:session_start => @query_start_datetime..@query_end_datetime).each do |session|
+      if (session.device.hasDownloadWithAppDownloadId(self.id))
+        total_session += 1
+        self.total_duration += session.session_duration
+      end
+    end
+
+    self.total_duration = self.total_duration / 60
+
+    if total_session > 0
+     self.average_duration = self.total_duration / total_sessio
+    end
   end
 
 end

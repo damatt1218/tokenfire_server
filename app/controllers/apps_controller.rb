@@ -43,7 +43,7 @@ class AppsController < ApplicationController
        @usageTime += app.getTotalUsageTime
 
       @mau += app.getMonthlyActiveUsers(Date.today)
-      @dau = app.getDailyActiveUsers(Date.today)
+      @dau += app.getDailyActiveUsers(Date.today)
       @dau_delta += @dau - app.getDailyActiveUsers(Date.today - 1.days)
       @downloads += Download.where(:app_download_id  => app.id,
                                    :pending => false).count
