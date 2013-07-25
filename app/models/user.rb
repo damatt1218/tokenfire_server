@@ -85,7 +85,12 @@ class User < ActiveRecord::Base
     if self.email.empty?
       return false
     else
-      return true
+      if (!persisted? || !password.nil? || !password_confirmation.nil?)
+        return true
+      else
+        return false
+      end
+
     end
   end
 
