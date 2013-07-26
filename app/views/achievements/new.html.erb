@@ -1,5 +1,5 @@
-<div class="row">
-  <div class="well span8 offset2">
+<div class="row-fluid">
+  <div class="well span6 offset3">
 
     <%= form_for :achievement, :url => app_achievements_path(@achievement.app_id), :html => { :method => :post } do |f| %>
       <legend>New Achievement for <%= @application.name.capitalize %></legend>

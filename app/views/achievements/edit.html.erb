@@ -1,5 +1,5 @@
-<div class="row">
-  <div class="well span8 offset2">
+<div class="row-fluid">
+  <div class="well span6 offset3">
 
     <%= form_for :achievement, :url => app_achievement_path(@application,@achievement), :html => { :method => :put } do |f| %>
       <legend>Edit <%= @achievement.name %></legend>
@@ -12,6 +12,5 @@
     <% if (@achievement.soft_deleted == true) && (current_user.role? :admin) %>
         <%= link_to 'Restore', app_restore_app_achievement_path(@application, @achievement), :class => "btn btn-warning"  %>
     <% end %>
-
   </div>
 </div>

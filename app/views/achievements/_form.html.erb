@@ -5,6 +5,7 @@
 
   <%= f.label :name %>
   <%= f.text_field :name, :class => 'span8' %>
+  <i>This is what users will see.</i>
 
   <%= f.label :description %>
   <%= f.text_area :description, :rows => '3', :class => 'span8'  %>
@@ -20,9 +21,6 @@
    <%= f.check_box :repeatable%> <i>Check this box if a user can acquire this achievement multiple times</i>
 </p>
 
-  <div class="actions">
     <%= f.submit :Submit, :class => "btn btn-primary" %>
     <%= link_to 'Cancel', app_path(@application), :class => 'btn' %>
-
-  </div>
 </fieldset>
