@@ -224,7 +224,6 @@ module Api
           returnUserHistories << history
         end
 
-        report_to_apsalar(OfferHistory.find_or_create_by_transaction_id(1363419925570))
         render status: 200, json: returnUserHistories
       end
     end
@@ -245,7 +244,7 @@ module Api
       # p: platform
       # s: session ID
       # h: hash
-      queryString = "u=d22abcccae2928e2&a=damatt&av=1.0&i=com.tokenfire.tokenfire&k=ANDI&p=Android&s=8266ded0-495c-4ac8-b1d8-4180e310964c" #"&h=a6006f38fdcdbd08fafcacd976eb1f802d867f9e"
+      queryString = "u=d22abcccae2928e2&a=damatt&av=1.0&i=com.tokenfire.tokenfire&k=ANDI&p=Android&s=8266ded0-495c-4ac8-b1d8-4180e310964c"
       queryString += "&n=" + offerHistory.company + "Redemption"
       queryString += "&e=" + url_encode(offerHistory.to_json.force_encoding("utf-8"))
       hash = "&h=" + Digest::SHA1.hexdigest(apsalarSecret + "?" + queryString)

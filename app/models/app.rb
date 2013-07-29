@@ -84,7 +84,7 @@ class App < ActiveRecord::Base
     #need to count all app_sessions whose device has a download whose app_download_id is this app_id
     app_sessions.each do |session|
       if (session.device.hasDownloadWithAppDownloadId(self.id))
-        total_session += 1
+        total_sessions += 1
       end
     end
 

@@ -132,7 +132,7 @@
           <tr>
             <td><%= achievement.name %></td>
             <td><%= achievement.cost %></td>
-            <td><%= @application.getAverageDurationForAchievement(achievement) %></td>
+            <td><%= Time.at(@application.getAverageDurationForAchievement(achievement)).gmtime.strftime('%R:%S') %></td>
             <td>
               <% if @downloads_count > 0 %>
                 <%= 100.0 * achievement.achievement_history.count / @downloads_count %>
@@ -150,7 +150,7 @@
     </table>
 
     <% if current_user.role? :admin %>
-        <h5>Deleted Applications</h5>
+        <h5>Deleted Achievements</h5>
         <table class="table table-bordered table-striped table-hover">
           <thead>
           <tr>

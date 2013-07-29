@@ -17,12 +17,13 @@ module Api
     def clicked_download_app
       parsed_json = JSON.parse(request.body.read)
 
-      device_id = parsed_json["device_uid"]
+      device_uuid = parsed_json["device_uid"]
       download_app_pkg = parsed_json["download_app_pkg"]
       refering_app_pkg = parsed_json["refering_app_pkg"]
 
       download_app = App.find_by_name(download_app_pkg)
       refering_app = App.find_by_name(refering_app_pkg)
+      device_id = Device.find_by_uuid(device_uuid)
 
       download = Download.find_or_create_by_device_id_app_id_and_app_download_id(
           device_id, refering_app.id, download_app.id)
@@ -31,13 +32,14 @@ module Api
       download.pending = true
       download.save
 
-      redirect_string = "https://play.google.com/store/apps/details?id=" +
-                        download_app.name +
-                        "&referrer=utm_source%3D" +
-                        refering_app.name
+      #redirect_string = "https://play.google.com/store/apps/details?id=" +
+      #                  download_app.name +
+      #                  "&referrer=utm_source%3D" +
+      #                  refering_app.name
 
       if download
-        redirect_to redirect_string
+        #redirect_to redirect_string
+        render status: 200, text: ""
       else
         render status: 401, json: {error: "Invalid download"}
       end
@@ -55,12 +57,13 @@ module Api
     def initial_app_launch
       parsed_json = JSON.parse(request.body.read)
 
-      device_id = parsed_json["device_uid"]
-      app_pkg = parsed_json["app_uid"]
+      device_uuid = parsed_json["device_uid"]
+      app_uid = parsed_json["app_uid"]
       refering_app_pkg = parsed_json["refering_app_pkg"]
 
       app = App.find_by_uid(app_uid)
       refering_app = App.find_by_name(refering_app_pkg)
+      device_id = Device.find_by_uuid(device_uuid)
 
       download = Download.find_or_create_by_device_id_app_id_and_app_download_id(
           device_id, refering_app.id, app.id)
