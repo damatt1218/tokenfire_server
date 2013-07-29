@@ -59,14 +59,12 @@ ActiveRecord::Schema.define(:version => 20130712084131) do
   end
 
   create_table "app_session_histories", :force => true do |t|
-    t.string   "session_id"
-    t.string   "sdkVersion"
-    t.datetime "eventTimeStamp"
-    t.integer  "SessionDuration"
-    t.integer  "device_id"
-    t.integer  "app_usage_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.string   "app_session_id"
+    t.datetime "event_timestamp"
+    t.integer  "reported_duration"
+    t.integer  "event_type"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
   create_table "app_sessions", :force => true do |t|

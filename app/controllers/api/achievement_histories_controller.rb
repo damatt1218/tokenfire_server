@@ -12,12 +12,14 @@ module Api
     #     {
     #       "achievement_uid": The UID of the achievement to report
     #       "device_uid": The UID of for the users device
+    #       "acquired" : The datetime of when the achievement was acquired
     #     }
     def report
 
       #Check for the needed parameter, return error if not populated
       achievement_uid = params[:achievement_uid]
       device_uid = params[:device_uid]
+      acquired_date = params[:acquired]
 
       # Validate that the request contains valid parameters
       valid_parameters = true
@@ -27,7 +29,7 @@ module Api
       end
 
 
-      if valid_parameters && save_achievement(achievement_uid, device_uid)
+      if valid_parameters && save_achievement(achievement_uid, device_uid, acquired_date)
         render_status = 200
         response = {result: 'Success'}
       else
@@ -90,6 +92,14 @@ module Api
         return false
       end
 
+      downloaded_through_tokenfire = false
+      user.devices.each do |device|
+        if device.hasDownloadWithAppDownloadId(app.id)
+          downloaded_through_tokenfire = true
+        end
+
+      end
+
       user_achievements_infos = Array.new
 
       app.achievements.each do |achievement|
@@ -97,6 +107,9 @@ module Api
         # if the achievement is not available to the user
         #   next
         # end
+        if !downloaded_through_tokenfire
+          next
+        end
 
         unless achievement.enabled
           next
@@ -127,7 +140,7 @@ module Api
     #  achievement_uid - The UID associated with the achievement being reported (UID, not ID)
     #  device_uid - The UID associated with the device the achievement was achieved on
     private
-    def save_achievement (achievement_uid, device_uid)
+    def save_achievement (achievement_uid, device_uid, acquired_date)
       user = current_user
       app = current_application
       achievement = Achievement.find_by_uid(achievement_uid)
@@ -152,8 +165,8 @@ module Api
 
       # Find the achievement history is it already exists
       begin
-        achievement_history = AchievementHistory.where(:device_id => device.id).
-            where(:achievement_id => achievement.id).
+        achievement_history = AchievementHistory.where(:device_id => device,
+                                                       :achievement_id => achievement).
             limit(1).first
       rescue
         # ignored
@@ -174,6 +187,7 @@ module Api
         achievement_history = AchievementHistory.new
         achievement_history.achievement = achievement
         achievement_history.device = device
+        achievement_history.acquired = acquired_date
 
         # Only pay the user after successfully saving
         payout &&= achievement_history.save
