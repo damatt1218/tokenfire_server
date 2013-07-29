@@ -60,9 +60,10 @@ MobileRewardz::Application.configure do
       domain: "gmail.com",
       authentication: "plain",
       enable_starttls_auto: true,
-      user_name: 'REPLACE_WITH_USERNAME',
-      password: 'REPLACE_WITH_PASSWORD'
+      user_name: 'tokenfire.email',
+      password: 'Tokenfire2012'
   }
+
   config.action_mailer.default_url_options = {host: 'tokenfire.herokuapp.com'}
 
   # Enable threaded mode
