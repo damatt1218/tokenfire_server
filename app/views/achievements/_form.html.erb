@@ -1,8 +1,5 @@
 <fieldset>
-  <% if @achievement.errors.any? %>
-    <div class="alert-message error" data-alert><a class="close" href="#">×</a><p>Whoops! Check your form for possible errors</p></div>
-  <% end %>
-
+  <%= f.error_messages %>
   <%= f.label :name %>
   <%= f.text_field :name, :class => 'span8' %>
   <i>This is what users will see.</i>

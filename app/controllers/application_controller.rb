@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  helper :error_messages
 
   def has_role?(current_user, role)
     if current_user == nil

@@ -1,12 +1,18 @@
 <% if application.errors.any? %>
-  <div class="alert-message error" data-alert><a class="close" href="#">×</a><p>Whoops! Check your form for possible errors</p></div>
+  <div class="alert-message error" data-alert><a class="close" href="#">×</a>
+    <p>Whoops! Check your form for possible errors</p>
+    <p>
+      <% application.errors.full_messages.each do |msg| %>
+          <%= msg %><br>
+      <% end %>
+    </p>
+  </div>
 
 <% end %>
 
 <%= f.label :name %>
 <div class="input">
   <%= f.text_field :name %>
-  <%= errors_for application, :name %>
 </div>
 
 <%= f.label :description %>
@@ -37,5 +43,5 @@
 
 <p>
   <%= f.submit :Submit, :class => "btn btn-primary" %>
-  <%= link_to "Cancel", :back, :class => "btn" %>
+  <%= link_to "Cancel", apps_path, :class => 'btn' %>
 </p>
