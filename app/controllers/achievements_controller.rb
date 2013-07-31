@@ -16,7 +16,7 @@ class AchievementsController < ApplicationController
   def new
     # Redirect if the user doesn't have access
     if !hasAccess
-      redirect_to '/'
+      render :file => "public/401.html", :status => :unauthorized
     end
 
     # Get a new achievement and set the app_id
@@ -38,6 +38,8 @@ class AchievementsController < ApplicationController
       # Save the new achievement
       if @achievement.save
         redirect_to app_url(params[:app_id]), :flash => { :notice => "Achievement successfully created." }
+      else
+        render :new
       end
     end
   end
@@ -52,6 +54,8 @@ class AchievementsController < ApplicationController
       # Do the update
       if @achievement.update_attributes(params[:achievement])
         redirect_to app_url(params[:app_id]), :flash => { :notice => "Achievement successfully updated." }
+      else
+        render :edit
       end
     end
   end
@@ -163,13 +167,21 @@ class AchievementsController < ApplicationController
   # Returns true if the current user has the admin role
   private
   def isAdmin
-    return (current_user.role? :admin)
+    if current_user == nil
+      return false
+    else
+      return (current_user.role? :admin)
+    end
   end
 
   # Returns true if the current user has the developer role
   private
   def isDev
-    return (current_user.role? :developer)
+    if current_user == nil
+      return false
+    else
+      return (current_user.role? :developer)
+    end
   end
 
 end

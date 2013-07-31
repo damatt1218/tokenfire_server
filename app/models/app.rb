@@ -19,6 +19,8 @@ class App < ActiveRecord::Base
   has_many :app_daily_summaries
   belongs_to :account
 
+  validates_presence_of :name
+
   mount_uploader :image, ImageUploader
 
   def update_analytics

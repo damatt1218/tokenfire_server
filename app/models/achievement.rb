@@ -25,6 +25,8 @@ class Achievement < ActiveRecord::Base
   has_many :achievement_history
   belongs_to :app
 
+  validates_presence_of :name, :cost
+
   after_initialize :defaults
 
   def defaults
