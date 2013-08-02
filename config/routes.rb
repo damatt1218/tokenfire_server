@@ -1,10 +1,13 @@
 MobileRewardz::Application.routes.draw do
 
-  get 'support/home'
-  get 'support/about_us'
-  get 'support/android_sdk_setup'
-  get 'support/contact_us'
-  get 'support/dev_terms'
+  # Support Pages
+  match 'about', :to => 'support#about_us'
+  match 'support', :to => 'support#home'
+  match 'contact', :to => 'support#contact_us'
+  match 'terms', :to => 'support#dev_terms'
+  match 'privacy', :to => 'support#privacy'
+  # Using GitHub documentation for now
+  # get 'support/android_sdk_setup'
 
   use_doorkeeper
 

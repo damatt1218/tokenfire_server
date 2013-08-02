@@ -1,8 +1,13 @@
 <footer>
   <% if current_user  %>
-    <%= link_to "TokenFire \xC2\xA9", :controller => '/support', :action => 'about_us' %> | <%= link_to 'Documentation', :controller => '/support', :action => 'home'  %> |  <%= link_to 'Contact', :controller => '/support', :action => 'contact_us' %> | <%= link_to 'Developer Terms', :controller => '/support', :action => 'dev_terms' %>
+    <%= link_to "TokenFire \xC2\xA9", about_path %> |
+    <%= link_to 'Documentation', support_path  %> |
+    <%= link_to 'Contact', contact_path %> |
+    <%= link_to 'Privacy', privacy_path %> |
+    <%= link_to 'Developer Terms', terms_path %>
   <% else %>
-    <%= link_to "TokenFire \xC2\xA9", :controller => '/support', :action => 'about_us' %> |
-    <%= link_to 'Contact', :controller => '/support', :action => 'contact_us' %>
+    <%= link_to "TokenFire \xC2\xA9", about_path %> |
+    <%= link_to 'Contact', contact_path %> |
+    <%= link_to 'Privacy', privacy_path %>
   <% end %>
 </footer>

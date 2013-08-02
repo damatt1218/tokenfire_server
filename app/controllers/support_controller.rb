@@ -8,7 +8,7 @@ class SupportController < ApplicationController
   end
 
   def contact_us
-    @page_title = 'TokenFire - Contact Us!'
+    @page_title = 'TokenFire - Contact Us'
   end
 
   def about_us
@@ -17,5 +17,9 @@ class SupportController < ApplicationController
 
   def dev_terms
     @page_title = 'TokenFire - Developer Terms and Agreement'
+  end
+
+  def privacy
+    @page_title = 'TokenFire - Privacy Policy'
   end
 end

@@ -1,21 +1,28 @@
 <fieldset>
   <%= f.error_messages %>
   <%= f.label :name %>
+  <i><small>This will be displayed to users in the marketplace.</small></i><br>
   <%= f.text_field :name, :class => 'span8' %>
-  <i>This is what users will see.</i>
+
 
   <%= f.label :description %>
+  <i><small>Short description of your app.</small></i><br>
   <%= f.text_area :description, :rows => '3', :class => 'span8'  %>
 
   <%= f.label :cost %>
+  <i><small>Value (USD) of achievement upon completion.</small></i><br>
   <%= f.text_field :cost %>
-  <i>Value (USD) of achievement upon completion.</i>
 
 <p>
+  <%= f.check_box :enabled %>
   <%= f.label :enabled, :class => 'checkbox inline' %>
-   <%= f.check_box :enabled %> <i>Check this box if the achievement should be currently available</i><br>
+  <br>
+  <i><small>Check this box if the achievement should be currently available</small></i>
+  <br>
+  <%= f.check_box :repeatable%>
   <%= f.label :repeatable, :class => 'checkbox inline' %>
-   <%= f.check_box :repeatable%> <i>Check this box if a user can acquire this achievement multiple times</i>
+  <br>
+  <i><small>Check this box if a user can acquire this achievement multiple times</small></i>
 </p>
 
     <%= f.submit :Submit, :class => "btn btn-primary" %>
