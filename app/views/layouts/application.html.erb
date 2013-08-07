@@ -33,5 +33,8 @@
   <!-- footer -->
   <%= render 'layouts/footer' %>
   <!-- /footer -->
+
+  <!-- google analytics -->
+    <%= render ‘layouts/ga’ if Rails.env.production? %>
 </body>
 </html>
