@@ -9,7 +9,27 @@ module Api
     # GET /api/apps.json - Gets all apps stored in the datasource
     def index
       @apps = App.all
-      Rabl.render(@apps, 'api/apps/index', view_path: 'app/views')
+      @applist = Array.new
+      device = nil
+
+      if params.has_key?(:device_uid)
+        device = Device.find_by_uuid(params[:device_uid])
+      end
+
+      @apps.collect do |app|
+        app_image = nil
+        available_tokens = get_available_tokens(app, device)
+
+        if (app.image.url != nil)
+          app_image = "http://#{request.host_with_port}#{app.image.url}"
+          @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :image => app_image, :rating => available_tokens }
+        else
+          @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :rating => available_tokens }
+        end
+      end
+
+      json_apps = @applist.to_json
+      render status: 200, json: json_apps
     end
 
     # Get /api/apps/1.json - Gets a single app based on the app_id
@@ -99,7 +119,54 @@ module Api
 
     def featured_apps
       @apps = App.where('featured_value > 0').order('featured_value desc')
-      Rabl.render(@apps, 'api/apps/featured_apps', view_path: 'app/views')
+
+      @applist = Array.new
+
+      @apps.collect do |app|
+        app_image = nil
+
+        if (app.image.url != nil)
+          app_image = "http://#{request.host_with_port}#{app.image.url}"
+          @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :image => app_image }
+        else
+          @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url }
+        end
+      end
+
+      json_apps = @applist.to_json
+      render status: 200, json: json_apps
+
+     # Rabl.render(@apps, 'api/apps/featured_apps', view_path: 'app/views')
+    end
+
+    def get_available_tokens(app, device)
+      available_tokens = 0
+      tokens_achieved = 0
+      app.achievements.each do |achievement|
+        if achievement.enabled
+          available_tokens += achievement.value
+        end
+      end
+      if !device.nil?
+        device.achievement_histories.each do |history|
+          if history.achievement.app.id == app.id
+            if history.achievement.enabled
+              tokens_achieved += history.achievement.value
+            end
+          end
+        end
+      end
+
+      if available_tokens > tokens_achieved
+        return (available_tokens - tokens_achieved)
+      else
+        return 0
+      end
+    end
+
+    private
+    def current_user
+      @current_user ||= User.find_by_id(doorkeeper_token.resource_owner_id)
     end
 
   end

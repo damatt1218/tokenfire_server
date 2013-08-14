@@ -8,8 +8,28 @@ module Api
 
      # GET /api/rewards.json
     def index
+
       @rewards = Reward.all
-      Rabl.render(@rewards, 'api/rewards/index', view_path: 'app/views')
+      @rewardlist = Array.new
+      device = nil
+
+      if params.has_key?(:device_uid)
+        device = Device.find_by_uuid(params[:device_uid])
+      end
+
+      @rewards.collect do |reward|
+        reward_image = nil
+
+        if (reward.image.url != nil)
+          app_image = "http://#{request.host_with_port}#{reward.image.url}"
+          @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity, :image => app_image }
+        else
+          @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity }
+        end
+      end
+
+      json_rewards = @rewardlist.to_json
+      render status: 200, json: json_rewards
     end
 
     # Get /api/rewards/1.json
@@ -73,7 +93,27 @@ module Api
 
     def featured_rewards
       @rewards = Reward.where('featured_value > 0').order('featured_value desc')
-      Rabl.render(@rewards, 'api/rewards/featured_rewards', view_path: 'app/views')
+
+      @rewardlist = Array.new
+      device = nil
+
+      if params.has_key?(:device_uid)
+        device = Device.find_by_uuid(params[:device_uid])
+      end
+
+      @rewards.collect do |reward|
+        reward_image = nil
+
+        if (reward.image.url != nil)
+          app_image = "http://#{request.host_with_port}#{reward.image.url}"
+          @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity, :image => app_image }
+        else
+          @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity }
+        end
+      end
+
+      json_rewards = @rewardlist.to_json
+      render status: 200, json: json_rewards
     end
 
   end

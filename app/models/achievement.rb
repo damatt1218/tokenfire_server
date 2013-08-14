@@ -27,6 +27,8 @@ class Achievement < ActiveRecord::Base
 
   validates_presence_of :name, :cost
 
+  validates :cost, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0, :less_than => 100}
+
   after_initialize :defaults
 
   def defaults

@@ -11,18 +11,17 @@ module Api
     #   Expects JSON passed in this format:
     #     {
     #         "device_uid":device_uid,
-    #         "download_app_pkg":download_app_pkg,
+    #         "download_app_id":download_app_id,
     #         "refering_app_pkg":refering_app_pkg
     #     }
     def clicked_download_app
-      parsed_json = JSON.parse(request.body.read)
 
-      device_uuid = parsed_json["device_uid"]
-      download_app_pkg = parsed_json["download_app_pkg"]
-      refering_app_pkg = parsed_json["refering_app_pkg"]
+      device_uuid = params["device_uid"]
+      download_app_id = params["download_app_id"]
+      refering_app_pkg = params["refering_app_pkg"]
 
-      download_app = App.find_by_name(download_app_pkg)
-      refering_app = App.find_by_name(refering_app_pkg)
+      download_app = App.find(download_app_id)
+      refering_app = App.find_by_url(refering_app_pkg)
       device_id = Device.find_by_uuid(device_uuid)
 
       download = Download.find_or_create_by_device_id_app_id_and_app_download_id(
@@ -32,14 +31,13 @@ module Api
       download.pending = true
       download.save
 
-      #redirect_string = "https://play.google.com/store/apps/details?id=" +
-      #                  download_app.name +
-      #                  "&referrer=utm_source%3D" +
-      #                  refering_app.name
+      redirect_string = "market://details?id=" +
+                        download_app.url +
+                        "&referrer=utm_source%3D" +
+                        refering_app.url
 
       if download
-        #redirect_to redirect_string
-        render status: 200, text: ""
+        redirect_to redirect_string
       else
         render status: 401, json: {error: "Invalid download"}
       end

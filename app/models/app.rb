@@ -23,6 +23,28 @@ class App < ActiveRecord::Base
 
   mount_uploader :image, ImageUploader
 
+
+  validate :validate_image_size
+  validate :validate_package_name
+
+  def validate_image_size
+    open_image = MiniMagick::Image.open(image.path)
+    unless open_image[:width] == 96 && open_image[:height] == 96
+      errors.add :image, "should be 96x96px!"
+    end
+  end
+
+  def validate_package_name
+    valid_url = false
+    if !url.nil?
+      valid_url = url.match(/[a-zA-Z]\w*([.]\w+)+/)
+    end
+
+    if !valid_url
+      errors.add :package, "The package name is invalid. Package names must start with a character and can only contain characters, numbers, underscores and dots. They must have at least one dot, cannot end with a dot, and cannot contain any runs of more than one consecutive dot."
+    end
+  end
+
   def update_analytics
       # force an update of todays rollup stats for this app
       AppDailySummary.update_for_date(self, Date.today)

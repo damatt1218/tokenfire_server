@@ -1,4 +1,4 @@
 object @app
 
 # The properties to include
-attributes :name, :description, :rating
+attributes :id, :name, :description, :rating

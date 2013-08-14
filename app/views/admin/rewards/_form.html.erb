@@ -1,3 +1,15 @@
+<% if @reward.errors.any? %>
+    <div class="alert-message error" data-alert><a class="close" href="#">×</a>
+      <p>Whoops! Check your form for possible errors</p>
+      <p>
+        <% @reward.errors.full_messages.each do |msg| %>
+            <%= msg %><br>
+        <% end %>
+      </p>
+    </div>
+
+<% end %>
+
 <%= f.label :name %>
 <%= f.text_field :name %>
 
@@ -9,6 +21,12 @@
 
 <%= f.label :quantity %>
 <%= f.text_field :quantity %>
+
+  <%= f.label :image, "Image (please upload a 96 x 96 icon)" %>
+  <%= image_tag @reward.image_url.to_s %><br>
+  <%= f.file_field :image %><br>
+  <%= f.label :remote_image_url, "or image URL" %>
+  <%= f.text_field :remote_image_url %>
 
 <% if current_user.role? :admin %>
   <%= f.label :featured_value %>

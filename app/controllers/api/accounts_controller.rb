@@ -41,9 +41,25 @@ module Api
       end
     end
 
+    # POST /api/accounts/update_profile
+    def updateProfile
+      account = current_user.account
+
+      if account.nil?
+        render status: 400, json: {error: "Invalid User"}
+      else
+        if current_user.update_with_password(params[:user])
+          render status: 200, json: {message: "Success"}
+        else
+          render status: 400, json: {error: "An error occurred. Please try again."}
+        end
+      end
+
+    end
+
 
     def adcolonyVideoComplete
-      adcolonyKey = "v4vc4ba1acf0703c4ebab1f87b"
+      adcolonyKey = "v4vc48eee7b6fed744908d7ffc"
 
       if (params.has_key?(:id) &&
           params.has_key?(:uid) &&
@@ -91,7 +107,7 @@ module Api
     end
 
     def tapjoyOfferComplete
-      tapjoyKey = "Nk0gZxliGJnQwE20NeUE"
+      tapjoyKey = "bJuBzs2k97YJU4j4OzMk"
 
       if (params.has_key?(:id) &&
           params.has_key?(:snuid) &&
@@ -204,13 +220,13 @@ module Api
 
         rewards.each do |r|
           history = UserHistory.new
-          history.populate(r.reward.name, r.reward.description, r.reward.image, r.reward.cost, r.reward.created_at)
+          history.populate(r.reward.name, r.reward.description, "http://#{request.host_with_port}#{r.reward.image.url}", r.reward.cost, r.reward.created_at)
           returnUserHistories << history
         end
 
         achievements.each do |a|
           history = UserHistory.new
-          history.populate(a.achievement.name, a.achievement.description, a.achievement.app.image, a.achievement.cost,
+          history.populate(a.achievement.name, a.achievement.description, "http://#{request.host_with_port}#{a.achievement.app.image.url}", a.achievement.cost,
                            a.achievement.created_at)
           returnUserHistories << history
         end
@@ -231,7 +247,7 @@ module Api
     private
     def report_to_apsalar(offerHistory)
 
-      apsalarSecret = "KSC9ivQz"
+      apsalarSecret = "m6QEEspq"
 
       apsalarUrl  = "http://api.apsalar.com/api/v1/event?"
 
@@ -244,7 +260,7 @@ module Api
       # p: platform
       # s: session ID
       # h: hash
-      queryString = "u=d22abcccae2928e2&a=damatt&av=1.0&i=com.tokenfire.tokenfire&k=ANDI&p=Android&s=8266ded0-495c-4ac8-b1d8-4180e310964c"
+      queryString = "u=d22abcccae2928e2&a=tokenfire&av=1.0&i=com.tokenfire.tokenfire&k=ANDI&p=Android&s=7b4a7a01-e2c5-4f43-9b9c-73f4f9e57f21"
       queryString += "&n=" + offerHistory.company + "Redemption"
       queryString += "&e=" + url_encode(offerHistory.to_json.force_encoding("utf-8"))
       hash = "&h=" + Digest::SHA1.hexdigest(apsalarSecret + "?" + queryString)
@@ -263,7 +279,7 @@ module Api
     def populate(history_name, history_description, history_image, history_amount, history_date)
       self.name = history_name
       self.description = history_description
-      #self.image = history_image
+      self.image = history_image
       self.amount = history_amount
       self.date = history_date
     end

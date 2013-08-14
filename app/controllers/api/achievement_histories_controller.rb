@@ -80,6 +80,12 @@ module Api
       app = current_application
       # end
 
+
+
+      if (app_id)
+        app = App.find_by_id(app_id)
+      end
+
       device = Device.find_by_uuid(device_uid)
 
       # Validate there are no nil values

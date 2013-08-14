@@ -19,7 +19,7 @@ gem 'pg'
 # gem 'sqlite3'
 
 gem 'carrierwave'
-# gem 'rmagick'
+gem "mini_magick", "~> 3.5.0"
 
 gem 'httparty'
 
