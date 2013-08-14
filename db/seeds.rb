@@ -26,6 +26,7 @@ user2.roles = [developerRole]
 sandbox_app = user2.account.apps.find_or_create_by_name!( :name => 'tokenfiresandbox',
                                                           :redirect_uri => 'urn:ietf:wg:oauth:2.0:oob',
                                                           :description => 'TokenFire sandbox application for testing',
+                                                          :url => 'com.tokenfire.tokenfire',
                                                           :image => '')
 
 sandbox_app.uid = '6533f4c7beb3e2054984092401674aa2ea198d291c2e9e642c652209fe1cd829'
@@ -43,6 +44,13 @@ sandbox_app.achievements.find_or_create_by_name!(:name => 'Test Achievement',
 
 sandbox_app.save
 
+# achievement_history = AchievementHistory.new
+# achievement_history.achievement_id = 1
+# achievement_history.device_id = 1
+# achievement_history.save
+
+
+
 # Option to initialize db with a fake reward
 if false
   reward = Reward.find_or_create_by_name!('Test Reward')
@@ -55,10 +63,10 @@ end
 # Optionally seed the database with fake session data to drive reports
 if false
 
-  num_users = 50
+  num_users = 5
   max_devices_per_user = 2
-  days_of_data = 100
-  max_sessions_per_device = 40
+  days_of_data = 5
+  max_sessions_per_device = 2
 
   user_counter = 0
 
