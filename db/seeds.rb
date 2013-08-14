@@ -35,8 +35,8 @@ sandbox_app.secret = 'b6df5911a6548a762623812910673749e39dcfecddc9afad2e00557ac0
 # Create an example achievement
 sandbox_app.achievements.find_or_create_by_name!(:name => 'Test Achievement',
                                                  :description => 'Just a test',
-                                                 :value => 1,
-                                                 :cost => 0.001,
+                                                 :value => 10,
+                                                 :cost => 0.01,
                                                  :enabled => true,
                                                  :repeatable => true,
                                                  :availability => '',
