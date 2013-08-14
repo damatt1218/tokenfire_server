@@ -28,9 +28,11 @@ class App < ActiveRecord::Base
   validate :validate_package_name
 
   def validate_image_size
-    open_image = MiniMagick::Image.open(image.path)
-    unless open_image[:width] == 96 && open_image[:height] == 96
-      errors.add :image, "should be 96x96px!"
+    if !image.nil? && !image.path.nil?
+      open_image = MiniMagick::Image.open(image.path)
+      unless open_image[:width] == 96 && open_image[:height] == 96
+        errors.add :image, "should be 96x96px!"
+      end
     end
   end
 

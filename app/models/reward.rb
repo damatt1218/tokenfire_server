@@ -20,8 +20,6 @@ class Reward < ActiveRecord::Base
        unless open_image[:width] == 96 && open_image[:height] == 96
          errors.add :image, "should be 96x96px!"
        end
-    else
-      errors.add :image, "cannot be blank!"
     end
   end
 end
