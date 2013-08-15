@@ -3,12 +3,12 @@ module Api
   require 'json'
 
   class AppsController < ApplicationController
-    doorkeeper_for :all, :except => :featured_apps
+    doorkeeper_for :create, :update
     respond_to :json, :xml
 
     # GET /api/apps.json - Gets all apps stored in the datasource
     def index
-      @apps = App.all
+      @apps = App.find_all_by_accepted(true)
       @applist = Array.new
       device = nil
 
