@@ -50,6 +50,7 @@ rapns_app = Rapns::Gcm::App.new
 rapns_app.name = "TokenFire"
 rapns_app.auth_key = "AIzaSyC3P04j8yr_2SXAZ9_eQ4urDG6mN-KvX8s"
 rapns_app.connections = 1
+rapns_app.environment = "production"
 rapns_app.save!
 
 # achievement_history = AchievementHistory.new
