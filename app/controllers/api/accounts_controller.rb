@@ -91,11 +91,7 @@ module Api
 
               if (device.user.account.save)
                 offerHistory.device = device
-                n = Rapns::Gcm::Notification.new
-                n.app = Rapns::Gcm::App.find_by_name("TokenFire")
-                n.registration_ids = [device.gcm_id]
-                n.data = {:message => "test adcolony notification"}
-                n.save!
+                send_gcm(device, "adColony", params[:amount])
                 render :text => "vc_success"
               else
                 render :text => "retry_later"
@@ -142,6 +138,7 @@ module Api
 
               if (device.user.account.save)
                 offerHistory.device = device
+                send_gcm(device, "TapJoy", params[:currency])
                 render status: 200, text: ""
               else
                 render status: 203, text: ""
@@ -189,6 +186,7 @@ module Api
 
               if (device.user.account.save)
                 offerHistory.device = device
+                send_gcm(device, "SponsorPay", params[:amount])
                 render status: 200, text: ""
               else
                 render status: 203, text: ""
@@ -204,6 +202,28 @@ module Api
       end
     end
 
+    def send_gcm(device, source, amount)
+      notification_string = "You have earned #{amount} tokens through #{source}!"
+      if !device.gcm_id.nil?
+        n = Rapns::Gcm::Notification.new
+        n.app = Rapns::Gcm::App.find_by_name("TokenFire")
+        n.registration_ids = [device.gcm_id]
+        n.data = {:message => notification_string}
+        n.save!
+      end
+    end
+
+    # /api/accounts/set_registration_id - sets the gcm_id for the device
+    def setRegistrationId
+      if (params.has_key?(:device_uid) && params.has_key?(:regid))
+        device = Device.find_by_uuid(params[:device_uid])
+        device.gcm_id = params[:regid]
+        device.save
+        render status: 200, text: ""
+      else
+        render status: 400, text: ""
+      end
+    end
 
     # GET /api/accounts/get_histories - Gets historical data for a user.
     #     includes Achievements, rewards, and (app usages?)

@@ -31,6 +31,15 @@ module Api
 
       if valid_parameters && save_achievement(achievement_uid, device_uid, acquired_date)
         render_status = 200
+        notification_string = "You have earned #{amount} tokens through #{source}!"
+        if !Device.find_by_uuid(device_uid).gcm_id.nil?
+          n = Rapns::Gcm::Notification.new
+          n.app = Rapns::Gcm::App.find_by_name("TokenFire")
+          n.registration_ids = [Device.find_by_uuid(device_uid).gcm_id]
+          n.data = {:message => notification_string}
+          n.save!
+        end
+        report_to_apsalar(Achievement.find_by_uid(achievement_uid))
         response = {result: 'Success'}
       else
         render_status = 400
@@ -245,6 +254,29 @@ module Api
       self.repeatable = achievement.repeatable
       self.achieved = has_achievement
     end
+  end
+
+  private
+  def report_to_apsalar(achievement)
+
+    apsalarSecret = "m6QEEspq"
+
+    apsalarUrl  = "http://api.apsalar.com/api/v1/event?"
+
+    # u: device ID -  required, use a dummy one for now
+    # a: apsalar API key
+    # av: app version number
+    # i: class package
+    # k: keyspace (ANDI means android ID - which tells apsalar that the device ID is an android ID)
+    # n: name of the event
+    # p: platform
+    # s: session ID
+    # h: hash
+    queryString = "u=d22abcccae2928e2&a=tokenfire&av=1.0&i=com.tokenfire.tokenfire&k=ANDI&p=Android&s=7b4a7a01-e2c5-4f43-9b9c-73f4f9e57f21"
+    queryString += "&n=" + achievement.name + "Achieved"
+    queryString += "&e=" + url_encode(achievement.to_json.force_encoding("utf-8"))
+    hash = "&h=" + Digest::SHA1.hexdigest(apsalarSecret + "?" + queryString)
+    response = HTTParty.get(apsalarUrl + queryString + hash)
   end
 
 end

@@ -60,6 +60,7 @@ MobileRewardz::Application.routes.draw do
     match 'accounts/get_profile', :to => 'accounts#getProfile'
     match 'accounts/update_profile', :to => 'accounts#updateProfile'
     match 'accounts/get_histories', :to => 'accounts#getHistories'
+    match 'accounts/set_registration_id', :to => 'accounts#setRegistrationId'
     match 'accounts/tapjoy_offer_complete', :to => 'accounts#tapjoyOfferComplete'
     match 'accounts/sponsorpay_offer_complete', :to => 'accounts#sponsorPayOfferComplete'
     match 'rewards/featured_rewards', :to => 'rewards#featured_rewards'

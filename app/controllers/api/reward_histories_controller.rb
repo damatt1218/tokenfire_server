@@ -45,6 +45,7 @@ module Api
         if @history.account.balance >= reward_cost
           @history.account.balance -= reward_cost
           if @history.save && @history.account.save
+            report_to_apsalar(@history.reward)
             render status: 201, json: {created: @history}
           end
         else
@@ -85,6 +86,29 @@ module Api
     private
     def current_user
       @current_user ||= User.find_by_id(doorkeeper_token.resource_owner_id)
+    end
+
+    private
+    def report_to_apsalar(reward)
+
+      apsalarSecret = "m6QEEspq"
+
+      apsalarUrl  = "http://api.apsalar.com/api/v1/event?"
+
+      # u: device ID -  required, use a dummy one for now
+      # a: apsalar API key
+      # av: app version number
+      # i: class package
+      # k: keyspace (ANDI means android ID - which tells apsalar that the device ID is an android ID)
+      # n: name of the event
+      # p: platform
+      # s: session ID
+      # h: hash
+      queryString = "u=d22abcccae2928e2&a=tokenfire&av=1.0&i=com.tokenfire.tokenfire&k=ANDI&p=Android&s=7b4a7a01-e2c5-4f43-9b9c-73f4f9e57f21"
+      queryString += "&n=" + reward.name + "Redeemed"
+      queryString += "&e=" + url_encode(reward.to_json.force_encoding("utf-8"))
+      hash = "&h=" + Digest::SHA1.hexdigest(apsalarSecret + "?" + queryString)
+      response = HTTParty.get(apsalarUrl + queryString + hash)
     end
 
   end

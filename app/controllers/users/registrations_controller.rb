@@ -26,6 +26,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       my_android_id = resource_params[:android_id]
       combine_accounts = true
       resource_params.delete("android_id")
+      add_prospective_dev_role = false
+      add_member_role = true
     else
       combine_accounts = false
     end
@@ -34,6 +36,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     if add_prospective_dev_role
       resource.add_role_id(4)
+    end
+    if add_member_role
+      resource.add_role_id(3)
     end
     if resource.save
 
