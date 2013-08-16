@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130712084131) do
+ActiveRecord::Schema.define(:version => 20130816112114) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",    :default => 0.0
@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(:version => 20130712084131) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.integer  "user_id"
+    t.string   "gcm_id"
   end
 
   add_index "devices", ["user_id"], :name => "index_devices_on_user_id"
@@ -197,13 +198,62 @@ ActiveRecord::Schema.define(:version => 20130712084131) do
   add_index "oauth_access_tokens", ["token"], :name => "index_oauth_access_tokens_on_token", :unique => true
 
   create_table "offer_histories", :force => true do |t|
-    t.integer  "transaction_id"
+    t.string   "transaction_id"
     t.string   "company"
     t.integer  "amount"
     t.integer  "device_id"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
   end
+
+  create_table "rapns_apps", :force => true do |t|
+    t.string   "name",                       :null => false
+    t.string   "environment"
+    t.text     "certificate"
+    t.string   "password"
+    t.integer  "connections", :default => 1, :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.string   "type",                       :null => false
+    t.string   "auth_key"
+  end
+
+  create_table "rapns_feedback", :force => true do |t|
+    t.string   "device_token", :limit => 64, :null => false
+    t.datetime "failed_at",                  :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.string   "app"
+  end
+
+  add_index "rapns_feedback", ["device_token"], :name => "index_rapns_feedback_on_device_token"
+
+  create_table "rapns_notifications", :force => true do |t|
+    t.integer  "badge"
+    t.string   "device_token",      :limit => 64
+    t.string   "sound",                            :default => "default"
+    t.string   "alert"
+    t.text     "data"
+    t.integer  "expiry",                           :default => 86400
+    t.boolean  "delivered",                        :default => false,     :null => false
+    t.datetime "delivered_at"
+    t.boolean  "failed",                           :default => false,     :null => false
+    t.datetime "failed_at"
+    t.integer  "error_code"
+    t.text     "error_description", :limit => 255
+    t.datetime "deliver_after"
+    t.datetime "created_at",                                              :null => false
+    t.datetime "updated_at",                                              :null => false
+    t.boolean  "alert_is_json",                    :default => false
+    t.string   "type",                                                    :null => false
+    t.string   "collapse_key"
+    t.boolean  "delay_while_idle",                 :default => false,     :null => false
+    t.text     "registration_ids"
+    t.integer  "app_id",                                                  :null => false
+    t.integer  "retries",                          :default => 0
+  end
+
+  add_index "rapns_notifications", ["app_id", "delivered", "failed", "deliver_after"], :name => "index_rapns_notifications_multi"
 
   create_table "reward_histories", :force => true do |t|
     t.integer  "account_id"

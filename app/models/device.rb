@@ -1,5 +1,5 @@
 class Device < ActiveRecord::Base
-  attr_accessible :description, :uuid
+  attr_accessible :description, :uuid, :gcm_id
 
   #relationships
   belongs_to :user

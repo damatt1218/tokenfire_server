@@ -10,7 +10,7 @@ gem 'oauth2'
 
 gem  'rabl'
 
-gem 'gcm_on_rails'
+gem 'rapns'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

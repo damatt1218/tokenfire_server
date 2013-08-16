@@ -22,6 +22,7 @@ user.roles = [adminRole]
 user2 = User.find_or_create_by_username!(:username => 'tokenfire_developer', :password => 'tokenfire', :password_confirmation => 'tokenfire')
 user2.roles = [developerRole]
 
+if false
 # add default app so we don't have to keep swapping out our app id in the sdk sandbox app
 sandbox_app = user2.account.apps.find_or_create_by_name!( :name => 'tokenfiresandbox',
                                                           :redirect_uri => 'urn:ietf:wg:oauth:2.0:oob',
@@ -43,6 +44,13 @@ sandbox_app.achievements.find_or_create_by_name!(:name => 'Test Achievement',
                                                  :uid => 'Mz9_Uet4YXvddC7lwGwc')
 
 sandbox_app.save
+end
+
+rapns_app = Rapns::Gcm::App.new
+rapns_app.name = "TokenFire"
+rapns_app.auth_key = "AIzaSyC3P04j8yr_2SXAZ9_eQ4urDG6mN-KvX8s"
+rapns_app.connections = 1
+rapns_app.save!
 
 # achievement_history = AchievementHistory.new
 # achievement_history.achievement_id = 1

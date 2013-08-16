@@ -91,6 +91,11 @@ module Api
 
               if (device.user.account.save)
                 offerHistory.device = device
+                n = Rapns::Gcm::Notification.new
+                n.app = Rapns::Gcm::App.find_by_name("TokenFire")
+                n.registration_ids = [device.gcm_id]
+                n.data = {:message => "test adcolony notification"}
+                n.save!
                 render :text => "vc_success"
               else
                 render :text => "retry_later"
