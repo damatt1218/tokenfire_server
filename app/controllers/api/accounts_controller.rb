@@ -114,9 +114,9 @@ module Api
           params.has_key?(:snuid) &&
           params.has_key?(:currency) &&
           params.has_key?(:verifier))
-        localHash = Digest::MD5.hexdigest(params[:id] +
-                                              params[:snuid] +
-                                              params[:currency] +
+        localHash = Digest::MD5.hexdigest(params[:id] + ":" +
+                                              params[:snuid] + ":" +
+                                              params[:currency] + ":" +
                                               tapjoyKey)
         if (params[:verifier] != localHash)
           render status: 403, text: ""
