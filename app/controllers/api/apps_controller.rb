@@ -21,7 +21,7 @@ module Api
         available_tokens = get_available_tokens(app, device)
 
         if (app.image.url != nil)
-          app_image = "http://#{request.host_with_port}#{app.image.url}"
+          app_image = "#{app.image.url}"
           @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :image => app_image, :rating => available_tokens }
         else
           @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :rating => available_tokens }
@@ -126,7 +126,7 @@ module Api
         app_image = nil
 
         if (app.image.url != nil)
-          app_image = "http://#{request.host_with_port}#{app.image.url}"
+          app_image = "#{app.image.url}"
           @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :image => app_image }
         else
           @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url }

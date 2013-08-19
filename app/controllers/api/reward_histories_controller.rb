@@ -1,10 +1,13 @@
 module Api
 
   require 'json'
+  require "erb"
 
   class RewardHistoriesController < ApplicationController
     doorkeeper_for :all
     respond_to :json, :xml
+
+    include ERB::Util
 
     # GET /api/reward_histories.json - Gets all reward histories stored in the datasource
     def index
@@ -105,7 +108,7 @@ module Api
       # s: session ID
       # h: hash
       queryString = "u=d22abcccae2928e2&a=tokenfire&av=1.0&i=com.tokenfire.tokenfire&k=ANDI&p=Android&s=7b4a7a01-e2c5-4f43-9b9c-73f4f9e57f21"
-      queryString += "&n=" + reward.name + "Redeemed"
+      queryString += "&n=" + url_encode(reward.name) + "Redeemed"
       queryString += "&e=" + url_encode(reward.to_json.force_encoding("utf-8"))
       hash = "&h=" + Digest::SHA1.hexdigest(apsalarSecret + "?" + queryString)
       response = HTTParty.get(apsalarUrl + queryString + hash)

@@ -1,8 +1,11 @@
 module Api
 
+  require "erb"
   # Controller for the Achievement History API
   # Enables devices to report achievement accomplishment
   class AchievementHistoriesController < ApplicationController
+
+    include ERB::Util
 
     # Require OAuth to access this controller
     doorkeeper_for :all
@@ -38,6 +41,7 @@ module Api
           n.registration_ids = [Device.find_by_uuid(device_uid).gcm_id]
           n.data = {:message => notification_string}
           n.save!
+          Rapns.push
         end
         report_to_apsalar(Achievement.find_by_uid(achievement_uid))
         response = {result: 'Success'}
@@ -273,7 +277,7 @@ module Api
     # s: session ID
     # h: hash
     queryString = "u=d22abcccae2928e2&a=tokenfire&av=1.0&i=com.tokenfire.tokenfire&k=ANDI&p=Android&s=7b4a7a01-e2c5-4f43-9b9c-73f4f9e57f21"
-    queryString += "&n=" + achievement.name + "Achieved"
+    queryString += "&n=" + url_encode(achievement.name) + "Achieved"
     queryString += "&e=" + url_encode(achievement.to_json.force_encoding("utf-8"))
     hash = "&h=" + Digest::SHA1.hexdigest(apsalarSecret + "?" + queryString)
     response = HTTParty.get(apsalarUrl + queryString + hash)

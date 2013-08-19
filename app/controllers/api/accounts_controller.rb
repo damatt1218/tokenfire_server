@@ -210,6 +210,7 @@ module Api
         n.registration_ids = [device.gcm_id]
         n.data = {:message => notification_string}
         n.save!
+        Rapns.push
       end
     end
 
@@ -245,14 +246,14 @@ module Api
 
         rewards.each do |r|
           history = UserHistory.new
-          history.populate(r.reward.name, r.reward.description, "http://#{request.host_with_port}#{r.reward.image.url}", r.reward.cost, r.reward.created_at)
+          history.populate(r.reward.name, "Reward redeemed!", "#{r.reward.image.url}", r.reward.cost, r.created_at)
           returnUserHistories << history
         end
 
         achievements.each do |a|
           history = UserHistory.new
-          history.populate(a.achievement.name, a.achievement.description, "http://#{request.host_with_port}#{a.achievement.app.image.url}", a.achievement.cost,
-                           a.achievement.created_at)
+          history.populate(a.achievement.name, "Achievement Complete!", "#{a.achievement.app.image.url}", a.achievement.cost,
+                           a.created_at)
           returnUserHistories << history
         end
 
@@ -264,6 +265,8 @@ module Api
           history.date = o.created_at
           returnUserHistories << history
         end
+
+        returnUserHistories = returnUserHistories.sort_by(&:date).reverse
 
         render status: 200, json: returnUserHistories
       end

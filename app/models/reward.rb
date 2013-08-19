@@ -14,8 +14,7 @@ class Reward < ActiveRecord::Base
   validate :validate_image_size
 
   def validate_image_size
-    if !image.nil? && !image.path.nil?
-      puts image
+    if !image.nil? && !image.path.nil? && !image.to_s.include?("AKIAIWYJD4O3PQX4ETIA")
       open_image = MiniMagick::Image.open(image.path)
        unless open_image[:width] == 96 && open_image[:height] == 96
          errors.add :image, "should be 96x96px!"

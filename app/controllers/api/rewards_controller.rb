@@ -21,7 +21,7 @@ module Api
         reward_image = nil
 
         if (reward.image.url != nil)
-          app_image = "http://#{request.host_with_port}#{reward.image.url}"
+          app_image = "#{reward.image.url}"
           @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity, :image => app_image }
         else
           @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity }
@@ -105,7 +105,7 @@ module Api
         reward_image = nil
 
         if (reward.image.url != nil)
-          app_image = "http://#{request.host_with_port}#{reward.image.url}"
+          app_image = "#{reward.image.url}"
           @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity, :image => app_image }
         else
           @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity }
