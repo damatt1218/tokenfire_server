@@ -17,7 +17,16 @@ module Api
         device = Device.find_by_uuid(params[:device_uid])
       end
 
-      @rewards.collect do |reward|
+      @filtered_rewards = []
+      @rewards.each do |r|
+        if r.quantity.nil?
+          @filtered_rewards << r
+        elsif r.quantity > 0
+          @filtered_rewards << r
+        end
+      end
+
+      @filtered_rewards.collect do |reward|
         reward_image = nil
 
         if (reward.image.url != nil)
@@ -93,6 +102,15 @@ module Api
 
     def featured_rewards
       @rewards = Reward.where('featured_value > 0').order('featured_value desc')
+      @filtered_rewards = []
+      @rewards.each do |r|
+        if r.quantity.nil?
+          @filtered_rewards << r
+        elsif r.quantity > 0
+          @filtered_rewards << r
+        end
+      end
+
 
       @rewardlist = Array.new
       device = nil
@@ -101,7 +119,7 @@ module Api
         device = Device.find_by_uuid(params[:device_uid])
       end
 
-      @rewards.collect do |reward|
+      @filtered_rewards.collect do |reward|
         reward_image = nil
 
         if (reward.image.url != nil)

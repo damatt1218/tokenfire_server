@@ -238,7 +238,7 @@ module Api
         devices.each do |d|
           device_ids << d.id
         end
-        rewards = RewardHistory.find_all_by_account_id(account.id)
+        rewards = RewardHistory.where(:account_id => account.id)
         achievements = AchievementHistory.where(:device_id => device_ids)
         offers = OfferHistory.where(:device_id => device_ids)
 
@@ -246,7 +246,13 @@ module Api
 
         rewards.each do |r|
           history = UserHistory.new
-          history.populate(r.reward.name, "Reward redeemed!", "#{r.reward.image.url}", r.reward.cost, r.created_at)
+          description_string = ""
+          if r.processed == false
+            description_string = "Pending reward"
+          else
+            description_string = "Reward redeemed!"
+          end
+          history.populate(r.reward.name, description_string, "#{r.reward.image.url}", r.reward.cost, r.created_at)
           returnUserHistories << history
         end
 

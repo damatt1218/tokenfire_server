@@ -46,10 +46,17 @@ module Api
           reward_cost = @history.reward.cost
         end
         if @history.account.balance >= reward_cost
-          @history.account.balance -= reward_cost
-          if @history.save && @history.account.save
-            report_to_apsalar(@history.reward)
-            render status: 201, json: {created: @history}
+          if (!@history.reward.quantity.nil? && @history.reward.quantity == 0)
+            render status: 200, json: {rejected: "Sorry, this reward is no longer available."}
+          else
+            @history.account.balance -= reward_cost
+            if (!@history.reward.quantity.nil? && @history.reward.quantity > 0)
+              @history.reward.quantity -= 1
+            end
+            if @history.save && @history.account.save
+              report_to_apsalar(@history.reward)
+              render status: 201, json: {created: @history}
+            end
           end
         else
           render status: 200, json: {rejected: "Not enough credits."}
