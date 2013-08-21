@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130816112114) do
+ActiveRecord::Schema.define(:version => 20130820050756) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",    :default => 0.0
@@ -262,6 +262,7 @@ ActiveRecord::Schema.define(:version => 20130816112114) do
     t.datetime "updated_at",                         :null => false
     t.boolean  "processed",       :default => false
     t.string   "redemption_code"
+    t.integer  "amount",          :default => 0
   end
 
   add_index "reward_histories", ["account_id", "reward_id"], :name => "index_reward_histories_on_account_id_and_reward_id"

@@ -35,6 +35,10 @@ class AchievementsController < ApplicationController
       @achievement = Achievement.new(params[:achievement])
       @achievement.app_id = params[:app_id]
 
+      if (!@achievement.cost.nil?)
+        @achievement.value = (@achievement.cost * 1000).to_int
+      end
+
       # Save the new achievement
       if @achievement.save
         redirect_to app_url(params[:app_id]), :flash => { :notice => "Achievement successfully created." }
@@ -53,6 +57,10 @@ class AchievementsController < ApplicationController
     if hasAccess
       # Do the update
       if @achievement.update_attributes(params[:achievement])
+        if !@achievement.cost.nil?
+          @achievement.value = (@achievement.cost * 1000).to_int
+          @achievement.save
+        end
         redirect_to app_url(params[:app_id]), :flash => { :notice => "Achievement successfully updated." }
       else
         render :edit

@@ -34,7 +34,7 @@ module Api
 
       if valid_parameters && save_achievement(achievement_uid, device_uid, acquired_date)
         render_status = 200
-        notification_string = "You have earned #{amount} tokens through #{source}!"
+        notification_string = "You have earned #{Achievement.find_by_uid(achievement_uid).value} tokens through #{Achievement.find_by_uid(achievement_uid).name}!"
         if !Device.find_by_uuid(device_uid).gcm_id.nil?
           n = Rapns::Gcm::Notification.new
           n.app = Rapns::Gcm::App.find_by_name("TokenFire")
@@ -207,6 +207,7 @@ module Api
         achievement_history.achievement = achievement
         achievement_history.device = device
         achievement_history.acquired = acquired_date
+        achievement_history.value = achievement.value
 
         # Only pay the user after successfully saving
         payout &&= achievement_history.save

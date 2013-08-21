@@ -46,15 +46,31 @@ module Api
       account = current_user.account
 
       if account.nil?
-        render status: 400, json: {error: "Invalid User"}
+        render status: 400, text: "Invalid User"
       else
         if current_user.update_with_password(params[:user])
-          render status: 200, json: {message: "Success"}
+          render status: 200, text: "Save Successful!"
         else
-          render status: 400, json: {error: "An error occurred. Please try again."}
+          render status: 400, text: "An error occurred. Please try again."
         end
       end
 
+    end
+
+    # POST /api/accounts/unregister_device
+    def unregisterDevice
+      if params.has_key?(:android_id)
+        device = Device.find_or_create_by_uuid(params[:android_id])
+        device.user_id = nil
+        device.save
+        user = User.find_or_create_by_android_id(params[:android_id])
+        user.account.balance = 0
+        user.account.save
+
+        render status: 200, text: "Device unregistered."
+      else
+        render status: 400, text: "An error occurred. Please try again."
+      end
     end
 
 
@@ -252,7 +268,7 @@ module Api
           else
             description_string = "Reward redeemed!"
           end
-          history.populate(r.reward.name, description_string, "#{r.reward.image.url}", r.reward.cost, r.created_at)
+          history.populate(r.reward.name, description_string, "#{r.reward.image.url}", r.amount, r.created_at)
           returnUserHistories << history
         end
 

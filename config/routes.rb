@@ -59,6 +59,7 @@ MobileRewardz::Application.routes.draw do
     match 'accounts/adColony_Video_Complete', :to => 'accounts#adcolonyVideoComplete'
     match 'accounts/get_profile', :to => 'accounts#getProfile'
     match 'accounts/update_profile', :to => 'accounts#updateProfile'
+    match 'accounts/unregister_device', :to => 'accounts#unregisterDevice'
     match 'accounts/get_histories', :to => 'accounts#getHistories'
     match 'accounts/set_registration_id', :to => 'accounts#setRegistrationId'
     match 'accounts/tapjoy_offer_complete', :to => 'accounts#tapjoyOfferComplete'

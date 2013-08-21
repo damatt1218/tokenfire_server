@@ -53,7 +53,9 @@ module Api
             if (!@history.reward.quantity.nil? && @history.reward.quantity > 0)
               @history.reward.quantity -= 1
             end
+            @history.amount = reward_cost
             if @history.save && @history.account.save
+              @history.reward.save
               report_to_apsalar(@history.reward)
               render status: 201, json: {created: @history}
             end

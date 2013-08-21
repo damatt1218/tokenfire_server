@@ -70,6 +70,8 @@ class User < ActiveRecord::Base
           else
             self.account.balance += u.account.balance
           end
+          u.account.balance = 0
+          u.account.save
 
           self.save
         end
