@@ -6,8 +6,8 @@ module Api
     doorkeeper_for :applyPromoCode
     respond_to :json, :xml
 
-    TOKENS_FOR_REFERRER = 60
-    TOKENS_FOR_REFERREE = 20
+    TOKENS_FOR_REFERRER = 400
+    TOKENS_FOR_REFERREE = 200
 
     # POST /api/promo_codes/apply_promo_code
     def applyPromoCode
