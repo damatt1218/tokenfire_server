@@ -1,6 +1,7 @@
 module Api
 
   require 'digest/md5'
+  require 'digest/sha1'
   require 'erb'
 
   class AccountsController < ApplicationController
@@ -31,13 +32,17 @@ module Api
       if account.nil?
         render status: 400, json: {error: "Invalid User"}
       else
+        if current_user.registered && (account.referral_code.nil? || account.referral_code.blank?)
+          account.generate_referral_code
+        end
         render status: 200, json: {username: current_user.username,
                                    email: current_user.email,
                                    firstName: current_user.first_name,
                                    lastName: current_user.last_name,
                                    company: current_user.company,
                                    balance: account.balance,
-                                   registered: current_user.registered}
+                                   registered: current_user.registered,
+                                   referralCode: account.referral_code}
       end
     end
 
@@ -218,6 +223,57 @@ module Api
       end
     end
 
+
+
+    def aarkiOfferComplete
+      aarkiKey = "MRyWAXfhUtdzluENmooYCEQWXQuCKhaE"
+
+      if (params.has_key?(:user) &&
+          params.has_key?(:units) &&
+          params.has_key?(:sha1_signature) &&
+          params.has_key?(:id))
+        localHash = Digest::SHA1.hexdigest(params[:id] +
+                                               params[:user] +
+                                               params[:units] +
+                                               aarkiKey)
+        if (params[:sha1_signature] != localHash)
+          render status: 403, text: ""
+        else
+          offerHistory = OfferHistory.find_by_transaction_id(params[:id])
+          if offerHistory
+            render status: 400, text: ""
+          else
+            offerHistory = OfferHistory.find_or_create_by_transaction_id(params[:id])
+            offerHistory.amount = params[:units]
+            offerHistory.company = "Aarki"
+            device = Device.find_by_uuid(params[:user])
+            if device
+              if (device.user.account.balance.nil?)
+                device.user.account.balance = params[:units].to_i
+              else
+                device.user.account.balance += params[:units].to_i
+              end
+
+              if (device.user.account.save)
+                offerHistory.device = device
+                send_gcm(device, "Aarki", params[:units])
+                render status: 200, text: ""
+              else
+                render status: 203, text: ""
+              end
+
+              offerHistory.save
+              report_to_apsalar(offerHistory)
+            else
+              render status: 403, text: ""
+            end
+          end
+        end
+      end
+    end
+
+
+
     def send_gcm(device, source, amount)
       notification_string = "You have earned #{amount} tokens through #{source}!"
       if !device.gcm_id.nil?
@@ -257,6 +313,9 @@ module Api
         rewards = RewardHistory.where(:account_id => account.id)
         achievements = AchievementHistory.where(:device_id => device_ids)
         offers = OfferHistory.where(:device_id => device_ids)
+        promos = PromoCodeHistory.where(:account_id => account.id)
+        referrals = ReferralCodeHistory.where(:account_id => account.id)
+        referrees = ReferralCodeHistory.where(:referrer_id => account.id)
 
         returnUserHistories = []
 
@@ -285,6 +344,33 @@ module Api
           history.description = "Offer completed from: " + o.company + "!"
           history.amount = o.amount
           history.date = o.created_at
+          returnUserHistories << history
+        end
+
+        promos.each do |p|
+          history = UserHistory.new
+          history.name = "Promotional Code"
+          history.description = "Promotional Code #{p.promo_code.name} redeemed!"
+          history.amount = p.value
+          history.date = p.created_at
+          returnUserHistories << history
+        end
+
+        referrals.each do |r|
+          history = UserHistory.new
+          history.name = "Referrer Install Bonus"
+          history.description = "Referral code entered!"
+          history.amount = r.referree_value
+          history.date = r.created_at
+          returnUserHistories << history
+        end
+
+        referrees.each do |r|
+          history = UserHistory.new
+          history.name = "Referral Bonus"
+          history.description = "#{r.account.user.username} entered your referral code!"
+          history.amount = r.referrer_value
+          history.date = r.created_at
           returnUserHistories << history
         end
 

@@ -64,12 +64,14 @@ MobileRewardz::Application.routes.draw do
     match 'accounts/set_registration_id', :to => 'accounts#setRegistrationId'
     match 'accounts/tapjoy_offer_complete', :to => 'accounts#tapjoyOfferComplete'
     match 'accounts/sponsorpay_offer_complete', :to => 'accounts#sponsorPayOfferComplete'
+    match 'accounts/aarki_offer_complete', :to => 'accounts#aarkiOfferComplete'
     match 'rewards/featured_rewards', :to => 'rewards#featured_rewards'
     match 'apps/featured_apps', :to => 'apps#featured_apps'
     match 'achievements/report', :to => 'achievement_histories#report', :via => :post
     match 'achievements/status', :to => 'achievement_histories#status', :via => :get
     match 'downloads/initial_app_launch', :to => 'downloads#initial_app_launch'
     match 'downloads/clicked_download_app', :to => 'downloads#clicked_download_app'
+    match 'promo_codes/apply_promo_code', :to => 'promo_codes#applyPromoCode'
 
     resources :tokens, :only => [:create, :destroy]
     resources :rewards, :only => [:index, :show, :create, :update]

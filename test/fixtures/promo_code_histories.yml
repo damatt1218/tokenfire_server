@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  promo_code: 
+  account: 
+  value: 1
+
+two:
+  promo_code: 
+  account: 
+  value: 1

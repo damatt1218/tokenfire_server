@@ -11,13 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130820050756) do
+ActiveRecord::Schema.define(:version => 20130823092612) do
 
   create_table "accounts", :force => true do |t|
-    t.float    "balance",    :default => 0.0
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.float    "balance",       :default => 0.0
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.integer  "user_id"
+    t.string   "referral_code"
   end
 
   add_index "accounts", ["user_id"], :name => "index_accounts_on_user_id"
@@ -206,6 +207,25 @@ ActiveRecord::Schema.define(:version => 20130820050756) do
     t.datetime "updated_at",     :null => false
   end
 
+  create_table "promo_code_histories", :force => true do |t|
+    t.integer  "promo_code_id"
+    t.integer  "account_id"
+    t.integer  "value"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "promo_code_histories", ["account_id"], :name => "index_promo_code_histories_on_account_id"
+  add_index "promo_code_histories", ["promo_code_id"], :name => "index_promo_code_histories_on_promo_code_id"
+
+  create_table "promo_codes", :force => true do |t|
+    t.string   "name"
+    t.integer  "value"
+    t.boolean  "active"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "rapns_apps", :force => true do |t|
     t.string   "name",                       :null => false
     t.string   "environment"
@@ -254,6 +274,17 @@ ActiveRecord::Schema.define(:version => 20130820050756) do
   end
 
   add_index "rapns_notifications", ["app_id", "delivered", "failed", "deliver_after"], :name => "index_rapns_notifications_multi"
+
+  create_table "referral_code_histories", :force => true do |t|
+    t.integer  "account_id"
+    t.integer  "referrer_id"
+    t.integer  "referree_value"
+    t.integer  "referrer_value"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "referral_code_histories", ["account_id"], :name => "index_referral_code_histories_on_account_id"
 
   create_table "reward_histories", :force => true do |t|
     t.integer  "account_id"

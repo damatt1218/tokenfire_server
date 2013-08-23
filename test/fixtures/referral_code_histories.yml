@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  account: 
+  referrer_id: 1
+  value: 1
+
+two:
+  account: 
+  referrer_id: 1
+  value: 1
