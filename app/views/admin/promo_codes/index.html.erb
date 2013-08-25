@@ -1,0 +1,30 @@
+<header class="page-header">
+  <h1>Manage Promo Codes
+    <small class="pull-right"><%= link_to "Create Promo Code", new_admin_promo_code_path, :class => "btn btn-info" %></small>
+  </h1>
+</header>
+
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Value</th>
+        <th>Active</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @promo_code.each do |pc| %>
+        <tr>
+          <td><%= pc.id %></td>
+          <td><%= link_to pc.name, admin_promo_code_path(pc) %></td>
+          <td>DESCRIPTION</td>
+          <td><%= pc.value %></td>
+          <td><%= pc.active %></td>
+          <td><%= link_to "Edit", edit_admin_promo_code_path(pc) %> Delete</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>

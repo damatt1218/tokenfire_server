@@ -1,0 +1,56 @@
+<header class="page-header">
+  <h1><%= @promo_code.name %>
+    <small class="pull-right"><%= link_to "Create Promo Code", new_admin_promo_code_path, :class => "btn btn-info" %></small>
+  </h1>
+</header>
+<div class="row-fluid">
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Code</th>
+        <th>Value</th>
+        <th>Active</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @promo_code.id %></td>
+        <td><%= @promo_code.name%></td>
+        <td>CODE</td>
+        <td><%= @promo_code.value %></td>
+        <td><%= @promo_code.active %></td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>
+<div class="row-fluid">
+  <h1>Redemption History</h1>
+  <% if @promo_code_history %>
+    <p>Number of Redemptions: <%= promo_code_history.count %></p>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Account</th>
+          <th>Value</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @promo_code_history.each do |pch| %>
+        <tr>
+          <td><%= pch.account_id %></td>
+          <td><%= pch.value %></td>
+          <td><%= pch.created_at %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    No Redemptions
+  <% end %>
+</div>
+
+<%= link_to "Back", admin_promo_codes_path, :class => 'btn' %>

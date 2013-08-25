@@ -20,7 +20,6 @@ MobileRewardz::Application.routes.draw do
     controllers :applications => 'apps/custom_applications'
   end
 
-
   match 'apps/dau_data', :to => 'apps#dau_data', :via => :get
   match 'apps/disable/:id', :to => 'apps#disable', :via => :get, :as => :apps_disable
   match 'apps/restore/:id', :to => 'apps#restore', :via => :get, :as => :apps_restore
@@ -30,9 +29,6 @@ MobileRewardz::Application.routes.draw do
     match 'achievements/:id/soft_delete', :to => 'achievements#softDelete', :as => :soft_delete_app_achievement
     match 'achievements/:id/restore', :to => 'achievements#restore', :as => :restore_app_achievement
     resources :achievements
-    resource :usage
-
-
   end
 
   scope :module => "oauth" do
@@ -42,9 +38,7 @@ MobileRewardz::Application.routes.draw do
   scope :module => 'apps' do
     match 'oauth/usage_info', :to => 'apps#getUsageInfo'
     match 'create_app', :to=> 'custom_applications#create'
-
   end
-
 
   devise_for :users, :controllers => {:registrations => "users/registrations", :sessions => "users/sessions"}
   #resources :users
@@ -81,14 +75,13 @@ MobileRewardz::Application.routes.draw do
     resources :accounts, :only => [:index, :show]
   end
 
-
   namespace :admin do
     resources :rewards
+    resources :promo_codes
     resources :users
     resources :reward_histories
     match '/' => 'users#index'
     match 'rewards/pending_redeemed', :to => 'reward_histories#index'
-
   end
 
 
