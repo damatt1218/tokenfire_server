@@ -273,6 +273,47 @@ module Api
     end
 
 
+    def metapsOfferComplete
+
+      if (params.has_key?(:cuid) &&
+          params.has_key?(:grid) &&
+          params.has_key?(:ucur) &&
+          params.has_key?(:scn))
+
+        offerHistory = OfferHistory.find_by_transaction_id("#{params[:scn]}#{params[:grid]}")
+        if offerHistory
+          render status: 400, text: ""
+        else
+          offerHistory = OfferHistory.find_or_create_by_transaction_id("#{params[:scn]}#{params[:grid]}")
+          offerHistory.amount = params[:ucur]
+          offerHistory.company = "metaps"
+          device = Device.find_by_uuid(params[:cuid])
+          if device
+            if (device.user.account.balance.nil?)
+              device.user.account.balance = params[:ucur].to_i
+            else
+              device.user.account.balance += params[:ucur].to_i
+            end
+
+            if (device.user.account.save)
+              offerHistory.device = device
+              send_gcm(device, "metaps", params[:ucur])
+              render status: 200, text: ""
+            else
+              render status: 203, text: ""
+            end
+
+            offerHistory.save
+            report_to_apsalar(offerHistory)
+          else
+            render status: 403, text: ""
+          end
+        end
+      end
+    end
+
+
+
 
     def send_gcm(device, source, amount)
       notification_string = "You have earned #{amount} tokens through #{source}!"

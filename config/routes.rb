@@ -59,6 +59,7 @@ MobileRewardz::Application.routes.draw do
     match 'accounts/tapjoy_offer_complete', :to => 'accounts#tapjoyOfferComplete'
     match 'accounts/sponsorpay_offer_complete', :to => 'accounts#sponsorPayOfferComplete'
     match 'accounts/aarki_offer_complete', :to => 'accounts#aarkiOfferComplete'
+    match 'accounts/metaps_offer_complete', :to => 'accounts#metapsOfferComplete'
     match 'rewards/featured_rewards', :to => 'rewards#featured_rewards'
     match 'apps/featured_apps', :to => 'apps#featured_apps'
     match 'achievements/report', :to => 'achievement_histories#report', :via => :post
