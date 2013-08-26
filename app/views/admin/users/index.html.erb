@@ -44,6 +44,7 @@
       <th>ID</th>
       <th><b>Username</b></th>
       <th><b>Email</b></th>
+      <th><b>Balance</b></th>
       <th><b>Created at</b></th>
       <th><b>Prospective Developer</b></th>
       <th><b>Actions</b></th>
@@ -55,6 +56,7 @@
       <td><%= user.id %></td>
       <td><%= link_to user.username, admin_user_path(user) %></td>
       <td><%= user.email %></td>
+      <td><%= user.account.balance %></td>
       <td><%= user.created_at %></td>
       <td><%= user.roles.include?(role) %></td>
       <td>
