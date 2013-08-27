@@ -1,55 +1,68 @@
-<div class="well">
-  <header class="page-header">
-    <h2>User Details</h2>
-  </header>
-  <div class="row-fluid">
-    <div class="span6">
-      <p>
-        <b>Username: </b>
-        <%= @user.username %>
-      </p>
+<header class="page-header">
+  <h2><%= @user.username %></h2>
+</header>
+<div class="row">
+  <div class="span6">
+    <p>
+      <b>Username: </b>
+      <%= @user.username %>
+    </p>
 
-      <p>
-        <b>Email: </b>
-        <%= @user.email %>
-      </p>
+    <p>
+      <b>Email: </b>
+      <%= @user.email %>
+    </p>
 
-      <p>
-        <b>First Name: </b>
-        <%= @user.first_name %>
-      </p>
+    <p>
+      <b>First Name: </b>
+      <%= @user.first_name %>
+    </p>
 
-      <p>
-        <b>Last Name: </b>
-        <%= @user.last_name %>
-      </p>
+    <p>
+      <b>Last Name: </b>
+      <%= @user.last_name %>
+    </p>
 
+    <p>
+      <b>Company: </b>
+      <%= @user.company %>
+    </p>
+  </div>
+  <div class="span6">
+    <% for role in Role.all %>
       <p>
-        <b>Company: </b>
-        <%= @user.company %>
+        <b><%= role.name %>: </b>
+        <%= @user.roles.include?(role) %>
       </p>
-    </div>
-    <div class="span6">
-      <% for role in Role.all %>
-        <p>
-          <b><%= role.name %>: </b>
-          <%= @user.roles.include?(role) %>
-        </p>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="span6">
+    <div class="well">
+      <h4>Account Information</h4>
+      <p>
+      <b>Balance</b>
+      <%= @user.account.balance %>
+      </p>
+      <p>
+      <b>Devices: </b><%= @user.devices.count %>
+      <% if @user.devices.count > 0 %>
+      <ul>
+      <% @user.devices.each do |device| %>
+      <li><%= device.uuid %></li>
       <% end %>
+      </ul>
+      <% end %>
+      </p>
     </div>
   </div>
-
-  <hr>
-
-  <h4>Account Information</h4>
-  <p>
-    <b>Balance</b>
-    <%= @user.account.balance %>
-  </p>
+  <div class="span6">
+    <div class="well">
+      <b>Recent Activity</b>
+    </div>
+  </div>
 </div>
-
-
-
 
 <div class="form-actions">
   <%= link_to "Back", admin_users_path, :class => 'btn'  %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130823092612) do
+ActiveRecord::Schema.define(:version => 20130827200616) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",       :default => 0.0
@@ -224,8 +224,10 @@ ActiveRecord::Schema.define(:version => 20130823092612) do
     t.string   "name"
     t.integer  "value"
     t.boolean  "active"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.boolean  "soft_deleted", :default => false
+    t.text     "description"
   end
 
   create_table "rapns_apps", :force => true do |t|

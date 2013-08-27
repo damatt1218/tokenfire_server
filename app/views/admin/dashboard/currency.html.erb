@@ -1,0 +1,38 @@
+Currency Dashboard
+
+<p>
+graph of all data on a daily basis for past month (will be able to manipulate graph eventually)
+</p>
+revenues: @
+<p>
+total from offers: <%= @total_offer_revenue %>
+</p>
+<p>
+by source
+<ul>
+  <li>TapJoy: <%= @tapjoy_revenue %> <%= @tapjoy_revenue / @total_offer_revenue if @total_offer_revenue > 0 %></li>
+  <li>Aarki: <%= @aarki_revenue %> <%= @aarki_revenue / @total_offer_revenue if @total_offer_revenue > 0 %></li>
+  <li>SponsorPay: <%= @sponsorpay_revenue %> <%= @sponsorpay_revenue / @total_offer_revenue if @total_offer_revenue > 0 %></li>
+  <li>AdColony: <%= @adcolony_revenue %> <%= @adcolony_revenue / @total_offer_revenue if @total_offer_revenue > 0 %></li>
+  <li>MeTap: <%= @metap_revenue %> <%= @metap_revenue / @total_offer_revenue if @total_offer_revenue > 0 %></li>
+</ul>
+</p>
+</p>
+<p>
+total from achievements: <%= @total_achievement_revenue %>
+</p>
+
+Costs:
+<p>
+total by time played
+</p>
+<p>
+Reward Redemptions: <%= @total_reward_cost %>
+</p>
+
+<p>
+  Revenue: <%= @total_revenue %>
+  Cost: <%= @total_cost %>
+  Profit: <%= @profit %>
+  graph of profit w/ revenue and costs
+</p>

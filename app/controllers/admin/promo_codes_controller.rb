@@ -1,7 +1,8 @@
 module Admin
   class PromoCodesController < AdminController
     def index
-      @promo_code = PromoCode.all
+      @active_promo_codes = PromoCode.find_all_by_active(true)
+      @inactive_promo_codes = PromoCode.find_all_by_active(false)
     end
 
     def show

@@ -13,7 +13,8 @@
         <ul class="nav">
           <li><%=  link_to "Dashboard", apps_path %></li>
           <% if current_user.role? :admin %>
-            <li><%=  link_to "Users", admin_users_path %></li>
+            <li><%= link_to "Currency", admin_currency_path %></li>
+            <li><%= link_to "Users", admin_users_path %></li>
             <li><%= link_to "Rewards", admin_rewards_path %></li>
             <li><%= link_to "Pending Rewards", admin_reward_histories_path %></li>
             <li><%= link_to "Promos", admin_promo_codes_path %></li>

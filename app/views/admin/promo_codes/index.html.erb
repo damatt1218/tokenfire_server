@@ -4,6 +4,7 @@
   </h1>
 </header>
 
+  <h4>Active</h4>
   <table class="table table-bordered table-striped table-hover">
     <thead>
       <tr>
@@ -16,11 +17,37 @@
       </tr>
     </thead>
     <tbody>
-      <% @promo_code.each do |pc| %>
+      <% @active_promo_codes.each do |pc| %>
         <tr>
           <td><%= pc.id %></td>
           <td><%= link_to pc.name, admin_promo_code_path(pc) %></td>
-          <td>DESCRIPTION</td>
+          <td><%= pc.description %></td>
+          <td><%= pc.value %></td>
+          <td><%= pc.active %></td>
+          <td><%= link_to "Edit", edit_admin_promo_code_path(pc) %> Delete</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h4>Inactive</h4>
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Value</th>
+        <th>Active</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @inactive_promo_codes.each do |pc| %>
+        <tr>
+          <td><%= pc.id %></td>
+          <td><%= link_to pc.name, admin_promo_code_path(pc) %></td>
+          <td><%= pc.description %></td>
           <td><%= pc.value %></td>
           <td><%= pc.active %></td>
           <td><%= link_to "Edit", edit_admin_promo_code_path(pc) %> Delete</td>

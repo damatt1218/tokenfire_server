@@ -1,5 +1,3 @@
 class PromoCode < ActiveRecord::Base
-  attr_accessible :name, :value, :active, :as => :admin
-
-  attr_accessible :active, :name, :value
+  attr_accessible :name, :value, :active, :description,   :as => :admin
 end

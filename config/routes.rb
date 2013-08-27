@@ -45,7 +45,6 @@ MobileRewardz::Application.routes.draw do
 
   # Routing for API
   namespace :api do
-
     match 'client_api/validate_app_id', :to => 'client_sdk_api#validate_app_id'
     match 'client_api/post_session_history', :to => 'client_sdk_api#post_session_history'
     match 'app_usages/increment_time', :to => 'app_usages#incrementTimeSpent'
@@ -76,12 +75,13 @@ MobileRewardz::Application.routes.draw do
     resources :accounts, :only => [:index, :show]
   end
 
+  # Admin routes
   namespace :admin do
     resources :rewards
     resources :promo_codes
     resources :users
     resources :reward_histories
-    match '/' => 'users#index'
+    match 'currency', :to => 'dashboard#currency'
     match 'rewards/pending_redeemed', :to => 'reward_histories#index'
   end
 
