@@ -20,8 +20,8 @@
       <td><%= number_to_currency(@total_revenue, :unit => "$") %></td>
       <td><%= number_to_currency(@realized_cost, :unit => "$") %></td>
       <td><%= number_to_currency(@unrealized_cost, :unit => "$") %></td>
-      <td><%= @total_earned_tokens %></td>
-      <td><%= @unused_tokens %></td>
+      <td><%= number_with_delimiter(@total_earned_tokens, :delimiter => ',') %></td>
+      <td><%= number_with_delimiter(@unused_tokens, :delimiter => ',') %></td>
     </tr>
   </tbody>
 </table>
@@ -42,8 +42,8 @@
     <tr>
       <td><%= company %></td>
       <td><%= number_to_currency(OfferHistory.sum(:amount, :conditions => {:company => company}) * @offers_payout_per_token, :unit => "$") %></td>
-      <td><%= OfferHistory.sum(:amount, :conditions => {:company => company}) %></td>
-      <td><%= OfferHistory.count(:amount, :conditions => {:company => company}) %></td>
+      <td><%= number_with_delimiter(OfferHistory.sum(:amount, :conditions => {:company => company}), :delimiter => ',') %></td>
+      <td><%= number_with_delimiter(OfferHistory.count(:amount, :conditions => {:company => company}), :delimiter => ',') %></td>
     </tr>
   <% end %>
   </tbody>
@@ -51,8 +51,8 @@
   <tr>
     <td><b>Totals:</b></td>
     <td><b><%= number_to_currency(@total_offer_tokens * @offers_payout_per_token, :unit => "$") %></b></td>
-    <td><b><%= @total_offer_tokens %></b></td>
-    <td><b><%= OfferHistory.count(:amount) %></b></td>
+    <td><b><%= number_with_delimiter(@total_offer_tokens, :delimiter => ',') %></b></td>
+    <td><b><%= number_with_delimiter(OfferHistory.count(:amount), :delimiter => ',') %></b></td>
   </tr>
   </tfoot>
 </table>
@@ -70,16 +70,16 @@
   <% @achievement_ids.each do |a_id| %>
       <tr>
         <td><%= Achievement.find_by_id(a_id).name %></td>
-        <td><%= @total_achievement_tokens %></td>
-        <td><%= AchievementHistory.count(:value, :conditions => {:achievement_id => a_id}) %></td>
+        <td><%= number_with_delimiter(AchievementHistory.sum(:value, :conditions => {:achievement_id => a_id}), :delimiter => ',') %></td>
+        <td><%= number_with_delimiter(AchievementHistory.count(:value, :conditions => {:achievement_id => a_id}), :delimiter => ',') %></td>
       </tr>
   <% end %>
   </tbody>
   <tfoot>
   <tr>
     <td><b>Totals:</b></td>
-    <td><b><%= AchievementHistory.sum(:value) %></b></td>
-    <td><b><%= AchievementHistory.count(:value) %></b></td>
+    <td><b><%= number_with_delimiter(@total_achievement_tokens, :delimiter => ',') %></b></td>
+    <td><b><%= number_with_delimiter(AchievementHistory.count(:value), :delimiter => ',') %></b></td>
   </tr>
   </tfoot>
 </table>
@@ -97,16 +97,16 @@
   <% @promo_ids.each do |p_id| %>
       <tr>
         <td><%= PromoCode.find_by_id(p_id).name %></td>
-        <td><%= PromoCodeHistory.sum(:value, :conditions => {:promo_code_id => p_id}) %></td>
-        <td><%= PromoCodeHistory.count(:value, :conditions => {:promo_code_id => p_id}) %></td>
+        <td><%= number_with_delimiter(PromoCodeHistory.sum(:value, :conditions => {:promo_code_id => p_id}), :delimiter => ',') %></td>
+        <td><%= number_with_delimiter(PromoCodeHistory.count(:value, :conditions => {:promo_code_id => p_id}), :delimiter => ',') %></td>
       </tr>
   <% end %>
   </tbody>
   <tfoot>
   <tr>
     <td><b>Totals:</b></td>
-    <td><b><%= @total_promo_tokens %></b></td>
-    <td><b><%= PromoCodeHistory.count(:value) %></b></td>
+    <td><b><%= number_with_delimiter(@total_promo_tokens, :delimiter => ',') %></b></td>
+    <td><b><%= number_with_delimiter(PromoCodeHistory.count(:value), :delimiter => ',') %></b></td>
   </tr>
   </tfoot>
 </table>
@@ -128,10 +128,10 @@
       <tr>
         <td><%= Account.find_by_id(r_id).user.username %></td>
         <td><%= Account.find_by_id(r_id).referral_code %></td>
-        <td><%= ReferralCodeHistory.sum(:referree_value, :conditions => {:referrer_id => r_id}) + ReferralCodeHistory.sum(:referrer_value, :conditions => {:referrer_id => r_id}) %></td>
-        <td><%= ReferralCodeHistory.sum(:referrer_value, :conditions => {:referrer_id => r_id}) %></td>
-        <td><%= ReferralCodeHistory.sum(:referree_value, :conditions => {:referrer_id => r_id}) %></td>
-        <td><%= ReferralCodeHistory.count(:referree_value, :conditions => {:referrer_id => r_id}) %></td>
+        <td><%= number_with_delimiter(ReferralCodeHistory.sum(:referree_value, :conditions => {:referrer_id => r_id}) + ReferralCodeHistory.sum(:referrer_value, :conditions => {:referrer_id => r_id}), :delimiter => ',') %></td>
+        <td><%= number_with_delimiter(ReferralCodeHistory.sum(:referrer_value, :conditions => {:referrer_id => r_id}), :delimiter => ',') %></td>
+        <td><%= number_with_delimiter(ReferralCodeHistory.sum(:referree_value, :conditions => {:referrer_id => r_id}), :delimiter => ',') %></td>
+        <td><%= number_with_delimiter(ReferralCodeHistory.count(:referree_value, :conditions => {:referrer_id => r_id}), :delimiter => ',') %></td>
       </tr>
   <% end %>
   </tbody>
@@ -139,10 +139,10 @@
   <tr>
     <td><b>Totals:</b></td>
     <td></td>
-    <td><b><%= @total_referral_tokens %></b></td>
-    <td><b><%= ReferralCodeHistory.sum(:referrer_value) %></b></td>
-    <td><b><%= ReferralCodeHistory.sum(:referree_value) %></b></td>
-    <td><b><%= ReferralCodeHistory.count(:referree_value) %></b></td>
+    <td><b><%= number_with_delimiter(@total_referral_tokens, :delimiter => ',') %></b></td>
+    <td><b><%= number_with_delimiter(ReferralCodeHistory.sum(:referrer_value), :delimiter => ',') %></b></td>
+    <td><b><%= number_with_delimiter(ReferralCodeHistory.sum(:referree_value), :delimiter => ',') %></b></td>
+    <td><b><%= number_with_delimiter(ReferralCodeHistory.count(:referree_value), :delimiter => ',') %></b></td>
   </tr>
   </tfoot>
 </table>
@@ -162,8 +162,8 @@
       <tr>
         <td><%= Reward.find_by_id(r_id).name %></td>
         <td><%= number_to_currency(RewardHistory.sum(:amount, :conditions => {:reward_id => r_id, :processed => true}) / @tokens_per_usd, :unit => "$") %></td>
-        <td><%= RewardHistory.sum(:amount, :conditions => {:reward_id => r_id, :processed => true}) %></td>
-        <td><%= RewardHistory.count(:amount, :conditions => {:reward_id => r_id, :processed => true}) %></td>
+        <td><%= number_with_delimiter(RewardHistory.sum(:amount, :conditions => {:reward_id => r_id, :processed => true}), :delimiter => ',') %></td>
+        <td><%= number_with_delimiter(RewardHistory.count(:amount, :conditions => {:reward_id => r_id, :processed => true}), :delimiter => ',') %></td>
       </tr>
   <% end %>
   </tbody>
@@ -171,8 +171,8 @@
   <tr>
     <td><b>Totals:</b></td>
     <td><b><%= number_to_currency(@total_reward_tokens / @tokens_per_usd, :unit => "$") %></b></td>
-    <td><b><%= @total_reward_tokens %></b></td>
-    <td><b><%= RewardHistory.count(:amount, :conditions => {:processed => true}) %></b></td>
+    <td><b><%= number_with_delimiter(@total_reward_tokens, :delimiter => ',') %></b></td>
+    <td><b><%= number_with_delimiter(RewardHistory.count(:amount, :conditions => {:processed => true}), :delimiter => ',') %></b></td>
   </tr>
   </tfoot>
 </table>
