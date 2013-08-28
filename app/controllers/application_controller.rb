@@ -13,6 +13,19 @@ class ApplicationController < ActionController::Base
     apps_path
   end
 
+  class UserHistory
+    attr_accessor :name, :description, :image, :amount, :date
+
+    def populate(history_name, history_description, history_image, history_amount, history_date)
+      self.name = history_name
+      self.description = history_description
+      self.image = history_image
+      self.amount = history_amount
+      self.date = history_date
+    end
+
+  end
+
 
   rescue_from CanCan::AccessDenied do |exception|
     flash[:error] = exception.message

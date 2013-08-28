@@ -60,6 +60,27 @@
   <div class="span6">
     <div class="well">
       <b>Recent Activity</b>
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+        <tr>
+          <th><b>Name</b></th>
+          <th><b>Description</b></th>
+          <th><b>Amount</b></th>
+          <th><b>Date</b></th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @returnUserHistories.each do |r| %>
+            <tr>
+              <td><%= r.name %></td>
+              <td><%= r.description %></td>
+              <td><%= r.amount %></td>
+              <td><%= r.date %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+
     </div>
   </div>
 </div>

@@ -27,10 +27,85 @@ module Admin
     def show
       @user = User.find(params[:id])
 
-      respond_to do |format|
+      account = @user.account
+
+        devices = Device.find_all_by_user_id(@user.id)
+        device_ids = []
+        devices.each do |d|
+          device_ids << d.id
+        end
+        rewards = RewardHistory.where(:account_id => account.id)
+        achievements = AchievementHistory.where(:device_id => device_ids)
+        offers = OfferHistory.where(:device_id => device_ids)
+        promos = PromoCodeHistory.where(:account_id => account.id)
+        referrals = ReferralCodeHistory.where(:account_id => account.id)
+        referrees = ReferralCodeHistory.where(:referrer_id => account.id)
+
+        @returnUserHistories = []
+
+        rewards.each do |r|
+          history = UserHistory.new
+          description_string = ""
+          if r.processed == false
+            description_string = "Pending reward"
+          else
+            description_string = "Reward redeemed!"
+          end
+          history.populate(r.reward.name, description_string, "#{r.reward.image.url}", "-#{r.amount}", r.created_at)
+          @returnUserHistories << history
+        end
+
+        achievements.each do |a|
+          history = UserHistory.new
+          history.populate(a.achievement.name, "Achievement Complete!", "#{a.achievement.app.image.url}", a.achievement.cost,
+                           a.created_at)
+          @returnUserHistories << history
+        end
+
+        offers.each do |o|
+          history = UserHistory.new
+          history.name = o.company
+          history.description = "Offer completed from: " + o.company + "!"
+          history.amount = o.amount
+          history.date = o.created_at
+          @returnUserHistories << history
+        end
+
+        promos.each do |p|
+          history = UserHistory.new
+          history.name = "Promotional Code"
+          history.description = "Promotional Code #{p.promo_code.name} redeemed!"
+          history.amount = p.value
+          history.date = p.created_at
+          @returnUserHistories << history
+        end
+
+        referrals.each do |r|
+          history = UserHistory.new
+          history.name = "Referrer Install Bonus"
+          history.description = "Referral code entered!"
+          history.amount = r.referree_value
+          history.date = r.created_at
+          @returnUserHistories << history
+        end
+
+        referrees.each do |r|
+          history = UserHistory.new
+          history.name = "Referral Bonus"
+          history.description = "#{r.account.user.username} entered your referral code!"
+          history.amount = r.referrer_value
+          history.date = r.created_at
+          @returnUserHistories << history
+        end
+
+        @returnUserHistories = @returnUserHistories.sort_by(&:date).reverse
+
+
+        respond_to do |format|
         format.html # show.html.erb
         format.json { render :json => @user }
-      end
+        end
+
     end
 
     # GET /users/new
