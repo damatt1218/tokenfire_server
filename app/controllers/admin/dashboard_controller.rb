@@ -26,7 +26,7 @@ module Admin
       @realized_cost = @total_reward_tokens / @tokens_per_usd
       @unrealized_cost =  (@unused_tokens / @tokens_per_usd)
 
-      @profit = @total_revenue  - @unrealized_cost
+      @profit = @total_revenue - @unrealized_cost - @realized_cost
 
     end
   end

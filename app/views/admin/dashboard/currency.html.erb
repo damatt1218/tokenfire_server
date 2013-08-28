@@ -6,7 +6,7 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
-    <th>Profit (Total Revenue - Realized Cost)</th>
+    <th>Profit (Total Revenue - Realized and Unrealized Costs)</th>
     <th><b>Total Revenue</b></th>
     <th><b>Realized Cost (Actual money spent)</b></th>
     <th><b>Unrealized Cost (Tokens not yet spent)</b></th>
@@ -115,6 +115,7 @@
 <table class="table table-bordered table-striped table-hover">
   <thead>
   <tr>
+    <th>User</th>
     <th>Referral Code</th>
     <th><b>Total # of Tokens Awarded</b></th>
     <th><b>Total # of Referrer Tokens Awarded</b></th>
@@ -125,6 +126,7 @@
   <tbody>
   <% @referral_ids.each do |r_id| %>
       <tr>
+        <td><%= Account.find_by_id(r_id).user.username %></td>
         <td><%= Account.find_by_id(r_id).referral_code %></td>
         <td><%= ReferralCodeHistory.sum(:referree_value, :conditions => {:referrer_id => r_id}) + ReferralCodeHistory.sum(:referrer_value, :conditions => {:referrer_id => r_id}) %></td>
         <td><%= ReferralCodeHistory.sum(:referrer_value, :conditions => {:referrer_id => r_id}) %></td>
@@ -136,6 +138,7 @@
   <tfoot>
   <tr>
     <td><b>Totals:</b></td>
+    <td></td>
     <td><b><%= @total_referral_tokens %></b></td>
     <td><b><%= ReferralCodeHistory.sum(:referrer_value) %></b></td>
     <td><b><%= ReferralCodeHistory.sum(:referree_value) %></b></td>
