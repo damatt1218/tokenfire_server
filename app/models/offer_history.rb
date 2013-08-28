@@ -3,8 +3,4 @@ class OfferHistory < ActiveRecord::Base
 
   belongs_to :device
 
-  # Functions
-  def revenue
-    return self.amount * 2 / 1000
-  end
 end

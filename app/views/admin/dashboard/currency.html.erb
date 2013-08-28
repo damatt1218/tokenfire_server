@@ -1,38 +1,188 @@
-Currency Dashboard
+<header class="page-header">
+  <h1>Currency Dashboard</h1>
+</header>
+
+<h4>Summary</h4>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Profit (Total Revenue - Realized Cost)</th>
+    <th><b>Total Revenue</b></th>
+    <th><b>Realized Cost (Actual money spent)</b></th>
+    <th><b>Unrealized Cost (Tokens not yet spent)</b></th>
+    <th><b>Total Earned Tokens</b></th>
+    <th><b>Unused Tokens</b></th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= number_to_currency(@profit, :unit => "$") %></td>
+      <td><%= number_to_currency(@total_revenue, :unit => "$") %></td>
+      <td><%= number_to_currency(@realized_cost, :unit => "$") %></td>
+      <td><%= number_to_currency(@unrealized_cost, :unit => "$") %></td>
+      <td><%= @total_earned_tokens %></td>
+      <td><%= @unused_tokens %></td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h4>Offers</h4>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Source</th>
+    <th><b>Total Revenue</b></th>
+    <th><b># of Tokens Awarded</b></th>
+    <th><b># of Events</b></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @offer_companies.each do |company| %>
+    <tr>
+      <td><%= company %></td>
+      <td><%= number_to_currency(OfferHistory.sum(:amount, :conditions => {:company => company}) * @offers_payout_per_token, :unit => "$") %></td>
+      <td><%= OfferHistory.sum(:amount, :conditions => {:company => company}) %></td>
+      <td><%= OfferHistory.count(:amount, :conditions => {:company => company}) %></td>
+    </tr>
+  <% end %>
+  </tbody>
+  <tfoot>
+  <tr>
+    <td><b>Totals:</b></td>
+    <td><b><%= number_to_currency(@total_offer_tokens * @offers_payout_per_token, :unit => "$") %></b></td>
+    <td><b><%= @total_offer_tokens %></b></td>
+    <td><b><%= OfferHistory.count(:amount) %></b></td>
+  </tr>
+  </tfoot>
+</table>
+
+<h4>Achievements</h4>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Achievement</th>
+    <th><b>Total # of Tokens Awarded</b></th>
+    <th><b># of Times Achieved</b></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @achievement_ids.each do |a_id| %>
+      <tr>
+        <td><%= Achievement.find_by_id(a_id).name %></td>
+        <td><%= @total_achievement_tokens %></td>
+        <td><%= AchievementHistory.count(:value, :conditions => {:achievement_id => a_id}) %></td>
+      </tr>
+  <% end %>
+  </tbody>
+  <tfoot>
+  <tr>
+    <td><b>Totals:</b></td>
+    <td><b><%= AchievementHistory.sum(:value) %></b></td>
+    <td><b><%= AchievementHistory.count(:value) %></b></td>
+  </tr>
+  </tfoot>
+</table>
+
+<h4>Promo Codes</h4>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Promo Code</th>
+    <th><b>Total # of Tokens Awarded</b></th>
+    <th><b># of Times Awarded</b></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @promo_ids.each do |p_id| %>
+      <tr>
+        <td><%= PromoCode.find_by_id(p_id).name %></td>
+        <td><%= PromoCodeHistory.sum(:value, :conditions => {:promo_code_id => p_id}) %></td>
+        <td><%= PromoCodeHistory.count(:value, :conditions => {:promo_code_id => p_id}) %></td>
+      </tr>
+  <% end %>
+  </tbody>
+  <tfoot>
+  <tr>
+    <td><b>Totals:</b></td>
+    <td><b><%= @total_promo_tokens %></b></td>
+    <td><b><%= PromoCodeHistory.count(:value) %></b></td>
+  </tr>
+  </tfoot>
+</table>
+
+<h4>Referral Codes</h4>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Referral Code</th>
+    <th><b>Total # of Tokens Awarded</b></th>
+    <th><b>Total # of Referrer Tokens Awarded</b></th>
+    <th><b>Total # of Referree Tokens Awarded</b></th>
+    <th><b># of Times Awarded</b></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @referral_ids.each do |r_id| %>
+      <tr>
+        <td><%= Account.find_by_id(r_id).referral_code %></td>
+        <td><%= ReferralCodeHistory.sum(:referree_value, :conditions => {:referrer_id => r_id}) + ReferralCodeHistory.sum(:referrer_value, :conditions => {:referrer_id => r_id}) %></td>
+        <td><%= ReferralCodeHistory.sum(:referrer_value, :conditions => {:referrer_id => r_id}) %></td>
+        <td><%= ReferralCodeHistory.sum(:referree_value, :conditions => {:referrer_id => r_id}) %></td>
+        <td><%= ReferralCodeHistory.count(:referree_value, :conditions => {:referrer_id => r_id}) %></td>
+      </tr>
+  <% end %>
+  </tbody>
+  <tfoot>
+  <tr>
+    <td><b>Totals:</b></td>
+    <td><b><%= @total_referral_tokens %></b></td>
+    <td><b><%= ReferralCodeHistory.sum(:referrer_value) %></b></td>
+    <td><b><%= ReferralCodeHistory.sum(:referree_value) %></b></td>
+    <td><b><%= ReferralCodeHistory.count(:referree_value) %></b></td>
+  </tr>
+  </tfoot>
+</table>
+
+<h4>Rewards</h4>
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Reward</th>
+    <th><b>Cost</b></th>
+    <th><b>Total # of Tokens Used</b></th>
+    <th><b># of Times Redeemed</b></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @reward_ids.each do |r_id| %>
+      <tr>
+        <td><%= Reward.find_by_id(r_id).name %></td>
+        <td><%= number_to_currency(RewardHistory.sum(:amount, :conditions => {:reward_id => r_id, :processed => true}) / @tokens_per_usd, :unit => "$") %></td>
+        <td><%= RewardHistory.sum(:amount, :conditions => {:reward_id => r_id, :processed => true}) %></td>
+        <td><%= RewardHistory.count(:amount, :conditions => {:reward_id => r_id, :processed => true}) %></td>
+      </tr>
+  <% end %>
+  </tbody>
+  <tfoot>
+  <tr>
+    <td><b>Totals:</b></td>
+    <td><b><%= number_to_currency(@total_reward_tokens / @tokens_per_usd, :unit => "$") %></b></td>
+    <td><b><%= @total_reward_tokens %></b></td>
+    <td><b><%= RewardHistory.count(:amount, :conditions => {:processed => true}) %></b></td>
+  </tr>
+  </tfoot>
+</table>
 
 <p>
 graph of all data on a daily basis for past month (will be able to manipulate graph eventually)
-</p>
-revenues: @
-<p>
-total from offers: <%= @total_offer_revenue %>
-</p>
-<p>
-by source
-<ul>
-  <li>TapJoy: <%= @tapjoy_revenue %> <%= @tapjoy_revenue / @total_offer_revenue if @total_offer_revenue > 0 %></li>
-  <li>Aarki: <%= @aarki_revenue %> <%= @aarki_revenue / @total_offer_revenue if @total_offer_revenue > 0 %></li>
-  <li>SponsorPay: <%= @sponsorpay_revenue %> <%= @sponsorpay_revenue / @total_offer_revenue if @total_offer_revenue > 0 %></li>
-  <li>AdColony: <%= @adcolony_revenue %> <%= @adcolony_revenue / @total_offer_revenue if @total_offer_revenue > 0 %></li>
-  <li>MeTap: <%= @metap_revenue %> <%= @metap_revenue / @total_offer_revenue if @total_offer_revenue > 0 %></li>
-</ul>
-</p>
-</p>
-<p>
-total from achievements: <%= @total_achievement_revenue %>
 </p>
 
 Costs:
 <p>
 total by time played
 </p>
-<p>
-Reward Redemptions: <%= @total_reward_cost %>
-</p>
 
 <p>
-  Revenue: <%= @total_revenue %>
-  Cost: <%= @total_cost %>
-  Profit: <%= @profit %>
   graph of profit w/ revenue and costs
 </p>
