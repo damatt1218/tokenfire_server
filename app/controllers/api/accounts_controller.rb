@@ -35,14 +35,14 @@ module Api
         if current_user.registered && (account.referral_code.nil? || account.referral_code.blank?)
           account.generate_referral_code
         end
-        render status: 200, json: {username: current_user.username,
-                                   email: current_user.email,
-                                   firstName: current_user.first_name,
-                                   lastName: current_user.last_name,
-                                   company: current_user.company,
-                                   balance: account.balance,
-                                   registered: current_user.registered,
-                                   referralCode: account.referral_code}
+        render status: 200, json: {username123: current_user.username,
+                                   email123: current_user.email,
+                                   firstName123: current_user.first_name,
+                                   lastName123: current_user.last_name,
+                                   company123: current_user.company,
+                                   balance123: account.balance,
+                                   registered123: current_user.registered,
+                                   referralCode123: account.referral_code}
       end
     end
 
