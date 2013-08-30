@@ -31,7 +31,7 @@ module Api
 
         if (reward.image.url != nil)
           app_image = "#{reward.image.url}"
-          @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity, :image => reward.image }
+          @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity, :image => app_image }
         else
           @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity }
         end
@@ -124,7 +124,7 @@ module Api
 
         if (reward.image.url != nil)
           app_image = "#{reward.image.url}"
-          @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity, :image => reward.image }
+          @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity, :image => app_image }
         else
           @rewardlist << { :id => reward.id, :name => reward.name, :description => reward.description, :cost => reward.cost, :quantity => reward.quantity }
         end
