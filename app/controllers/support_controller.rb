@@ -22,4 +22,8 @@ class SupportController < ApplicationController
   def privacy
     @page_title = 'TokenFire - Privacy Policy'
   end
+
+  def end_user_tos
+    @page_title = 'TokenFire - End User TOS'
+  end
 end

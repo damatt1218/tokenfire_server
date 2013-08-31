@@ -6,6 +6,7 @@ MobileRewardz::Application.routes.draw do
   match 'contact', :to => 'support#contact_us'
   match 'terms', :to => 'support#dev_terms'
   match 'privacy', :to => 'support#privacy'
+  match 'usertos', :to => 'support#end_user_tos'
   # Using GitHub documentation for now
   # get 'support/android_sdk_setup'
 
