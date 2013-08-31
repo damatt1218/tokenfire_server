@@ -313,6 +313,103 @@ module Api
     end
 
 
+    def supersonicadsOfferComplete
+      supersonicKey = "1822f2"
+
+      if (params.has_key?(:userId) &&
+          params.has_key?(:rewards) &&
+          params.has_key?(:eventId) &&
+          params.has_key?(:timestamp) &&
+          params.has_key?(:signature))
+        localHash = Digest::MD5.hexdigest(params[:timestamp] +
+                                              params[:eventId] +
+                                              params[:userId] +
+                                              params[:rewards] +
+                                              supersonicKey)
+        if (params[:signature] != localHash)
+          render status: 403, text: ""
+        else
+          offerHistory = OfferHistory.find_by_transaction_id(params[:eventId])
+          if offerHistory
+            render  status: 200, text: "#{params[:eventId]}:OK"
+          else
+            offerHistory = OfferHistory.find_or_create_by_transaction_id(params[:eventId])
+            offerHistory.amount = params[:rewards]
+            offerHistory.company = "SupersonicAds"
+            device = Device.find_by_uuid(params[:userId])
+            if device
+              if (device.user.account.balance.nil?)
+                device.user.account.balance = params[:rewards].to_i
+              else
+                device.user.account.balance += params[:rewards].to_i
+              end
+
+              if (device.user.account.save)
+                offerHistory.device = device
+                send_gcm(device, "SupersonicAds", params[:rewards])
+                render status: 200, text: "#{params[:eventId]}:OK"
+              else
+                render status: 203, text: ""
+              end
+
+              offerHistory.save
+              report_to_apsalar(offerHistory)
+            else
+              render status: 403, text: ""
+            end
+          end
+        end
+      end
+    end
+
+    def supersonicadsOfferRevoke
+      supersonicKey = "1822f2"
+
+      if (params.has_key?(:userId) &&
+          params.has_key?(:rewards) &&
+          params.has_key?(:eventId) &&
+          params.has_key?(:timestamp) &&
+          params.has_key?(:signature))
+        localHash = Digest::MD5.hexdigest(params[:timestamp] +
+                                              params[:eventId] +
+                                              params[:userId] +
+                                              params[:rewards] +
+                                              supersonicKey)
+        if (params[:signature] != localHash)
+          render status: 403, text: ""
+        else
+          offerHistory = OfferHistory.find_by_transaction_id(params[:eventId])
+          if offerHistory
+            offerHistory = OfferHistory.find_or_create_by_transaction_id("revoke#{params[:eventId]}")
+            offerHistory.amount = params[:rewards]
+            offerHistory.company = "SupersonicAds"
+            device = Device.find_by_uuid(params[:userId])
+            if device
+              if !(device.user.account.balance.nil?)
+                device.user.account.balance -= params[:rewards].to_i
+              end
+
+              if (device.user.account.save)
+                offerHistory.device = device
+                render status: 200, text: "#{params[:eventId]}:OK"
+              else
+                render status: 203, text: ""
+              end
+
+              offerHistory.save
+              report_to_apsalar(offerHistory)
+            else
+              render status: 403, text: ""
+            end
+          else
+            render status: 200, text: "#{params[:eventId]}:OK"
+          end
+        end
+      end
+    end
+
+
+
 
 
     def send_gcm(device, source, amount)

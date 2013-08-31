@@ -8,6 +8,8 @@ module Api
 
     TOKENS_FOR_REFERRER = 400
     TOKENS_FOR_REFERREE = 200
+    TOKENS_FOR_HACK_REFERRAL_CODE = 250
+    HACK_REFERRAL_CODE = "deadbeef"
 
     # POST /api/promo_codes/apply_promo_code
     def applyPromoCode
@@ -20,8 +22,27 @@ module Api
           device = Device.find_by_uuid(params[:android_id])
           referral_account = Account.find_by_referral_code(params[:promo_code])
 
+          # check if promo code matches the "hacked" referral code
+          if params[:promo_code] == HACK_REFERRAL_CODE
+            if account.referral_code_history.nil?
+              referral_history = ReferralCodeHistory.find_or_create_by_account_id(account.id)
+              referral_history.referrer_id = 1
+              referral_history.referrer_value = 0
+              referral_history.referree_value = TOKENS_FOR_HACK_REFERRAL_CODE
+              referral_history.save
+
+              if device
+                send_gcm(device, "a referral", TOKENS_FOR_HACK_REFERRAL_CODE)
+              end
+              account.add_to_balance(TOKENS_FOR_HACK_REFERRAL_CODE)
+              account.save
+
+              render status: 200, text: "Referral code accepted.  You have earned #{TOKENS_FOR_HACK_REFERRAL_CODE} tokens!"
+            else
+              render status: 400, text: "You have already entered a referral code!"
+            end
           # check if promo code matches an account
-          if !referral_account.nil?
+          elsif !referral_account.nil?
             if referral_account == account
               render status: 400, text: "Invalid referral code."
             else
