@@ -57,14 +57,14 @@ module Api
 
       device_uuid = parsed_json["device_uid"]
       app_uid = parsed_json["app_uid"]
-      refering_app_pkg = parsed_json["refering_app_pkg"]
+      referring_app_pkg = parsed_json["refering_app_pkg"]
 
       app = App.find_by_uid(app_uid)
-      refering_app = App.find_by_url(refering_app_pkg)
+      referring_app = App.find_by_url(referring_app_pkg)
       device_id = Device.find_by_uuid(device_uuid)
 
       download = Download.find_or_create_by_device_id_app_id_and_app_download_id(
-          device_id, refering_app.id, app.id)
+          device_id, referring_app.id, app.id)
 
       if !download.initial_launch_time
         download.initial_launch_time = Time.now
