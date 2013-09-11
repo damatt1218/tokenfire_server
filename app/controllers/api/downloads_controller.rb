@@ -27,8 +27,12 @@ module Api
       download = Download.find_or_create_by_device_id_app_id_and_app_download_id(
           device_id, refering_app.id, download_app.id)
 
-      download.link_click_time = Time.now
-      download.pending = true
+      if download.link_click_time.nil?
+        download.link_click_time = Time.now
+      end
+      if download.pending.nil?
+        download.pending = true
+      end
       download.save
 
       redirect_string = "market://details?id=" +
