@@ -60,7 +60,7 @@ module Api
       refering_app_pkg = parsed_json["refering_app_pkg"]
 
       app = App.find_by_uid(app_uid)
-      refering_app = App.find_by_name(refering_app_pkg)
+      refering_app = App.find_by_url(refering_app_pkg)
       device_id = Device.find_by_uuid(device_uuid)
 
       download = Download.find_or_create_by_device_id_app_id_and_app_download_id(
