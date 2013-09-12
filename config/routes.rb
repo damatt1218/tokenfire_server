@@ -27,9 +27,15 @@ MobileRewardz::Application.routes.draw do
   match 'apps/accept/:id', :to => 'apps#accept', :via => :get, :as => :apps_accept
   match 'apps/submit/:id', :to => 'apps#submit', :as => :apps_submit
   resources :apps do
-    match 'achievements/:id/soft_delete', :to => 'achievements#softDelete', :as => :soft_delete_app_achievement
-    match 'achievements/:id/restore', :to => 'achievements#restore', :as => :restore_app_achievement
-    resources :achievements
+    match 'campaigns/:id/soft_delete', :to => 'campaigns#softDelete', :as => :soft_delete_app_campaign
+    match 'campaigns/:id/restore', :to => 'campaigns#restore', :as => :restore_app_campaign
+    match 'campaigns/:id/activate', :to => 'campaigns#activate', :as => :activate_app_campaign
+    match 'campaigns/:id/deactivate', :to => 'campaigns#deactivate', :as => :deactivate_app_campaign
+    resources :campaigns  do
+      match 'achievements/:id/soft_delete', :to => 'achievements#softDelete', :as => :soft_delete_app_achievement
+      match 'achievements/:id/restore', :to => 'achievements#restore', :as => :restore_app_achievement
+      resources :achievements
+    end
   end
 
   scope :module => "oauth" do

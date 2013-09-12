@@ -1,8 +1,8 @@
 <header class="page-header">
   <h1>
-    <%= @application.name %> Achievements
+    <%= @application.name %>/<%= @campaign.name %> Achievements
     <small class="pull-right">
-      <%= link_to 'New', new_app_achievement_path(@application), :class => "btn btn-info" %>
+      <%= link_to 'New', new_app_campaign_achievement_path(@application, @campaign), :class => "btn btn-info" %>
     </small>
   </h1>
 </header>
@@ -18,13 +18,13 @@
   </tr>
   </thead>
   <tbody>
-    <% @application.achievements.where(:soft_deleted => false).each do |achievement| %>
+    <% @campaign.achievements.where(:soft_deleted => false).each do |achievement| %>
         <tr>
           <td><%= achievement.name%></td>
           <td><%= achievement.description%></td>
           <td><%= achievement.value%></td>
           <td><%= achievement.cost%></td>
-          <td><%= link_to 'Edit', edit_app_achievement_path(achievement.app_id, achievement) %></td>
+          <td><%= link_to 'Edit', edit_app_campaign_achievement_path(@campaign.app_id, achievement.campaign_id, achievement) %></td>
         </tr>
     <% end %>
   </tbody>
@@ -34,4 +34,4 @@
 
 </div>
 
-<%= link_to 'Back to Application', app_path(@application), :class => 'btn' %>
+<%= link_to 'Back to Application', app_campaign_path(@application, @campaign), :class => 'btn' %>

@@ -1,0 +1,22 @@
+<fieldset>
+  <%= f.error_messages %>
+  <%= f.label :name %>
+  <i><small>This is the name for your campaign.</small></i><br>
+  <%= f.text_field :name, :class => 'span8' %>
+
+
+  <%= f.label :description %>
+  <i><small>Short description of your campaign.</small></i><br>
+  <%= f.text_area :description, :rows => '3', :class => 'span8'  %>
+
+  <%= f.label :overall_budget %>
+  <i><small>Total amount in USD allocated to be spent for this campaign.</small></i><br>
+  <%= f.text_field :overall_budget %>
+
+  <%= f.label :daily_budget %>
+  <i><small>Total daily amount in USD allocated to be spent for this campaign.</small></i><br>
+  <%= f.text_field :daily_budget %>
+
+  <%= f.submit :Submit, :class => "btn btn-primary" %>
+  <%= link_to 'Cancel', app_path(@application), :class => 'btn' %>
+</fieldset>

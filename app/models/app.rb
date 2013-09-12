@@ -16,6 +16,7 @@ class App < ActiveRecord::Base
   has_many :accounts, through: :app_usages
   has_many :app_sessions, through: :app_usages
   has_many :achievements
+  has_many :campaigns
   has_many :app_daily_summaries
   belongs_to :account
 

@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.8'
 
-gem 'devise', '~> 3.0'
+gem 'devise', '~> 3.1.0'
 gem 'cancan'
 gem 'doorkeeper', :git => 'git://github.com/applicake/doorkeeper.git', :branch => "1.0"
 

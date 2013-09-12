@@ -1,6 +1,7 @@
 <div class="span16">
   <header class="page-header">
     <h1>Application: <%= @application.name %></h1>
+    <h1>Campaign: <%= @campaign.name %></h1>
     <h2>Achievement: <%= @achievement.name %></h2>
   </header>
 </div>
@@ -28,8 +29,8 @@
   <p><code id="availability"><%= @achievement.uid %></code></p>
 
   <div>
-    <%= link_to 'Edit', edit_app_achievement_path(@application, @achievement), :class => "btn primary" %>
-    <%= link_to 'Back to App', app_path(@application), :class => "btn" %>
+    <%= link_to 'Edit', edit_app_campaign_achievement_path(@application, @campaign, @achievement), :class => "btn primary" %>
+    <%= link_to 'Back to Campaign', app_campaign_path(@application, @campaign), :class => "btn" %>
   </div>
 </div>
 

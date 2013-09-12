@@ -24,6 +24,7 @@ class Achievement < ActiveRecord::Base
   # Relationships
   has_many :achievement_history
   belongs_to :app
+  belongs_to :campaign
 
   validates_presence_of :name, :cost
 

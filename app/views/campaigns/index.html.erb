@@ -1,0 +1,37 @@
+<header class="page-header">
+  <h1>
+    <%= @campaign.name %> Campaign
+    <small class="pull-right">
+      <%= link_to 'New', new_app_campaign_path(@campaign), :class => "btn btn-info" %>
+    </small>
+  </h1>
+</header>
+
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Overall Budget</th>
+    <th>Daily Budget</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @application.campaigns.where(:soft_deleted => false).each do |campaign| %>
+      <tr>
+        <td><%= campaign.nam e%></td>
+        <td><%= campaign.description %></td>
+        <td><%= campaign.overall_budget %></td>
+        <td><%= campaign.daily_budget %></td>
+        <td><%= link_to 'Edit', edit_app_campaign_path(campaign.app_id, campaign) %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div class="actions">
+
+</div>
+
+<%= link_to 'Back to Application', app_path(@application), :class => 'btn' %>

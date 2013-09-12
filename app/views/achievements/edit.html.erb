@@ -1,16 +1,16 @@
 <div class="row-fluid">
   <div class="well span6 offset3">
 
-    <%= form_for @achievement, :url => app_achievement_path(@application,@achievement), :html => { :method => :put } do |f| %>
+    <%= form_for @achievement, :url => app_campaign_achievement_path(@application, @achievement.campaign, @achievement), :html => { :method => :put } do |f| %>
       <legend>Edit <%= @achievement.name %></legend>
       <%= render 'form', :achievement => @achievement, :f => f %>
     <% end %>
 
     <% if @achievement.soft_deleted == false %>
-        <%= link_to 'Delete', app_soft_delete_app_achievement_path(@application, @achievement), :class => "btn btn-danger", :data => {:confirm => 'Are you sure?'} %>
+        <%= link_to 'Delete', app_campaign_soft_delete_app_achievement_path(@application, @achievement.campaign, @achievement), :class => "btn btn-danger", :data => {:confirm => 'Are you sure?'} %>
     <% end %>
     <% if (@achievement.soft_deleted == true) && (current_user.role? :admin) %>
-        <%= link_to 'Restore', app_restore_app_achievement_path(@application, @achievement), :class => "btn btn-warning"  %>
+        <%= link_to 'Restore', app_restore_app_achievement_path(@application, @achievement.campaign, @achievement), :class => "btn btn-warning"  %>
     <% end %>
   </div>
 </div>

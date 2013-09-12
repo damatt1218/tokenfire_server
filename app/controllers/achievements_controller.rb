@@ -1,7 +1,7 @@
 class AchievementsController < ApplicationController
 
   # Index to view all achievements for an application
-  # GET /apps/:app_id/achievements
+  # GET /apps/:app_id/campaigns/:campaign_id/achievements
   #   :app_id is the id of the app to view achievements for
   def index
     # Redirect if the user doesn't have access
@@ -11,7 +11,7 @@ class AchievementsController < ApplicationController
   end
 
   # Gets data for new achievement view
-  # GET /apps/:app_id/achievements/new
+  # GET /apps/:app_id/campaigns/:campaign_id/achievements/new
   #   :app_id is the id of the app the achievement will be associated with
   def new
     # Redirect if the user doesn't have access
@@ -21,11 +21,11 @@ class AchievementsController < ApplicationController
 
     # Get a new achievement and set the app_id
     @achievement = Achievement.new
-    @achievement.app_id = params[:app_id]
+    @achievement.campaign_id = params[:campaign_id]
   end
 
   # Creates a new achievement
-  # POST /apps/:app_id/achievements
+  # POST /apps/:app_id/campaigns/:campaign_id/achievements
   #   :app_id is the id of the app the achievement will be associated with
   def create
     # Check if user has access
@@ -33,7 +33,7 @@ class AchievementsController < ApplicationController
 
       # Create the achievement form the input and set the app id
       @achievement = Achievement.new(params[:achievement])
-      @achievement.app_id = params[:app_id]
+      @achievement.campaign = Campaign.find(params[:campaign_id])
 
       if (!@achievement.cost.nil?)
         @achievement.value = (@achievement.cost * 1000).to_int
@@ -41,7 +41,7 @@ class AchievementsController < ApplicationController
 
       # Save the new achievement
       if @achievement.save
-        redirect_to app_url(params[:app_id]), :flash => { :notice => "Achievement successfully created." }
+        redirect_to app_campaign_url(params[:app_id], params[:campaign_id]), :flash => { :notice => "Achievement successfully created." }
       else
         render :new
       end
@@ -49,7 +49,7 @@ class AchievementsController < ApplicationController
   end
 
   # Updates an existing achievement
-  # PUT /apps/:app_id/achievements/:id
+  # PUT /apps/:app_id/campaigns/:campaign_id/achievements/:id
   #   :app_id is the id of the app the achievement will be associated with
   #   :id is the id of the achievement to update
   def update
@@ -61,7 +61,7 @@ class AchievementsController < ApplicationController
           @achievement.value = (@achievement.cost * 1000).to_int
           @achievement.save
         end
-        redirect_to app_url(params[:app_id]), :flash => { :notice => "Achievement successfully updated." }
+        redirect_to app_campaign_url(params[:app_id], params[:campaign_id]), :flash => { :notice => "Achievement successfully updated." }
       else
         render :edit
       end
@@ -69,7 +69,7 @@ class AchievementsController < ApplicationController
   end
 
   # Shows a single achievement
-  #   GET /apps/:app_id/achievements/:id
+  #   GET /apps/:app_id/campaigns/:campaign_id/achievements/:id
   #     :app_id is the id of the app the achievement will be associated with
   #     :id is the id of the achievement to view
   def show
@@ -80,7 +80,7 @@ class AchievementsController < ApplicationController
   end
 
   # Edit an achievement
-  #   GET /apps/:app_id/achievements/:id/edit
+  #   GET /apps/:app_id/campaigns/:campaign_id/achievements/:id/edit
   #     :app_id is the id of the app the achievement will be associated with
   #     :id is the id of the achievement to edit
   def edit
@@ -91,7 +91,7 @@ class AchievementsController < ApplicationController
   end
 
   # Soft deletes an existing achievement
-  # /apps/:app_id/achievements/:id/soft_delete
+  # /apps/:app_id/campaigns/:campaign_id/achievements/:id/soft_delete
   #   :app_id is the id of the app the achievement will be associated with
   #   :id is the id of the achievement to update
   def softDelete
@@ -99,7 +99,7 @@ class AchievementsController < ApplicationController
       achievement = Achievement.find(params[:id])
       achievement.soft_deleted = true;
       achievement.save
-      redirect_to app_path(params[:app_id]), :flash => { :notice => "Achievement successfully deleted." }
+      redirect_to app_campaign_path(params[:app_id], params[:campaign_id]), :flash => { :notice => "Achievement successfully deleted." }
     else
       redirect_to '/'
     end
@@ -107,7 +107,7 @@ class AchievementsController < ApplicationController
   end
 
   # Restores a soft deleted, existing achievement
-  # /apps/:app_id/achievements/:id/restore
+  # /apps/:app_id/campaigns/:campaign_id/achievements/:id/restore
   #   :app_id is the id of the app the achievement will be associated with
   #   :id is the id of the achievement to update
   def restore
@@ -115,7 +115,7 @@ class AchievementsController < ApplicationController
       achievement = Achievement.find(params[:id])
       achievement.soft_deleted = false;
       achievement.save
-      redirect_to app_path(params[:app_id]), :flash => { :notice => "Achievement successfully restored." }
+      redirect_to app_campaign_path(params[:app_id], params[:campaign_id]), :flash => { :notice => "Achievement successfully restored." }
     else
       redirect_to '/'
     end
@@ -125,6 +125,7 @@ class AchievementsController < ApplicationController
   # Checks permissions to see if the requesting user has access to the data requested
   # If the user has access:
   #   - The @application field will be populated (if the :app_id parameter is available)
+  #   - The @campaign field will be populated (if the :campaign_id parameter is available)
   #   - The @achievement field will be populated (if the :id parameter is available)
   private
   def hasAccess
@@ -139,6 +140,14 @@ class AchievementsController < ApplicationController
       @application = App.find(params[:app_id])
     rescue ActiveRecord::RecordNotFound
       @application = nil
+      return false
+    end
+
+    # Find the campaign being requested
+    begin
+      @campaign = Campaign.find(params[:campaign_id])
+    rescue ActiveRecord::RecordNotFound
+      @campaign = nil
       return false
     end
 
@@ -158,13 +167,23 @@ class AchievementsController < ApplicationController
       @achievement = Achievement.find(params[:id])
     rescue ActiveRecord::RecordNotFound
       @application = nil
+      @campaign = nil
       @achievement = nil
       return false
     end
 
-    # Verify the achievement is associated with the app (which we already verified access to)
-    if (@achievement.app_id != @application.id) && (!isAdmin)
+    # Verify the campaign is associated with the app (which we already verified access to)
+    if (@campaign.app_id != @application.id) && (!isAdmin)
       @application = nil
+      @campaign = nil
+      @achievement = nil
+      return false
+    end
+
+    # Verify the achievement is associated with the campaign (which we already verified access to)
+    if (@achievement.campaign_id != @campaign.id) && (!isAdmin)
+      @application = nil
+      @campaign = nil
       @achievement = nil
       return false
     end

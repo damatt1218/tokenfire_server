@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130827200616) do
+ActiveRecord::Schema.define(:version => 20130912095849) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",       :default => 0.0
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20130827200616) do
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
     t.boolean  "soft_deleted", :default => false
+    t.integer  "campaign_id"
   end
 
   create_table "app_daily_summaries", :force => true do |t|
@@ -110,6 +111,22 @@ ActiveRecord::Schema.define(:version => 20130827200616) do
 
   add_index "apps", ["account_id"], :name => "index_apps_on_account_id"
   add_index "apps", ["uid"], :name => "index_apps_on_uid", :unique => true
+
+  create_table "campaigns", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.boolean  "active",              :default => false
+    t.boolean  "approved",            :default => false
+    t.float    "overall_budget"
+    t.float    "daily_budget"
+    t.float    "duration"
+    t.integer  "app_id"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+    t.boolean  "soft_deleted",        :default => false
+    t.float    "overall_used_budget", :default => 0.0
+    t.float    "daily_used_budget",   :default => 0.0
+  end
 
   create_table "device_metrics_histories", :force => true do |t|
     t.string   "OS"

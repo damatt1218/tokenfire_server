@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  description: MyString
+  active: false
+  approved: false
+  overall_budget: 1.5
+  daily_budget: 1.5
+  duration: 1.5
+  app_id: 1
+
+two:
+  name: MyString
+  description: MyString
+  active: false
+  approved: false
+  overall_budget: 1.5
+  daily_budget: 1.5
+  duration: 1.5
+  app_id: 1

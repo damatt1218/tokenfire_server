@@ -74,6 +74,16 @@ module Api
         download.initial_launch_time = Time.now
         download.pending = false
         download.save
+
+        # assign a campaign history.  May want to move this functionality elsewhere
+        campaign_hist = CampaignHistory.new
+        campaign_hist.device_id = device_id
+        app.campaigns.each do |c|
+          if c.active
+            campaign_hist.campaign_id = c.id
+          end
+        end
+        campaign_hist.save
       end
 
       if download

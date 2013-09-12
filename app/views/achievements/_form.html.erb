@@ -26,5 +26,5 @@
 </p>
 
     <%= f.submit :Submit, :class => "btn btn-primary" %>
-    <%= link_to 'Cancel', app_path(@application), :class => 'btn' %>
+    <%= link_to 'Cancel', app_campaign_path(@application, @achievement.campaign), :class => 'btn' %>
 </fieldset>

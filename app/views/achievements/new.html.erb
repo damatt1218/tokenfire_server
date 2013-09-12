@@ -1,8 +1,8 @@
 <div class="row-fluid">
   <div class="span6 offset3">
     <div class="well">
-      <%= form_for @achievement, :url => app_achievements_path(@achievement.app_id), :html => { :method => :post } do |f| %>
-        <legend>New Achievement for <%= @application.name.capitalize %></legend>
+      <%= form_for @achievement, :url => app_campaign_achievements_path(@achievement.campaign.app_id, @achievement.campaign_id), :html => { :method => :post } do |f| %>
+        <legend>New Achievement for <%= @application.name.capitalize %>/<%= @campaign.name.capitalize %></legend>
         <%= render 'form', :achievement => @achievement, :f => f %>
       <% end %>
     </div>
