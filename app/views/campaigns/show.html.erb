@@ -1,125 +1,48 @@
-<div class="span16">
-  <header class="page-header">
-    <h1>Application: <%= @application.name %></h1>
-    <h2>Campaign: <%= @campaign.name %></h2>
-  </header>
-</div>
+<header>
+  <p class="lead pull-right">
+    Status: <% if @campaign.active == false %>Inactive<% else %>Active<% end %>
+  </p>
+  <h1>Campaign: <%= @campaign.name %></h1>
+</header>
 
-<div class="span10">
-  <% if !@campaign.active %>
-    <p><%= link_to 'Activate Campaign', app_activate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Activate this campaign?'} %></p>
-  <% else %>
-    <p><%= link_to 'Deactivate Campaign', app_deactivate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Deactivate this campaign?'} %></p>
-  <% end %>
-</div>
-
-<div class="span10">
-  <table class="table table-bordered table-striped table-hover">
-    <thead>
-    <tr>
-      <th>Description</th>
-      <th>Overall Budget (USD)</th>
-      <th>Overall Used Budget (USD)</th>
-      <th>Daily Budget (USD)</th>
-      <th>Daily Used Budget (USD)</th>
-      <th>Active</th>
-    </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><%= @campaign.description %></td>
-        <td><%= @campaign.overall_budget %></td>
-        <td><%= @campaign.overall_used_budget %></td>
-        <td><%= @campaign.daily_budget %></td>
-        <td><%= @campaign.daily_used_budget %></td>
-        <td><%= @campaign.active %></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="row-fluid">
-    <h4>Achievements</h4>
-
-    <p><%= link_to 'New Achievement', new_app_campaign_achievement_path(@application, @campaign), :class => "btn btn-primary" %></p>
-
-    <div>
-      <table class="table table-bordered table-striped table-hover">
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Cost (USD)</th>
-          <th>Avg. time to complete</th>
-          <th>Percent of Users</th>
-          <th>Times achieved</th>
-          <th>Achievement UID</th>
-          <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% @campaign.achievements.where(:soft_deleted => false).each do |achievement| %>
-            <tr>
-              <td><%= link_to achievement.name, app_campaign_achievement_path(@application, @campaign, achievement) %></td>
-              <td><%= achievement.cost %></td>
-              <td><%= Time.at(@application.getAverageDurationForAchievement(achievement)).gmtime.strftime('%R:%S') %></td>
-              <td>
-                <% if @downloads_count > 0 %>
-                    <%= 100.0 * achievement.achievement_history.count / @downloads_count %>
-                <% else %>
-                    0
-                <% end%>
-                %
-              </td>
-              <td><%= achievement.achievement_history.count %></td>
-              <td><%= achievement.uid %></td>
-              <td><%= link_to 'Edit', edit_app_campaign_achievement_path(@application, @campaign, achievement) %></td>
-            </tr>
+<div class="navbar">
+  <div class="navbar-inner">
+    <ul class="nav">
+      <li><%= link_to "Analytics", app_path(@application) %></li>
+      <li class="active"><%= link_to "Campaigns", app_campaigns_path(@application) %></li>
+    </ul>
+    <ul class="nav pull-right">
+      <% if @application.disabled == false %>
+        <% if @application.submitted == false %>
+          <li><%= link_to 'Submit For Review', apps_submit_path(@application)%></li>
         <% end %>
-        </tbody>
-      </table>
-
-      <% if current_user.role? :admin %>
-          <h5>Deleted Achievements</h5>
-          <table class="table table-bordered table-striped table-hover">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Cost (USD)</th>
-              <th>Avg. time to complete</th>
-              <th>Percent of Users</th>
-              <th>Times achieved</th>
-              <th>Achievement UID</th>
-              <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% @application.achievements.where(:soft_deleted => true).each do |achievement| %>
-                <tr>
-                  <td><%= link_to achievement.name, app_campaign_achievement_path(@application, @campaign, achievement) %></td>
-                  <td><%= achievement.cost %></td>
-                  <td><%= @application.getAverageDurationForAchievement(achievement) %></td>
-                  <td>
-                    <% if @downloads_count > 0 %>
-                        <%= 100.0 * achievement.achievement_history.count / @downloads_count %>
-                    <% else %>
-                        0
-                    <% end%>
-                    %
-                  </td>
-                  <td><%= achievement.achievement_history.count %></td>
-                  <td><%= achievement.uid %></td>
-                  <td><%= link_to 'Edit', edit_app_campaign_achievement_path(@application, @campaign, achievement) %></td>
-                </tr>
-            <% end %>
-            </tbody>
-          </table>
       <% end %>
-    </div>
-  </div>
-
-
-  <div>
-    <%= link_to 'Edit', edit_app_campaign_path(@application, @campaign), :class => "btn primary" %>
-    <%= link_to 'Back to App', app_path(@application), :class => "btn" %>
+      <li>
+        <%= link_to 'App Key', oauth_application_path(@application) %>
+      </li>
+      <li>
+        <%= link_to 'Edit', edit_oauth_application_path(@application) %>
+      </li>
+        <% if current_user.role? :admin %>
+          <%= link_to 'Delete', apps_disable_path(@application), :data => {:confirm => 'Are you sure?'} %>
+          <% if @application.accepted == false %>
+            <%= link_to 'Accept Application', apps_accept_path(@application), :class => "btn btn-info" %>
+          <% end %>
+          <% if @application.disabled == true %>
+            <%= link_to 'Restore', apps_restore_path(@application), :class => "btn btn-info" %>
+          <% end %>
+        <% end %>
+    </ul>
   </div>
 </div>
 
+<% if @campaign.active == false %>
+  <%= render 'new_campaign' %>
+<% else %>
+  <%= render 'campaign_stats' %>
+  </div>
+<% end %>
+
+<div>
+  <%= link_to 'Back to Campaigns', app_campaigns_path(@application), :class => "btn" %>
+</div>

@@ -1,5 +1,5 @@
 <div class="row-fluid">
-  <div class="span6 offset3">
+  <div class="span8 offset2">
     <div class="well">
       <%= form_for @campaign, :url => app_campaigns_path(@campaign.app_id), :html => { :method => :post } do |f| %>
           <legend>New Campaign for <%= @application.name.capitalize %></legend>

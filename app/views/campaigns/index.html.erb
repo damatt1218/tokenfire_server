@@ -1,37 +1,82 @@
-<header class="page-header">
-  <h1>
-    <%= @campaign.name %> Campaign
-    <small class="pull-right">
-      <%= link_to 'New', new_app_campaign_path(@campaign), :class => "btn btn-info" %>
-    </small>
-  </h1>
-</header>
+<h1>
+  <%= @application.name.capitalize %>
+</h1>
 
-<table class="table table-bordered table-striped table-hover">
-  <thead>
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Overall Budget</th>
-    <th>Daily Budget</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <% @application.campaigns.where(:soft_deleted => false).each do |campaign| %>
-      <tr>
-        <td><%= campaign.nam e%></td>
-        <td><%= campaign.description %></td>
-        <td><%= campaign.overall_budget %></td>
-        <td><%= campaign.daily_budget %></td>
-        <td><%= link_to 'Edit', edit_app_campaign_path(campaign.app_id, campaign) %></td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
-
-<div class="actions">
-
+<div class="navbar">
+  <div class="navbar-inner">
+    <ul class="nav">
+      <li><%= link_to "Analytics", app_path(@application) %></li>
+      <li class="active"><%= link_to "Campaigns", app_campaigns_path(@application) %></li>
+    </ul>
+    <ul class="nav pull-right">
+      <% if @application.disabled == false %>
+        <% if @application.submitted == false %>
+          <li><%= link_to 'Submit For Review', apps_submit_path(@application) %></li>
+        <% end %>
+      <% end %>
+      <li>
+        <%= link_to 'App Key', oauth_application_path(@application) %>
+      </li>
+      <li>
+        <%= link_to 'Edit', edit_oauth_application_path(@application) %>
+      </li>
+        <% if current_user.role? :admin %>
+          <%= link_to 'Delete', apps_disable_path(@application), :data => {:confirm => 'Are you sure?'} %>
+          <% if @application.accepted == false %>
+            <%= link_to 'Accept Application', apps_accept_path(@application), :class => "btn btn-info" %>
+          <% end %>
+          <% if @application.disabled == true %>
+            <%= link_to 'Restore', apps_restore_path(@application), :class => "btn btn-info" %>
+          <% end %>
+        <% end %>
+    </ul>
+  </div>
 </div>
 
-<%= link_to 'Back to Application', app_path(@application), :class => 'btn' %>
+<!--
+GRAPH OF ALL ACTIVITY. Should graph new installs and eCPI and total spend. Will need to have 2 y-axis. 1: number of users (installs) 2: USD (eCPI/total spend) if total spend >> eCPI then won't fit on axis... will need to just graph eCPI perhaps?
+-->
+
+<div>
+  <p>
+    <%= link_to "New Campaign", new_app_campaign_path, :class => 'btn btn-primary' %>
+  </p>
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Installs</th>
+      <th>eCPI</th>
+      <th>Spend (USD)</th>
+      <th>Budgets (Daily / Total)</th>
+      <th>Achievements</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @application.campaigns.where(:soft_deleted => false).each do |campaign| %>
+        <tr>
+          <td><%= link_to campaign.name, app_campaign_path(@application, campaign) %></td>
+          <!-- Should show number of achievements and total value -->
+          <td><%= campaign.description %></td>
+          <!-- eCPI: total spend / total installs -->
+          <td>CALCULATE eCPI</td>
+          <!-- Spend: total amount spent -->
+          <td><%= number_to_currency(campaign.overall_used_budget) %></td>
+          <!-- Budget spend should be listed as $spent / $total budget -->
+          <td><%= number_to_currency(campaign.daily_budget) %> / <%= number_to_currency(campaign.overall_budget) %></td>
+          <td><%= campaign.achievements.count %> / $1.20 CALCULATE TOTAL COST</td>
+          <td>
+            <% if campaign.active == false %>
+              Inactive
+            <% else %>
+              Active
+            <% end %>
+          </td>
+          <td><%= link_to 'Edit', edit_app_campaign_path(campaign.app_id, campaign) %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

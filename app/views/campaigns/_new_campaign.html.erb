@@ -1,0 +1,127 @@
+<div>
+  <h4>Step 1: Campaign Details</h4>
+  <p>Set the total budget you would like to spend on your campaign (daily budgets optional). The link to Google Play will be the same as the URL in your app settings.</p>
+  <p>
+    <%= link_to 'Edit Details', edit_app_campaign_path(@application, @campaign), :class => "btn btn-primary" %>
+  </p>
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Overall Budget (USD)</th>
+      <th>Daily Budget (USD)</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @campaign.name %></td>
+        <td><%= @campaign.description %></td>
+        <td><%= number_to_currency(@campaign.overall_budget) %></td>
+        <td><%= number_to_currency(@campaign.daily_budget) %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="row-fluid">
+  <h4>Step 2: Achievements</h4>
+  <p>
+    Create achievements to help highlight unique features of your game. Users will earn tokens based on the value of the achievement upon completion. Achievements are completable once per download / user. <b>The maximum cost of a user will be the sum of all achievement values.</b>
+  </p>
+  <p>
+      Add the code <code>reportAchievement(String achievementUID)</code> with correct <code>String achievementUID</code> at the appropriate places in your source code. Make sure you integrated the SDK properly to support achievements (<a href="https://github.com/TokenFire/tokenfire_android_sdk" target="_blank">SDK Guide</a>).
+  </p>
+  <p>
+    <b class="text-warning">All achievements should be completable within 1 hour of casual playtime to give users the best possible experience. This will be verified by our QA testers.</b>
+  </p>
+
+  <p><%= link_to 'New Achievement', new_app_campaign_achievement_path(@application, @campaign), :class => "btn btn-primary" %></p>
+
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Cost (USD)</th>
+        <th>Avg. time to complete</th>
+        <th>Percent of Users</th>
+        <th>Times achieved</th>
+        <th>Achievement UID</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @campaign.achievements.where(:soft_deleted => false).each do |achievement| %>
+      <tr>
+        <td><%= link_to achievement.name, app_campaign_achievement_path(@application, @campaign, achievement) %></td>
+        <td><%= number_to_currency(achievement.cost) %></td>
+        <td><%= Time.at(@application.getAverageDurationForAchievement(achievement)).gmtime.strftime('%R:%S') %></td>
+        <td>
+          <% if @downloads_count > 0 %>
+              <%= 100.0 * achievement.achievement_history.count / @downloads_count %>
+          <% else %>
+              0
+          <% end%>
+          %
+        </td>
+        <td><%= achievement.achievement_history.count %></td>
+        <td><%= achievement.uid %></td>
+        <td>
+          <%= link_to 'Edit', edit_app_campaign_achievement_path(@application, @campaign, achievement) %>
+          <%= link_to 'Delete', app_campaign_soft_delete_app_achievement_path(@application, achievement.campaign, achievement), :class => 'text-danger', :data => {:confirm => 'Are you sure?'} %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% if current_user.role? :admin %>
+    <h5>Deleted Achievements</h5>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Cost (USD)</th>
+        <th>Avg. time to complete</th>
+        <th>Percent of Users</th>
+        <th>Times achieved</th>
+        <th>Achievement UID</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+        <% @application.achievements.where(:soft_deleted => true).each do |achievement| %>
+          <tr>
+            <td><%= link_to achievement.name, app_campaign_achievement_path(@application, @campaign, achievement) %></td>
+            <td><%= achievement.cost %></td>
+            <td><%= @application.getAverageDurationForAchievement(achievement) %></td>
+            <td>
+              <% if @downloads_count > 0 %>
+                  <%= 100.0 * achievement.achievement_history.count / @downloads_count %>
+              <% else %>
+                  0
+              <% end%>
+              %
+            </td>
+            <td><%= achievement.achievement_history.count %></td>
+            <td><%= achievement.uid %></td>
+            <td><%= link_to 'Edit', edit_app_campaign_achievement_path(@application, @campaign, achievement) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+
+<div>
+  <h4>Step 3: Approval</h4>
+  <p>Submit APK with SDK / Achievements fully integrated for QA. Campaigns will be activated upon successful review and you will be alerted via e-mail.</p>
+
+  UPLOADER HERE
+
+  Submit button under.
+  <% if !@campaign.active %>
+    <p><%= link_to 'Activate Campaign', app_activate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Activate this campaign?'} %></p>
+  <% else %>
+    <p><%= link_to 'Deactivate Campaign', app_deactivate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Deactivate this campaign?'} %></p>
+  <% end %>
+</div>

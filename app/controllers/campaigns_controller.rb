@@ -10,6 +10,9 @@ class CampaignsController < ApplicationController
     if !hasAccess
       redirect_to '/'
     end
+
+    @campaigns = Campaign.find_all_by_app_id(params[:app_id])
+
   end
 
   # Gets data for new campaign view
@@ -43,7 +46,7 @@ class CampaignsController < ApplicationController
 
       # Save the new campaign
       if @campaign.save
-        redirect_to app_url(params[:app_id]), :flash => { :notice => "Campaign successfully created." }
+        redirect_to app_campaign_url(params[:app_id], @campaign), :flash => { :notice => "Campaign successfully created." }
       else
         render :new
       end
@@ -62,7 +65,7 @@ class CampaignsController < ApplicationController
         if (@campaign.duration.nil?)
           @campaign.duration = CAMPAIGN_DURATION_DAYS
         end
-        redirect_to app_url(params[:app_id]), :flash => { :notice => "Campaign successfully updated." }
+        redirect_to app_campaign_url(params[:app_id], @campaign), :flash => { :notice => "Campaign successfully updated." }
       else
         render :edit
       end
@@ -102,7 +105,7 @@ class CampaignsController < ApplicationController
       campaign = Campaign.find(params[:id])
       campaign.soft_deleted = true;
       campaign.save
-      redirect_to app_path(params[:app_id]), :flash => { :notice => "Campaign successfully deleted." }
+      redirect_to app_campaigns_url, :flash => { :notice => "Campaign successfully deleted." }
     else
       redirect_to '/'
     end

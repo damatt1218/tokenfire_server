@@ -1,0 +1,5 @@
+    <% if !@campaign.active %>
+      <p><%= link_to 'Activate Campaign', app_activate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Activate this campaign?'} %></p>
+    <% else %>
+      <p><%= link_to 'Deactivate Campaign', app_deactivate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Deactivate this campaign?'} %></p>
+    <% end %>

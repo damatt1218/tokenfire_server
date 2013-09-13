@@ -1,0 +1,79 @@
+<!-- Campaign Analytics -->
+<div class="row-fluid">
+
+  <h4>Campaigns</h4>
+
+  <p><%= link_to 'New Campaign', new_app_campaign_path(@application), :class => "btn btn-primary" %></p>
+
+  <div>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Overall Budget (USD)</th>
+        <th>Overall Spent (USD)</th>
+        <th>Remaining Overall Budget (USD)</th>
+        <th>Daily Budget (USD)</th>
+        <th>Daily Spent (USD)</th>
+        <th>Remaining Daily Budget (USD)</th>
+        <th>Active</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @application.campaigns.where(:soft_deleted => false).each do |campaign| %>
+          <tr>
+            <td><%= link_to campaign.name, app_campaign_path(@application, campaign) %></td>
+            <td><%= campaign.overall_budget %></td>
+            <td><%= campaign.overall_used_budget %></td>
+            <td><%= campaign.overall_budget - campaign.overall_used_budget %></td>
+            <td><%= campaign.daily_budget %></td>
+            <td><%= campaign.daily_used_budget %></td>
+            <td><%= campaign.daily_budget - campaign.daily_used_budget %></td>
+            <td><%= campaign.active %></td>
+
+            <td><%= link_to 'Edit', edit_app_campaign_path(@application, campaign) %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+
+
+    <% if current_user.role? :admin %>
+        <h5>Deleted Campaigns</h5>
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Overall Budget (USD)</th>
+              <th>Overall Spent (USD)</th>
+              <th>Remaining Overall Budget (USD)</th>
+              <th>Daily Budget (USD)</th>
+              <th>Daily Spent (USD)</th>
+              <th>Remaining Daily Budget (USD)</th>
+              <th>Active</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @application.campaigns.where(:soft_deleted => true).each do |campaign| %>
+                <tr>
+                  <td><%= link_to campaign.name, app_campaign_path(@application, campaign) %></td>
+                  <td><%= campaign.overall_budget %></td>
+                  <td><%= campaign.overall_used_budget %></td>
+                  <td><%= campaign.overall_budget - campaign.overall_used_budget %></td>
+                  <td><%= campaign.daily_budget %></td>
+                  <td><%= campaign.daily_used_budget %></td>
+                  <td><%= campaign.daily_budget - campaign.daily_used_budget %></td>
+                  <td><%= campaign.active %></td>
+
+                  <td><%= link_to 'Edit', edit_app_campaign_path(@application, campaign) %></td>
+                </tr>
+            <% end %>
+            </tbody>
+        </table>
+
+    <% end %>
+  </div>
+</div>
+<!-- /Campaign Analytics -->
