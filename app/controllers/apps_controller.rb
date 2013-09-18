@@ -16,17 +16,18 @@ class AppsController < ApplicationController
                                           :accepted => false,
                                           :disabled => false)
     else
+      @applications = App.where(:account_id => current_user.account.id, :disabled => false)
       @accepted_applications = App.where(:account_id => current_user.account.id,
                                          :accepted => true,
                                          :disabled => false)
-      @pending_applications = App.where(:account_id => current_user.account.id,
-                                        :accepted => false,
-                                        :submitted => false,
-                                        :disabled => false)
-      @submitted_applications = App.where(:account_id => current_user.account.id,
-                                          :submitted => true,
-                                          :accepted => false,
-                                          :disabled => false)
+      # @pending_applications = App.where(:account_id => current_user.account.id,
+      #                                   :accepted => false,
+      #                                   :submitted => false,
+      #                                   :disabled => false)
+      # @submitted_applications = App.where(:account_id => current_user.account.id,
+      #                                     :submitted => true,
+      #                                     :accepted => false,
+      #                                     :disabled => false)
     end
 
     # This should be pre-calculate when we start to get a real amount of data

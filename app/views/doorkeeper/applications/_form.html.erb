@@ -11,25 +11,29 @@
 <% end %>
 
 <%= f.label :name %>
-<div class="input">
-  <%= f.text_field :name %>
-</div>
+<i><small>Public name for listing in TokenFire marketplace.</small></i>
+<%= f.text_field :name, :class=>"input-block-level" %>
 
 <%= f.label :description %>
-<%= f.text_field :description %>
+<i><small>Public description for listing in TokenFire marketplace.</small></i>
+<%= f.text_area :description, :rows => '3', :class => 'input-block-level' %>
 
-<p>
-  <%= f.label :image, "Image (please upload a 96 x 96 icon)" %>
-  <%= image_tag application.image_url.to_s %><br>
-  <%= f.file_field :image %><br>
-  <%= f.label :remote_image_url, "or image URL" %>
-  <%= f.text_field :remote_image_url %>
-</p>
+<%= f.label :image %>
+<i><small>Please upload a 96 x 96 icon</small></i>
+<div class="row-fluid">
+  <div class="span10">
+    <%= f.file_field :image %>
+    <%= f.label :remote_image_url, "Or image URL" %>
+    <%= f.text_field :remote_image_url %>
+  </div>
+  <div class="span2">
+    <%= image_tag application.image_url.to_s %>
+  </div>
+</div>
 
-<p>
-  <%= f.label :url, "Google Play Package Name" %>
-  <%= f.text_field :url %>
-</p>
+<%= f.label :url, "Google Play Package Name" %>
+<i><small>Example: com.tokenfire.android</small></i><br>
+<%= f.text_field :url %>
 
 <% if current_user.role? :admin %>
   <p>
@@ -40,8 +44,22 @@
 
 <%= f.hidden_field :redirect_uri, :value => "http://localhost" %>
 
+<% if application.submitted == false %>
+  <legend>
+    Application Approval
+  </legend>
+  <h3>PUT APK UPLOADER HERE</h3>
+  <%= f.label :apk, "Upload APK" %>
+  <i><small>We will verify correct integration of the Android SDK for QA.</small></i>
+  <%= f.file_field :apk %>
+  <p>
+    <%= link_to "Submit for Approval", nil, :class => "btn btn-primary" %>
+  </p>
+<% end %>
+
+<hr>
 
 <p>
-  <%= f.submit :Submit, :class => "btn btn-primary" %>
+  <%= f.submit :Save, :class => "btn btn-primary" %>
   <%= link_to "Cancel", apps_path, :class => 'btn' %>
 </p>

@@ -141,7 +141,7 @@ class CampaignsController < ApplicationController
 
       @campaign.active = true
       @campaign.save
-      redirect_to app_path(params[:app_id]), :flash => { :notice => "Campaign successfully activated." }
+      redirect_to app_campaigns_path(params[:app_id]), :flash => { :notice => "Campaign successfully activated." }
     else
       redirect_to '/'
     end

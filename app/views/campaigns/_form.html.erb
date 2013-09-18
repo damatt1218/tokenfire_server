@@ -1,22 +1,30 @@
 <fieldset>
   <%= f.error_messages %>
   <%= f.label :name %>
-  <i><small>This is the name for your campaign.</small></i><br>
-  <%= f.text_field :name, :class => 'span8' %>
+  <i><small>For interal use - not shown to public.</small></i><br>
+  <%= f.text_field :name, :class => 'input-block-level' %>
 
 
   <%= f.label :description %>
-  <i><small>Short description of your campaign.</small></i><br>
-  <%= f.text_area :description, :rows => '3', :class => 'span8'  %>
+  <i><small>For internal use – not shown to public (optional).</small></i><br>
+  <%= f.text_area :description, :rows => '3', :class => 'input-block-level' %>
 
   <%= f.label :overall_budget %>
   <i><small>Total amount in USD allocated to be spent for this campaign.</small></i><br>
-  <%= f.text_field :overall_budget %>
+    <div class="input-prepend">
+    <span class="add-on">$</span>
+    <%= f.text_field :overall_budget, :class=>"span7", :id=>"appendedPrependedInput" %>
+  </div>
 
   <%= f.label :daily_budget %>
   <i><small>Total daily amount in USD allocated to be spent for this campaign.</small></i><br>
-  <%= f.text_field :daily_budget %>
+  <div class="input-prepend">
+    <span class="add-on">$</span>
+    <%= f.text_field :daily_budget, :class=>"span7", :id=>"appendedPrependedInput" %>
+  </div>
 
-  <%= f.submit :Submit, :class => "btn btn-primary" %>
-  <%= link_to 'Cancel', app_path(@application), :class => 'btn' %>
+  <p>
+    <%= f.submit :Submit, :class => "btn btn-primary" %>
+    <%= link_to 'Cancel', app_path(@application), :class => 'btn' %>
+  </p>
 </fieldset>

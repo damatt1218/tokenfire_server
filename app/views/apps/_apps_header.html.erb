@@ -1,0 +1,44 @@
+<h1>
+  <%= @application.name.capitalize %>
+  <% if @application.accepted == true %>
+    <span class="label label-success">Active</span>
+  <% elsif @application.submitted == true && @application.accepted == false %>
+    <span class="label label-warning">Pending</span>
+  <% else %>
+    <span class="label">Inactive</span>
+  <% end %>
+</h1>
+
+<div class="navbar">
+  <div class="navbar-inner">
+    <ul class="nav">
+      <li>
+        <%= link_to app_path(@application) do %>
+          <i class="icon-signal"></i> Analytics
+        <% end %>
+      </li>
+      <li>
+        <%= link_to app_campaigns_path(@application) do %>
+          <i class="icon-filter"></i> Campaigns
+        <% end %>
+      </li>
+    </ul>
+    <ul class="nav pull-right">
+      <li>
+        <%= link_to 'AppID & Secret', oauth_application_path(@application) %>
+      </li>
+      <li>
+        <%= link_to 'Edit App', edit_oauth_application_path(@application) %>
+      </li>
+        <% if current_user.role? :admin %>
+          <%= link_to 'Delete', apps_disable_path(@application), :data => {:confirm => 'Are you sure?'} %>
+          <% if @application.accepted == false %>
+            <%= link_to 'Accept Application', apps_accept_path(@application), :class => "btn btn-info" %>
+          <% end %>
+          <% if @application.disabled == true %>
+            <%= link_to 'Restore', apps_restore_path(@application), :class => "btn btn-info" %>
+          <% end %>
+        <% end %>
+    </ul>
+  </div>
+</div>

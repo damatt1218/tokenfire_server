@@ -1,275 +1,188 @@
-<% if @accepted_applications.count == 0 && @pending_applications.count == 0 && @submitted_applications.count == 0 %>
-  <%= render 'apps/getting_started' %>
-<% else %>
-  <header class="page-header">
-    <h1>Overview</h1>
-  </header>
+<header class="page-header">
+  <h1>Dashboard</h1>
+</header>
+<!-- Graphs
+<div id="dauGraph" class="bigGraph"></div>
+<script type="text/javascript">
+  // set up the carousel and make automatically cycle through the graphs
+    $(document).ready(function () {
+        $('#graphCarousel').carousel({
+            interval: 5000
+        });
 
-  <!-- KPI -->
-  <section>
-    <h4>Daily Statistics</h4>
-    <!-- KPI #1 -->
-    <div class="row-fluid">
-      <div class="span4 well">
-        <i class="icon-download-alt icon-4x pull-left"></i>
-        <div>
-          <h4 class="media-heading">Downloads</h4>
-          <p class="lead"><%= number_with_delimiter(@downloads, :delimiter => ',')  %></p>
-        </div>
-      </div>
-      <!-- /KPI #1 -->
-      <!-- KPI #2 -->
-      <div class="span4 well">
-        <div>
-          <i class="icon-group icon-4x pull-left"></i>
-          <h4 class="media-heading">Daily Active Users</h4>
-          <p class="lead"><%= number_with_delimiter(@dau, :delimiter => ',')  %></p>
-          <!-- DAU Delta
-          <h3 class="text-<%= @dau_delta < 0 ?  'error' : 'success' %>"><%= @formatted_dau_delta %></h3>
-          -->
-        </div>
-      </div>
-      <!-- /KPI #2 -->
-      <!-- KPI #3 -->
-      <div class="span4 well">
-        <i class="icon-money icon-4x pull-left"></i>
-        <div>
-          <h4 class="media-heading">Budget Remaining</h4>
-          <p class="lead">-----------</p>
-        </div>
-      </div>
-      <!-- /KPI #3 -->
-    </div>
-  </section>
-  <!-- /KPI -->
+        $('#graphCarousel').carousel('cycle');
 
-  <!-- Graphs -->
-  <section class="row-fluid">
-    <h4>Graphs</h4>
-    <div id="dauGraph" class="bigGraph"></div>
-  </section>
-    <script type="text/javascript">
-      // set up the carousel and make automatically cycle through the graphs
-        $(document).ready(function () {
-            $('#graphCarousel').carousel({
-                interval: 5000
+        d3.json('<%= url_for :controller => 'apps', :action => 'dau_data' %>', function(error, json_data) {
+
+            if (error) return console.warn(error);
+
+            var parseDate = d3.time.format("%Y-%m-%d").parse;
+
+            json_data.forEach(function(d) {
+                d.date = parseDate(d.report_date);
+                d.user_count = +d.user_count;
             });
 
-            $('#graphCarousel').carousel('cycle');
+            json_data.sort(function(a,b) {return b.date - a.date;});
 
-            d3.json('<%= url_for :controller => 'apps', :action => 'dau_data' %>', function(error, json_data) {
+            var graph_div = $('#dauGraph')
 
-                if (error) return console.warn(error);
-
-                var parseDate = d3.time.format("%Y-%m-%d").parse;
-
-                json_data.forEach(function(d) {
-                    d.date = parseDate(d.report_date);
-                    d.user_count = +d.user_count;
-                });
-
-                json_data.sort(function(a,b) {return b.date - a.date;});
-
-                var graph_div = $('#dauGraph')
-
-                 var margin = {top: 10, right: 30, bottom: 70, left: 30},
-                        width = graph_div.width() - margin.left - margin.right,
-                        height = graph_div.height()- margin.top - margin.bottom;
+             var margin = {top: 10, right: 30, bottom: 70, left: 30},
+                    width = graph_div.width() - margin.left - margin.right,
+                    height = graph_div.height()- margin.top - margin.bottom;
 
 
-                var max_user_count =    d3.max(json_data, function(d) { return d.user_count; });
+            var max_user_count =    d3.max(json_data, function(d) { return d.user_count; });
 
 
-                var x = d3.time.scale()
-                        .domain(d3.extent(json_data, function(d) { return d.date; }))
-                        .range([0, width]);
+            var x = d3.time.scale()
+                    .domain(d3.extent(json_data, function(d) { return d.date; }))
+                    .range([0, width]);
 
-                var y = d3.scale.linear()
-                        .domain([0, max_user_count * 2])
-                        .range([height, 0]);
+            var y = d3.scale.linear()
+                    .domain([0, max_user_count * 2])
+                    .range([height, 0]);
 
-                var xAxis = d3.svg.axis()
-                        .scale(x)
-                        .orient("bottom");
+            var xAxis = d3.svg.axis()
+                    .scale(x)
+                    .orient("bottom");
 
-                var yAxis = d3.svg.axis()
-                        .scale(y)
-                        .orient("left");
+            var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .orient("left");
 
-                var line = d3.svg.line()
-                        .interpolate('monotone')
-                        .x(function(d) {
-                            console.log('Plotting X value for data point: ' + d.date + '.');
+            var line = d3.svg.line()
+                    .interpolate('monotone')
+                    .x(function(d) {
+                        console.log('Plotting X value for data point: ' + d.date + '.');
 
-                            return x(d.date);
-                        })
-                        .y(function(d) {
+                        return x(d.date);
+                    })
+                    .y(function(d) {
 
-                            console.log('Plotting Y value for data point: ' + d.user_count + '.');
-                            return y(d.user_count);
-                        });
+                        console.log('Plotting Y value for data point: ' + d.user_count + '.');
+                        return y(d.user_count);
+                    });
 
-                var svg = d3.select("#dauGraph").append("svg")
-                        .attr("width", width + margin.left + margin.right)
-                        .attr("height", height + margin.top + margin.bottom)
-                        .append("g")
-                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            var svg = d3.select("#dauGraph").append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                    .append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-                    svg.append("g")
-                            .attr("class", "x axis")
-                            .attr("transform", "translate(0," + height + ")")
-                            .call(xAxis);
+                svg.append("g")
+                        .attr("class", "x axis")
+                        .attr("transform", "translate(0," + height + ")")
+                        .call(xAxis);
 
-                    svg.append("g")
-                            .attr("class", "y axis")
-                            .call(yAxis)
-                            .append("text")
-                            .attr("transform", "rotate(-90)")
-                            .attr("y", 6)
-                            .attr("dy", ".71em")
-                            .style("text-anchor", "end")
-                            .text("Users");
+                svg.append("g")
+                        .attr("class", "y axis")
+                        .call(yAxis)
+                        .append("text")
+                        .attr("transform", "rotate(-90)")
+                        .attr("y", 6)
+                        .attr("dy", ".71em")
+                        .style("text-anchor", "end")
+                        .text("DAU");
 
-                    svg.append("path")
-                            .datum(json_data)
-                            .attr("class", "line")
-                            .attr("d", line);
-                });
+                svg.append("path")
+                        .datum(json_data)
+                        .attr("class", "line")
+                        .attr("d", line);
+            });
 
 
-        });
-    </script>
-  <!-- /Graphs -->
+    });
+</script>
+ /Graphs -->
 
-  <!-- Applications -->
-  <section>
-    <h4>Applications</h4>
-    <div class="row-fluid">
-      <p>
-        <%= link_to 'Register New Application', new_oauth_application_path, :class => "btn btn-primary" %>
-        <% if current_user.role? :admin %>
-          <%= link_to 'Manage OAuth Attributes', oauth_applications_path, :class => "btn btn-primary" %>
-        <% end %>
-      </p>
-
-      <h5>Accepted Applications</h5>
-      <table class="table table-bordered table-striped table-hover">
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Total Users</th>
-          <th>DAU</th>
-          <th>Avg. Sessions / day</th>
-          <th>Avg. Session Length</th>
-          <th>Analytics</th>
-          <th>App Key</th>
-        </tr>
-        </thead>
-        <tbody>
-          <% @accepted_applications.each do |application| %>
-              <tr id="application_<%= application.id %>">
-                <td><%= link_to application.name, app_path(application) %></td>
-                <td><%= Download.where(:app_download_id  => application.id,
-                                       :pending => false).count %></td>
-                <td><%= application.getDailyActiveUsers(Date.today) %></td>
-                <td><%= application.getAverageSessionsPerDay %></td>
-                <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
-                <td><%= link_to 'View Statistics', app_path(application) %></td>
-                <td><%= link_to 'View Key', oauth_application_path(application) %></td>
-              </tr>
-          <% end %>
-        </tbody>
-      </table>
-
-      <h5>Pending Applications</h5>
-      <table class="table table-bordered table-striped table-hover">
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Total Users</th>
-          <th>DAU</th>
-          <th>Avg. Sessions / day</th>
-          <th>Avg. Session Length</th>
-          <th>Analytics</th>
-          <th>App Key</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% @pending_applications.each do |application| %>
-            <tr id="application_<%= application.id %>">
-              <td><%= link_to application.name, app_path(application) %></td>
-              <td><%= application.accounts.count %></td>
-              <td><%= application.getDailyActiveUsers(Date.today) %></td>
-              <td><%= application.getAverageSessionsPerDay %></td>
-              <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
-              <td><%= link_to 'View Statistics', app_path(application) %></td>
-              <td><%= link_to 'View Key', oauth_application_path(application) %></td>
-            </tr>
-        <% end %>
-        </tbody>
-      </table>
-
-      <h5>Submitted Applications</h5>
-      <table class="table table-bordered table-striped table-hover">
-        <thead>
-        <tr>
-          <th>Name</th>
-          <th>Total Users</th>
-          <th>DAU</th>
-          <th>Avg. Sessions / day</th>
-          <th>Avg. Session Length</th>
-          <th>Analytics</th>
-          <th>App Key</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% @submitted_applications.each do |application| %>
-            <tr id="application_<%= application.id %>">
-              <td><%= link_to application.name, app_path(application) %></td>
-              <td><%= application.accounts.count %></td>
-              <td><%= application.getDailyActiveUsers(Date.today) %></td>
-              <td><%= application.getAverageSessionsPerDay %></td>
-              <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
-              <td><%= link_to 'View Statistics', app_path(application) %></td>
-              <td><%= link_to 'View Key', oauth_application_path(application) %></td>
-            </tr>
-        <% end %>
-        </tbody>
-      </table>
-
-      <% if current_user.role? :admin %>
-          <h5>Deleted Applications</h5>
-          <table class="table table-bordered table-striped table-hover">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Total Users</th>
-              <th>DAU</th>
-              <th>Avg. Sessions / day</th>
-              <th>Avg. Session Length</th>
-              <th>Analytics</th>
-              <th>App Key</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% @deleted_applications.each do |application| %>
-                <tr id="application_<%= application.id %>">
-                  <td><%= link_to application.name, app_path(application) %></td>
-                  <td><%= application.accounts.count %></td>
-                  <td><%= application.getDailyActiveUsers(Date.today) %></td>
-                  <td><%= application.getAverageSessionsPerDay %></td>
-                  <td><%= Time.at(application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
-                  <td><%= link_to 'View Statistics', app_path(application) %></td>
-                  <td><%= link_to 'View Key', oauth_application_path(application) %></td>
-                </tr>
-            <% end %>
-            </tbody>
-          </table>
+<!-- Applications -->
+<div class="row-fluid">
+  <div class="span8">
+    <h3 class="pull-left">Applications</h3>
+    <p class="pull-right">
+      <%= link_to new_oauth_application_path, :class => "btn btn-primary" do %>
+        <i class="icon-plus"></i> Register Application
       <% end %>
+    </p>
+  </div>
+</div>
+
+<div class="row-fluid">
+  <!-- Apps List -->
+  <div class="span8">
+    <% @applications.each do |application| %>
+      <div class="navbar">
+        <div class="navbar-inner">
+          <ul class="nav">
+            <li>
+              <%= link_to app_path(application) do %>
+                <% if application.image_url == nil %>
+                  <i class="icon-android icon-large"></i>
+                <% else %>
+                  <%= image_tag application.image_url.to_s %>
+                <% end %>
+                  <%= application.name %>
+              <% end %>
+            </li>
+          </ul>
+          <ul class="nav pull-right">
+            <li>
+              <p class="navbar-text">
+                <% if application.accepted == true %>
+                  <span class="label label-success">Active</span>
+                <% elsif application.submitted == true && application.accepted == false %>
+                  <span class="label label-warning">Pending</span>
+                <% else %>
+                  <span class="label">Inactive</span>
+                <% end %>
+              </p>
+            </li>
+            <li>
+              <%= link_to app_path(application) do %>
+                <i class="icon-signal"></i> Analytics
+              <% end %>
+            </li>
+            <li>
+              <%= link_to app_campaigns_path(application) do %>
+                <i class="icon-filter"></i> Campaigns
+              <% end %>
+            </li>
+            <li>
+              <p class="navbar-text">
+                <%= link_to "Edit", edit_oauth_application_path(application) %>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <!-- /Apps List -->
+
+  <!-- Sidebar -->
+  <div class="span4">
+    <div class="well">
+      <h4>Getting Started</h4>
+      <p>
+        Need help integrating TokenFire? Check out the guide for step-by-step directions!
+      </p>
+      <p>
+        <a href="https://github.com/TokenFire/tokenfire_android_sdk" target="_blank">Android Guide >></a>
+     </p>
+
     </div>
-  </section>
+    <div class="well">
+      <h4>Support</h4>
+      <p>
+        Have questions? Reach out to us at <a href="mailto:support@tokenfire.com">support@tokenfire.com</a>
+      </p>
+    </div>
+  </div>
+  <!-- /Sidebar -->
+
+</div>
 <!-- /Applications -->
 
 <!-- Javascript -->
 <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-<% end %>
