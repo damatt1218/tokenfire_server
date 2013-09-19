@@ -8,7 +8,16 @@ module Api
 
     # GET /api/apps.json - Gets all apps stored in the datasource
     def index
-      @apps = App.find_all_by_accepted(true)
+      @apps = Array.new
+      App.find_all_by_accepted(true).each do |a|
+        campaign = a.getActiveCampaign
+        if !campaign.nil?
+          if campaign.isAvailable
+            @apps << a
+          end
+        end
+      end
+
       @applist = Array.new
       device = nil
 
@@ -22,15 +31,65 @@ module Api
 
         if (app.image.url != nil)
           app_image = "#{app.image.url}"
-          @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :image => app_image, :rating => available_tokens }
+          @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :image => app_image, :rating => available_tokens, :timeRemaining => -1 }
         else
-          @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :rating => available_tokens }
+          @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :rating => available_tokens, :timeRemaining => -1 }
         end
       end
 
       json_apps = @applist.to_json
       render status: 200, json: json_apps
     end
+
+    # GET /api/apps/get_apps_for_device - Gets all apps that the passed in device has downloaded
+    def getAppsForDevice
+
+      if !params.has_key?(:device_uid)
+        render status: 400, text: ""
+      end
+
+      @apps = Array.new
+      device = Device.find_by_uuid(params[:device_uid])
+      downloads = Download.find_all_by_device_id(device.id)
+
+      downloads.each do |d|
+        app = App.find_by_id(d.app_download_id)
+
+        if d.pending == false && app.accepted == true
+          @apps << app
+        end
+      end
+
+      @applist = Array.new
+      @apps.collect do |app|
+        app_image = nil
+        available_tokens = get_available_tokens(app, device)
+
+        campaign_time_left = 0;
+        campaign = device.getCampaignWithAppId(app.id)
+        campaign_history = device.getCampaignHistoryWithAppId(app.id)
+        if !campaign.nil? && !campaign_history.nil?
+          if campaign.active && campaign.approved
+           time_elapsed = Time.now - campaign_history.created_at
+           if time_elapsed > (campaign.duration * 1.day)
+             campaign_time_left = (campaign.duration * 1.day) - time_elapsed
+           # campaign_time_left = 300
+           end
+          end
+        end
+
+        if (app.image.url != nil)
+          app_image = "#{app.image.url}"
+          @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :image => app_image, :rating => available_tokens, :timeRemaining => campaign_time_left }
+        else
+          @applist << { :id => app.id, :name => app.name, :description => app.description, :url => app.url, :rating => available_tokens, :timeRemaining => campaign_time_left }
+        end
+      end
+
+      json_apps = @applist.to_json
+      render status: 200, json: json_apps
+    end
+
 
     # Get /api/apps/1.json - Gets a single app based on the app_id
     def show
@@ -118,7 +177,16 @@ module Api
     end
 
     def featured_apps
-      @apps = App.where('featured_value > 0').order('featured_value desc')
+
+      @apps = Array.new
+      App.where('featured_value > 0').order('featured_value desc').each do |a|
+        campaign = a.getActiveCampaign
+        if !campaign.nil?
+          if campaign.isAvailable
+            @apps << a
+          end
+        end
+      end
 
       @applist = Array.new
 
@@ -142,11 +210,20 @@ module Api
     def get_available_tokens(app, device)
       available_tokens = 0
       tokens_achieved = 0
-      app.achievements.each do |achievement|
-        if achievement.enabled
-          available_tokens += achievement.value
+
+      campaign = device.getCampaignWithAppId(app.id)
+      if campaign.nil?
+        campaign = app.getActiveCampaign
+      end
+
+      if !campaign.nil?
+        campaign.achievements.each do |achievement|
+          if achievement.enabled
+            available_tokens += achievement.value
+          end
         end
       end
+
       if !device.nil?
         device.achievement_histories.each do |history|
           if history.achievement.app.id == app.id

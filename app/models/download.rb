@@ -19,5 +19,21 @@ class Download < ActiveRecord::Base
     return newDownload
   end
 
+  def check_for_valid_download(device_id, app_id)
+    download = Download.where(:device_id => device_id,
+                              :app_download_id => app_id)
+
+    if !download.nil?
+      tokenfire_app = App.where(:url => "com.tokenfire.tokenfire")
+      if !tokenfire_app.nil?
+        if download.app_id == tokenfire_app.app_id
+          return true
+        end
+      end
+    end
+
+    return false
+  end
+
 
 end

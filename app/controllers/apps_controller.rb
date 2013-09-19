@@ -6,6 +6,7 @@ class AppsController < ApplicationController
   #  /apps
   def index
     if current_user.role? :admin
+      @applications = App.all
       @accepted_applications = App.where(:accepted => true,
                                          :disabled =>false)
       @pending_applications = App.where(:accepted => false,
@@ -110,12 +111,16 @@ class AppsController < ApplicationController
   # /apps/submit/<id>
   def submit
     @application = App.find(params[:id])
-    if (@application.account_id == current_user.account.id) || (current_user.role? :admin)
-      @application.submitted = true
-      @application.save
-    end
+    if @application[:apk].nil?
+      redirect_to edit_oauth_application_path(params[:id]), :flash => { :notice => "Application not submitted. Missing Apk!" }
+    else
+      if (@application.account_id == current_user.account.id) || (current_user.role? :admin)
+        @application.submitted = true
+        @application.save
+      end
 
-    redirect_to apps_path
+      redirect_to app_path(params[:id]), :flash => { :notice => "Application successfully submitted." }
+    end
   end
 
   # Provides Daily Action Users JSON for all applications to be displayed as a chart

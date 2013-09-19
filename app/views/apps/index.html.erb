@@ -136,6 +136,11 @@
                 <% else %>
                   <span class="label">Inactive</span>
                 <% end %>
+                <% if application[:apk].nil? %>
+                  <span class="label">APK Not Uploaded</span>
+                <% else %>
+                  <span class="label label-success">APK Uploaded</span>
+                <% end %>
               </p>
             </li>
             <li>

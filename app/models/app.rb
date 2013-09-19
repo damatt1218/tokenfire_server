@@ -7,7 +7,7 @@ class App < ActiveRecord::Base
 
 
   attr_accessible :name, :redirect_uri
-  attr_accessible :description, :image, :name, :rating, :remote_image_url, :url, :disabled, :accepted, :submitted
+  attr_accessible :description, :image, :name, :rating, :remote_image_url, :url, :disabled, :accepted, :submitted, :apk
 
   # relationships
   has_many :downloads
@@ -23,6 +23,7 @@ class App < ActiveRecord::Base
   validates_presence_of :name
 
   mount_uploader :image, ImageUploader
+  mount_uploader :apk, ApkUploader
 
 
   validate :validate_image_size
@@ -153,6 +154,16 @@ class App < ActiveRecord::Base
       return 0.0
     end
 
+  end
+
+  def getActiveCampaign
+    campaigns.each do |c|
+      if c.active == true && c.approved == true
+        return c
+      end
+
+      return nil
+    end
   end
 
 

@@ -1,9 +1,11 @@
 <div>
   <h4>Step 1: Campaign Details</h4>
   <p>Set the total budget you would like to spend on your campaign (daily budgets optional). The link to Google Play will be the same as the URL in your app settings.</p>
-  <p>
-    <%= link_to 'Edit Details', edit_app_campaign_path(@application, @campaign), :class => "btn btn-primary" %>
-  </p>
+  <% if !@campaign.submitted %>
+    <p>
+      <%= link_to 'Edit Details', edit_app_campaign_path(@application, @campaign), :class => "btn btn-primary" %>
+    </p>
+  <% end %>
   <table class="table table-bordered table-striped table-hover">
     <thead>
     <tr>
@@ -36,7 +38,9 @@
     <b class="text-warning">All achievements should be completable within 1 hour of casual playtime to give users the best possible experience. This will be verified by our QA testers.</b>
   </p>
 
-  <p><%= link_to 'New Achievement', new_app_campaign_achievement_path(@application, @campaign), :class => "btn btn-primary" %></p>
+  <% if !@campaign.submitted %>
+    <p><%= link_to 'New Achievement', new_app_campaign_achievement_path(@application, @campaign), :class => "btn btn-primary" %></p>
+  <% end %>
 
   <table class="table table-bordered table-striped table-hover">
     <thead>
@@ -104,7 +108,7 @@
             </td>
             <td><%= achievement.achievement_history.count %></td>
             <td><%= achievement.uid %></td>
-            <td><%= link_to 'Edit', edit_app_campaign_achievement_path(@application, @campaign, achievement) %></td>
+            <td><%= link_to 'Edit', edit_app_campaign_achievement_path(@application, @campaign, @campaign.id) %></td>
           </tr>
         <% end %>
       </tbody>
@@ -116,12 +120,36 @@
   <h4>Step 3: Approval</h4>
   <p>Submit APK with SDK / Achievements fully integrated for QA. Campaigns will be activated upon successful review and you will be alerted via e-mail.</p>
 
-  UPLOADER HERE
 
-  Submit button under.
-  <% if !@campaign.active %>
-    <p><%= link_to 'Activate Campaign', app_activate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Activate this campaign?'} %></p>
+  <% if @campaign.submitted %>
+    <i><small>Current apk filename: <b><%= @campaign[:apk] %></b></small></i><br><br>
   <% else %>
-    <p><%= link_to 'Deactivate Campaign', app_deactivate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Deactivate this campaign?'} %></p>
+    <%= form_for @campaign, :html => {:multipart => true}, :url => app_campaign_path(@application.id, @campaign.id) do |f| %>
+      <%= f.error_messages %>
+      <p>
+        <% if !@campaign.apk.nil? %>
+          <i><small>Current apk filename: <b><%= @campaign[:apk] %></b></small></i><br>
+        <% else %>
+            <i><small>No apk uploaded yet!</small></i><br>
+        <% end %>
+        <%= f.file_field :apk %>
+      </p>
+      <p><%= f.submit %></p>
+    <% end %>
+  <% end %>
+
+  <% if !@campaign.submitted %>
+    <p> <%= link_to 'Submit For Review', app_submit_for_review_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Submit for review? Upon review complete this campaign will become the active campaign.'} %></p>
+  <% end %>
+
+  <% if current_user.role? :admin %>
+    <% if @campaign.submitted %>
+      <p> <%= link_to 'Accept', app_accept_app_campaign_path(@application, @campaign), :class => "btn btn-primary" %>
+    <% end %>
+    <% if !@campaign.active %>
+      <p><%= link_to 'Activate Campaign', app_activate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Activate this campaign?'} %></p>
+    <% else %>
+      <p><%= link_to 'Deactivate Campaign', app_deactivate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Deactivate this campaign?'} %></p>
+    <% end %>
   <% end %>
 </div>

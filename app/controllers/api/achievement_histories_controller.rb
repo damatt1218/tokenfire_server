@@ -31,8 +31,14 @@ module Api
         valid_parameters = false
       end
 
+      # Check if app was downloaded through the tokenfire app
+      downloaded_through_tokenfire = false
+      if valid_parameters
+        downloaded_through_tokenfire = Download.check_for_valid_download(Device.find_by_uuid(device_uid).id,
+                                                                         current_application.id)
+      end
 
-      if valid_parameters && save_achievement(achievement_uid, device_uid, acquired_date)
+      if valid_parameters && downloaded_through_tokenfire && save_achievement(achievement_uid, device_uid, acquired_date)
         render_status = 200
         notification_string = "You have earned #{Achievement.find_by_uid(achievement_uid).value} tokens through #{Achievement.find_by_uid(achievement_uid).name}!"
         if !Device.find_by_uuid(device_uid).gcm_id.nil?
@@ -121,34 +127,42 @@ module Api
 
       user_achievements_infos = Array.new
 
-      app.achievements.each do |achievement|
+      campaign = device.getCampaignWithAppId(app.id)
+      if campaign.nil?
+        campaign = app.getActiveCampaign
+      end
 
-        # if the achievement is not available to the user
-        #   next
-        # end
-        if !downloaded_through_tokenfire
-          next
+      if !campaign.nil?
+
+        campaign.achievements.each do |achievement|
+
+          # if the achievement is not available to the user
+          #   next
+          # end
+          if !downloaded_through_tokenfire
+            next
+          end
+
+          unless achievement.enabled
+            next
+          end
+
+          # Find the achievement history is it already exists
+          begin
+            achievement_history = AchievementHistory.where(:device_id => device.id).
+                where(:achievement_id => achievement.id).
+                limit(1).first
+          rescue
+            # ignored
+          end
+
+          has_achievement = !achievement_history.nil?
+
+          user_achievement_info = UserAchievementInfo.new
+          user_achievement_info.populate(achievement, has_achievement)
+
+          user_achievements_infos.push(user_achievement_info)
         end
-
-        unless achievement.enabled
-          next
-        end
-
-        # Find the achievement history is it already exists
-        begin
-          achievement_history = AchievementHistory.where(:device_id => device.id).
-              where(:achievement_id => achievement.id).
-              limit(1).first
-        rescue
-          # ignored
-        end
-
-        has_achievement = !achievement_history.nil?
-
-        user_achievement_info = UserAchievementInfo.new
-        user_achievement_info.populate(achievement, has_achievement)
-
-        user_achievements_infos.push(user_achievement_info)
       end
 
       return user_achievements_infos
@@ -182,7 +196,7 @@ module Api
         return false
       end
 
-      # Find the achievement history is it already exists
+      # Find the achievement history if it already exists
       begin
         achievement_history = AchievementHistory.where(:device_id => device,
                                                        :achievement_id => achievement).
@@ -197,6 +211,8 @@ module Api
       record_achievement ||= (!achievement_history.nil?) && (achievement.repeatable?)
       # AND it is enabled
       record_achievement &&= (achievement.enabled?)
+      # AND there is still budget available in the campaign
+      record_achievement &&= achievement.campaign.hasRemainingBudget(achievement.cost)
 
       # The user should be paid for the achievement if they meet any special requirements
       payout = record_achievement # TODO - Check for special cases when the achievement is only available to some users
@@ -208,6 +224,7 @@ module Api
         achievement_history.device = device
         achievement_history.acquired = acquired_date
         achievement_history.value = achievement.value
+        achievement_history.cost = achievement.cost
 
         # Only pay the user after successfully saving
         payout &&= achievement_history.save

@@ -19,6 +19,7 @@ GRAPH OF ALL ACTIVITY. Should graph new installs and eCPI and total spend. Will 
       <th>Spend (USD)</th>
       <th>Budgets (Daily / Total)</th>
       <th>Achievements</th>
+      <th>APK Uploaded</th>
       <th>Status</th>
       <th>Actions</th>
     </tr>
@@ -28,19 +29,34 @@ GRAPH OF ALL ACTIVITY. Should graph new installs and eCPI and total spend. Will 
         <tr>
           <td><%= link_to campaign.name, app_campaign_path(@application, campaign) %></td>
           <!-- Should show number of achievements and total value -->
-          <td><%= campaign.description %></td>
+          <td><%= CampaignHistory.find_all_by_campaign_id(campaign.id).count() %></td>
           <!-- eCPI: total spend / total installs -->
-          <td>CALCULATE eCPI</td>
+          <td><% if CampaignHistory.find_all_by_campaign_id(campaign.id).count() > 0 %>
+                <%= number_to_currency(campaign.actual_overall_spent / CampaignHistory.find_all_by_campaign_id(campaign.id).count()) %>
+            <% else %>
+                0
+            <% end %></td>
           <!-- Spend: total amount spent -->
-          <td><%= number_to_currency(campaign.overall_used_budget) %></td>
+          <td><%= number_to_currency(campaign.actual_overall_spent) %></td>
           <!-- Budget spend should be listed as $spent / $total budget -->
           <td><%= number_to_currency(campaign.daily_budget) %> / <%= number_to_currency(campaign.overall_budget) %></td>
-          <td><%= campaign.achievements.count %> / $1.20 CALCULATE TOTAL COST</td>
+          <td><%= campaign.achievements.count %> / <%= number_to_currency(campaign.achievements.sum(&:cost)) %></td>
+          <td>
+            <% if campaign[:apk].nil? %>
+              <span class="label label-warning">No</span>
+            <% else %>
+              <span class="label label-success">Yes</span>
+            <% end %>
+          </td>
           <td>
             <% if campaign.active == true %>
               <span class="label label-success">Active</span>
-            <% else %>
+            <% elsif campaign.submitted %>
+              <span class="label label-warning">Submitted</span>
+            <% elsif campaign.accepted %>
               <span class="label">Inactive</span>
+            <% else %>
+              <span class="label">Unsubmitted</span>
             <% end %>
           </td>
           <td><%= link_to 'Edit', edit_app_campaign_path(campaign.app_id, campaign) %></td>

@@ -81,6 +81,7 @@ module Api
         app.campaigns.each do |c|
           if c.active
             campaign_hist.campaign_id = c.id
+            c.updateUsedBudgetValues(c.getCampaignValue, 0.0)
           end
         end
         campaign_hist.save

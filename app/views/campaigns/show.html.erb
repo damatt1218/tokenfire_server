@@ -36,11 +36,10 @@
   </div>
 </div>
 
-<% if @campaign.active == false %>
-  <%= render 'new_campaign' %>
-<% else %>
+<% if @campaign.active %>
   <%= render 'campaign_stats' %>
-  </div>
+<% else %>
+  <%= render 'new_campaign' %>
 <% end %>
 
 <div>

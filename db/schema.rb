@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130912114136) do
+ActiveRecord::Schema.define(:version => 20130919184505) do
 
   create_table "accounts", :force => true do |t|
     t.float    "balance",       :default => 0.0
@@ -28,8 +28,9 @@ ActiveRecord::Schema.define(:version => 20130912114136) do
     t.integer  "value"
     t.integer  "device_id"
     t.integer  "achievement_id"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+    t.float    "cost",           :default => 0.0
   end
 
   create_table "achievements", :force => true do |t|
@@ -61,14 +62,12 @@ ActiveRecord::Schema.define(:version => 20130912114136) do
   end
 
   create_table "app_session_histories", :force => true do |t|
-    t.string   "session_id"
-    t.string   "sdkVersion"
-    t.datetime "eventTimeStamp"
-    t.integer  "SessionDuration"
-    t.integer  "device_id"
-    t.integer  "app_usage_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.string   "app_session_id"
+    t.datetime "event_timestamp"
+    t.integer  "reported_duration"
+    t.integer  "event_type"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
   create_table "app_sessions", :force => true do |t|
@@ -109,6 +108,7 @@ ActiveRecord::Schema.define(:version => 20130912114136) do
     t.boolean  "disabled",       :default => false
     t.boolean  "accepted",       :default => false
     t.boolean  "submitted",      :default => false
+    t.string   "apk"
   end
 
   add_index "apps", ["account_id"], :name => "index_apps_on_account_id"
@@ -124,17 +124,22 @@ ActiveRecord::Schema.define(:version => 20130912114136) do
   create_table "campaigns", :force => true do |t|
     t.string   "name"
     t.string   "description"
-    t.boolean  "active",              :default => false
-    t.boolean  "approved",            :default => false
+    t.boolean  "active",               :default => false
+    t.boolean  "approved",             :default => false
     t.float    "overall_budget"
     t.float    "daily_budget"
     t.float    "duration"
     t.integer  "app_id"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
-    t.boolean  "soft_deleted",        :default => false
-    t.float    "overall_used_budget", :default => 0.0
-    t.float    "daily_used_budget",   :default => 0.0
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
+    t.boolean  "soft_deleted",         :default => false
+    t.float    "overall_used_budget",  :default => 0.0
+    t.float    "daily_used_budget",    :default => 0.0
+    t.float    "actual_overall_spent", :default => 0.0
+    t.float    "actual_daily_spent",   :default => 0.0
+    t.string   "apk"
+    t.boolean  "accepted",             :default => false
+    t.boolean  "submitted",            :default => false
   end
 
   create_table "device_metrics_histories", :force => true do |t|

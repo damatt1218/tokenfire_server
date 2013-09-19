@@ -31,6 +31,8 @@ MobileRewardz::Application.routes.draw do
     match 'campaigns/:id/restore', :to => 'campaigns#restore', :as => :restore_app_campaign
     match 'campaigns/:id/activate', :to => 'campaigns#activate', :as => :activate_app_campaign
     match 'campaigns/:id/deactivate', :to => 'campaigns#deactivate', :as => :deactivate_app_campaign
+    match 'campaigns/:id/accept', :to => 'campaigns#accept', :as => :accept_app_campaign
+    match 'campaigns/:id/submit_for_review', :to => 'campaigns#submitForReview', :as => :submit_for_review_app_campaign
     resources :campaigns  do
       match 'achievements/:id/soft_delete', :to => 'achievements#softDelete', :as => :soft_delete_app_achievement
       match 'achievements/:id/restore', :to => 'achievements#restore', :as => :restore_app_achievement
@@ -70,6 +72,7 @@ MobileRewardz::Application.routes.draw do
     match 'accounts/supersonicads_offer_revoke', :to => 'accounts#supersonicadsOfferRevoke'
     match 'rewards/featured_rewards', :to => 'rewards#featured_rewards'
     match 'apps/featured_apps', :to => 'apps#featured_apps'
+    match 'apps/get_apps_for_device', :to => 'apps#getAppsForDevice'
     match 'achievements/report', :to => 'achievement_histories#report', :via => :post
     match 'achievements/status', :to => 'achievement_histories#status', :via => :get
     match 'downloads/initial_app_launch', :to => 'downloads#initial_app_launch'

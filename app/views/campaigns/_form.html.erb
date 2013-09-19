@@ -23,8 +23,14 @@
     <%= f.text_field :daily_budget, :class=>"span7", :id=>"appendedPrependedInput" %>
   </div>
 
+
+  <%= f.label :apk %>
+  <% if !@campaign.apk.nil? %><i><small>Current uploaded apk: <b><%= @campaign[:apk] %></b></small></i><br><% end %>
+  <%= f.file_field :apk %><br><br>
+
+
   <p>
-    <%= f.submit :Submit, :class => "btn btn-primary" %>
+    <%= f.submit :Save, :class => "btn btn-primary" %>
     <%= link_to 'Cancel', app_path(@application), :class => 'btn' %>
   </p>
 </fieldset>

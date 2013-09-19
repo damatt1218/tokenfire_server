@@ -1,23 +1,22 @@
 <div class="row-fluid">
   <div class="well span6 offset3">
-    <div>
-      <% if !@campaign.active %>
-          <p><%= link_to 'Activate Campaign', app_activate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Activate this campaign?'} %></p>
-      <% else %>
-          <p><%= link_to 'Deactivate Campaign', app_deactivate_app_campaign_path(@application, @campaign), :class => "btn btn-primary", :data => {:confirm => 'Deactivate this campaign?'} %></p>
+
+    <% if @campaign.submitted && !(current_user.role? :admin) %>
+      Cannot edit a submitted app. <br><br>
+      <%= link_to 'Back to Campaigns', app_campaigns_path(@application), :class => "btn btn-primary" %> or
+      <%= link_to 'See Details', app_campaign_path(@application, @campaign), :class => "btn btn-primary" %>
+    <% else %>
+      <%= form_for @campaign, :url => app_campaign_path(@application,@campaign), :html => { :method => :put } do |f| %>
+          <legend>Edit <%= @campaign.name %></legend>
+          <%= render 'form', :campaign => @campaign, :f => f %>
       <% end %>
-    </div>
 
-    <%= form_for @campaign, :url => app_campaign_path(@application,@campaign), :html => { :method => :put } do |f| %>
-        <legend>Edit <%= @campaign.name %></legend>
-        <%= render 'form', :campaign => @campaign, :f => f %>
-    <% end %>
-
-    <% if @campaign.soft_deleted == false %>
-        <%= link_to 'Delete', app_soft_delete_app_campaign_path(@application, @campaign), :class => "btn btn-danger", :data => {:confirm => 'Are you sure?'} %>
-    <% end %>
-    <% if (@campaign.soft_deleted == true) && (current_user.role? :admin) %>
-        <%= link_to 'Restore', app_restore_app_campaign_path(@application, @campaign), :class => "btn btn-warning"  %>
+      <% if @campaign.soft_deleted == false %>
+          <%= link_to 'Delete', app_soft_delete_app_campaign_path(@application, @campaign), :class => "btn btn-danger", :data => {:confirm => 'Are you sure?'} %>
+      <% end %>
+      <% if (@campaign.soft_deleted == true) && (current_user.role? :admin) %>
+          <%= link_to 'Restore', app_restore_app_campaign_path(@application, @campaign), :class => "btn btn-warning"  %>
+      <% end %>
     <% end %>
   </div>
 </div>

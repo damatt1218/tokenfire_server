@@ -30,6 +30,11 @@
       <li>
         <%= link_to 'Edit App', edit_oauth_application_path(@application) %>
       </li>
+      <li>
+        <% if !@application.submitted %>
+          <%= link_to "Submit for Approval", apps_submit_path(@application) %>
+        <% end %>
+      </li>
         <% if current_user.role? :admin %>
           <%= link_to 'Delete', apps_disable_path(@application), :data => {:confirm => 'Are you sure?'} %>
           <% if @application.accepted == false %>

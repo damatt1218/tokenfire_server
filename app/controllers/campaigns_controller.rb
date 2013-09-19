@@ -128,6 +128,31 @@ class CampaignsController < ApplicationController
 
   end
 
+  # Accepts a campaign
+  # /apps/:app_id/campaigns/:id/accept
+  #   :app_id is the id of the app the campaign will be associated with
+  #   :id is the id of the campaign to accept
+  def accept
+    if hasAccess && isAdmin
+      if @application.accepted
+        @campaign.accepted = true
+        Campaign.find_all_by_app_id(@application.id).each do |c|
+          c.active = false
+          c.save
+        end
+
+        @campaign.active = true
+        @campaign.save
+
+        redirect_to app_campaigns_path(params[:app_id]), :flash => { :notice => "Campaign successfully accepted." }
+      else
+        redirect_to app_campaigns_path(params[:app_id]), :flash => { :notice => "Campaign not accepted. Current application has not been approved." }
+      end
+    else
+      redirect_to '/'
+    end
+  end
+
   # Activates a campaign
   # /apps/:app_id/campaigns/:id/activate
   #   :app_id is the id of the app the campaign will be associated with
@@ -164,6 +189,23 @@ class CampaignsController < ApplicationController
 
   end
 
+  # Submits a campaign for admin review
+  # /apps/:app_id/campaigns/:id/submit_for_review
+  #   :app_id is the id of the app the campaign will be associated with
+  #   :id is the id of the campaign submitted
+  def submitForReview
+    @application = App.find(params[:app_id])
+    @campaign = Campaign.find(params[:id])
+    if (@campaign[:apk].nil?)
+      redirect_to app_campaign_path(params[:app_id], params[:id]), :flash => { :notice => "APK missing!" }
+    else
+      @campaign.submitted = true
+      @campaign.active = false
+      @campaign.accepted = false
+      @campaign.save
+      redirect_to app_campaign_path(params[:app_id], params[:id]), :flash => { :notice => "Campaign successfully submitted." }
+    end
+  end
 
   # Checks permissions to see if the requesting user has access to the data requested
   # If the user has access:

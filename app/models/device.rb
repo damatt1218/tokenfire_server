@@ -16,4 +16,22 @@ class Device < ActiveRecord::Base
     end
   end
 
+  def getCampaignWithAppId(app_id)
+    campaign_histories.each do |c|
+      if c.campaign.app_id == app_id
+        return c.campaign
+      end
+    end
+    return nil
+  end
+
+  def getCampaignHistoryWithAppId(app_id)
+    campaign_histories.each do |c|
+      if c.campaign.app_id == app_id
+        return c
+      end
+    end
+    return nil
+  end
+
 end
