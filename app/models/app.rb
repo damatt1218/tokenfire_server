@@ -5,11 +5,16 @@ class App < ActiveRecord::Base
     doorkeeper_client!
   end
 
-
   attr_accessible :name, :redirect_uri
   attr_accessible :description, :image, :name, :rating, :remote_image_url, :url, :disabled, :accepted, :submitted, :apk
 
-  # relationships
+  # Scopes
+  scope :active, where(accepted: true, disabled: false)
+  scope :submitted, where(accepted: false, disabled: false, submitted: true)
+  scope :pending, where(accepted: false, disabled: false, submitted: false)
+  scope :deleted, where(disabled: true)
+
+  # Relationships
   has_many :downloads
   has_many :app_usages
 
@@ -24,7 +29,6 @@ class App < ActiveRecord::Base
 
   mount_uploader :image, ImageUploader
   mount_uploader :apk, ApkUploader
-
 
   validate :validate_image_size
   validate :validate_package_name

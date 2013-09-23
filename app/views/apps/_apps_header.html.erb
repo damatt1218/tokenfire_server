@@ -25,10 +25,10 @@
     </ul>
     <ul class="nav pull-right">
       <li>
-        <%= link_to 'AppID & Secret', oauth_application_path(@application) %>
+        <%= link_to 'Details', oauth_application_path(@application) %>
       </li>
       <li>
-        <%= link_to 'Edit App', edit_oauth_application_path(@application) %>
+        <%= link_to 'Edit', edit_oauth_application_path(@application) %>
       </li>
       <li>
         <% if !@application.submitted %>

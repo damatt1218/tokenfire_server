@@ -1,29 +1,11 @@
 class SupportController < ApplicationController
+  layout "support"
+
   def home
     @page_title = 'TokenFire Support - Home'
   end
 
   def android_sdk_setup
     @page_title = 'TokenFire Support - Android SDK Setup Instructions'
-  end
-
-  def contact_us
-    @page_title = 'TokenFire - Contact Us'
-  end
-
-  def about_us
-    @page_title = 'TokenFire - About Us'
-  end
-
-  def dev_terms
-    @page_title = 'TokenFire - Developer Terms and Agreement'
-  end
-
-  def privacy
-    @page_title = 'TokenFire - Privacy Policy'
-  end
-
-  def end_user_tos
-    @page_title = 'TokenFire - End User TOS'
   end
 end

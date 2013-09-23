@@ -9,38 +9,40 @@
       <!-- nav-collapse -->
       <div class="nav-collapse collapse">
         <% if current_user %>
-        <ul class="nav">
-          <li><%=  link_to "Dashboard", apps_path %></li>
-          <% if current_user.role? :admin %>
-            <li><%= link_to "Currency", admin_currency_path %></li>
-            <li><%= link_to "Users", admin_users_path %></li>
-            <li><%= link_to "Rewards", admin_rewards_path %></li>
-            <li><%= link_to "Pending Rewards", admin_reward_histories_path %></li>
-            <li><%= link_to "Promos", admin_promo_codes_path %></li>
-          <% end %>
-          <li>
-            <div class="btn-group">
-              <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                Select Application
-                <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <% if current_user.account.apps.count > 0 %>
-                  <% current_user.account.apps.where(:disabled=>false).each do |application| %>
-                    <li><%= link_to application.name, app_path(application) %></li>
-                  <% end %>
-                <% else %>
-                  No applications
+          <ul class="nav">
+            <% if current_user.role? :admin %>
+              <li><%= link_to "Apps", admin_apps_path %></li>
+              <li><%= link_to "Currency", admin_currency_path %></li>
+              <li><%= link_to "Users", admin_users_path %></li>
+              <li><%= link_to "Rewards", admin_rewards_path %></li>
+              <li><%= link_to "Pending Rewards", admin_reward_histories_path %></li>
+              <li><%= link_to "Promos", admin_promo_codes_path %></li>
+            <% else %>
+              <li><%=  link_to "Dashboard", root_path %></li>
+              <li>
+                <div class="btn-group">
+                  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                    Select Application
+                    <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <% if current_user.account.apps.count > 0 %>
+                      <% current_user.account.apps.where(:disabled=>false).each do |application| %>
+                        <li><%= link_to application.name, app_path(application) %></li>
+                      <% end %>
+                    <% else %>
+                      No applications
+                    <% end %>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <%= link_to new_oauth_application_path do %>
+                  <i class="icon-plus-sign icon-large inline"></i>
                 <% end %>
-              </ul>
-            </div>
-          </li>
-          <li>
-            <%= link_to new_oauth_application_path do %>
-              <i class="icon-plus-sign icon-large inline"></i>
+              </li>
             <% end %>
-          </li>
-        </ul>
+          </ul>
         <% end %>
         <div class="navbar-text pull-right">
           <% if current_user %>

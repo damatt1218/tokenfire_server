@@ -18,8 +18,8 @@
 <i><small>Public description for listing in TokenFire marketplace.</small></i>
 <%= f.text_area :description, :rows => '3', :class => 'input-block-level' %>
 
-<%= f.label :image %>
-<i><small>Please upload a 96 x 96 icon</small></i>
+<%= f.label :image, 'App Icon' %>
+<i><small>Please upload a 96 x 96 icon for listings in the TokenFire marketplace.</small></i>
 <div class="row-fluid">
   <div class="span10">
     <%= f.file_field :image %>
@@ -35,7 +35,7 @@
 <i><small>Example: com.tokenfire.android</small></i><br>
 <%= f.text_field :url %>
 
-<%= f.label :apk %>
+<%= f.label :apk, 'APK' %>
 <i><small>We will verify correct integration of the Android SDK for QA.</small></i>
 <% if !application.apk.nil? %><i><small>Current uploaded apk: <b><%= application[:apk] %></b></small></i><br><% end %>
 <%= f.file_field :apk %><br><br>
@@ -53,5 +53,5 @@
 
 <p>
   <%= f.submit :Save, :class => "btn btn-primary" %>
-  <%= link_to "Cancel", apps_path, :class => 'btn' %>
+  <%= link_to "Cancel", :back, :class => 'btn' %>
 </p>

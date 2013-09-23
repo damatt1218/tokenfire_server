@@ -1,14 +1,15 @@
 MobileRewardz::Application.routes.draw do
 
+  # Static Pages
+  match 'about', :to => 'static_pages#about_us'
+  match 'contact', :to => 'static_pages#contact'
+  match 'privacy', :to => 'static_pages#privacy'
+  match 'usertos', :to => 'static_pages#usertos'
+  match 'devtos', :to => 'static_pages#devtos'
+
   # Support Pages
-  match 'about', :to => 'support#about_us'
   match 'support', :to => 'support#home'
-  match 'contact', :to => 'support#contact_us'
-  match 'terms', :to => 'support#dev_terms'
-  match 'privacy', :to => 'support#privacy'
-  match 'usertos', :to => 'support#end_user_tos'
-  # Using GitHub documentation for now
-  # get 'support/android_sdk_setup'
+  match 'android', :to => 'support#android_sdk_setup'
 
   use_doorkeeper
 
@@ -88,7 +89,9 @@ MobileRewardz::Application.routes.draw do
   end
 
   # Admin routes
+  # Need to clean up... full CRUD not needed for all resources
   namespace :admin do
+    resources :apps
     resources :rewards
     resources :promo_codes
     resources :users
@@ -146,6 +149,12 @@ MobileRewardz::Application.routes.draw do
   #   end
 
   # You can have the root of your site routed with "root"
+  # root :to => 'static_pages#home'
+
+  # If user is logged in, root is dashboard page.
+  root :to => 'apps#index', :constraints => lambda { |r| r.env["warden"].authenticate? }
+
+  # If user it NOT logged in, root is informational page
   root :to => 'static_pages#home'
 
   # See how all your routes lay out with "rake routes"

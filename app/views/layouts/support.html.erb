@@ -12,9 +12,11 @@
   <%= javascript_include_tag "application" %>
   <%= javascript_include_tag "bootstrap" if Rails.env.development? %>
 
+
   <!-- Font Awesome -->
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
   <!-- google analytics -->
+
   <%= render 'layouts/ga' if Rails.env.production? %>
 </head>
 <body>
@@ -27,7 +29,29 @@
     <div id="main" class="container">
     <!-- Content -->
       <%= render 'shared/errors' %>
-      <%= yield %>
+      <div class="row">
+        <div class="span2 well well-small" data-spy="affix">
+          <ul class="nav nav-list">
+            <li>
+              <%= link_to support_path do %>
+                <i class="icon-home"> Home</i>
+              <% end %>
+            </li>
+            <li class="nav-header">Guides</li>
+            <li>
+              <%= link_to android_path do %>
+                <i class="icon-android"> Android</i>
+              <% end %>
+            </li>
+            <li class="nav-header">Downloads</li>
+            <li class="nav-header">Glossary</li>
+            <li class="nav-header">FAQ</li>
+          </ul>
+        </div>
+        <div class="span10 offset2 well">
+          <%= yield %>
+        </div>
+      </div>
     <!-- /Content -->
     </div>
     <div class="push"></div>

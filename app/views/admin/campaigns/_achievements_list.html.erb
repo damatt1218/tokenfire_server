@@ -1,0 +1,33 @@
+<table class="table table-bordered table-striped table-hover">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Cost (USD)</th>
+    <th>Avg. time to complete</th>
+    <th>Percent of Users</th>
+    <th>Times achieved</th>
+    <th>Achievement UID</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% campaign.achievements.where(:soft_deleted => true).each do |achievement| %>
+      <tr>
+        <td><%= link_to achievement.name, app_campaign_achievement_path(@application, @campaign, achievement) %></td>
+        <td><%= achievement.cost %></td>
+        <td><%= @application.getAverageDurationForAchievement(achievement) %></td>
+        <td>
+          <% if @downloads_count > 0 %>
+              <%= 100.0 * achievement.achievement_history.count / @downloads_count %>
+          <% else %>
+              0
+          <% end%>
+          %
+        </td>
+        <td><%= achievement.achievement_history.count %></td>
+        <td><%= achievement.uid %></td>
+        <td><%= link_to 'Edit', edit_app_campaign_achievement_path(@application, @campaign, @campaign.id) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

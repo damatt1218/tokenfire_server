@@ -5,31 +5,16 @@ class AppsController < ApplicationController
   # user and a summary of statistics
   #  /apps
   def index
-    if current_user.role? :admin
-      @applications = App.all
-      @accepted_applications = App.where(:accepted => true,
-                                         :disabled =>false)
-      @pending_applications = App.where(:accepted => false,
-                                        :submitted => false,
-                                        :disabled => false)
-      @deleted_applications = App.where(:disabled => true)
-      @submitted_applications = App.where(:submitted => true,
-                                          :accepted => false,
-                                          :disabled => false)
-    else
-      @applications = App.where(:account_id => current_user.account.id, :disabled => false)
-      @accepted_applications = App.where(:account_id => current_user.account.id,
-                                         :accepted => true,
-                                         :disabled => false)
-      # @pending_applications = App.where(:account_id => current_user.account.id,
-      #                                   :accepted => false,
-      #                                   :submitted => false,
-      #                                   :disabled => false)
-      # @submitted_applications = App.where(:account_id => current_user.account.id,
-      #                                     :submitted => true,
-      #                                     :accepted => false,
-      #                                     :disabled => false)
-    end
+    @applications = App.where(:account_id => current_user.account.id, :disabled => false)
+    @accepted_applications = App.where(:account_id => current_user.account.id).active
+    # @pending_applications = App.where(:account_id => current_user.account.id,
+    #                                   :accepted => false,
+    #                                   :submitted => false,
+    #                                   :disabled => false)
+    # @submitted_applications = App.where(:account_id => current_user.account.id,
+    #                                     :submitted => true,
+    #                                     :accepted => false,
+    #                                     :disabled => false)
 
     # This should be pre-calculate when we start to get a real amount of data
     @users = 0

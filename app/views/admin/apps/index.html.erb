@@ -1,0 +1,17 @@
+<header class="page-header">
+  <h1>Applications</h1>
+</header>
+<p>
+  <%= link_to new_oauth_application_path, :class => "btn btn-primary" do %>
+    <i class="icon-plus"></i> Register Application
+  <% end %>
+</p>
+
+<h4>Active Applications</h4>
+<%= render 'apps_list', applications: @accepted_applications %>
+
+<h4>Submitted Applications</h4>
+<%= render 'apps_list', applications: @submitted_applications %>
+
+<h4>Pending Applications</h4>
+<%= render 'apps_list', applications: @pending_applications %>

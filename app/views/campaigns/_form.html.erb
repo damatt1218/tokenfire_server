@@ -17,7 +17,7 @@
   </div>
 
   <%= f.label :daily_budget %>
-  <i><small>Total daily amount in USD allocated to be spent for this campaign.</small></i><br>
+  <i><small>Total daily amount in USD allocated to be spent for this campaign (optional).</small></i><br>
   <div class="input-prepend">
     <span class="add-on">$</span>
     <%= f.text_field :daily_budget, :class=>"span7", :id=>"appendedPrependedInput" %>
@@ -31,6 +31,6 @@
 
   <p>
     <%= f.submit :Save, :class => "btn btn-primary" %>
-    <%= link_to 'Cancel', app_path(@application), :class => 'btn' %>
+    <%= link_to 'Cancel', :back, :class => 'btn' %>
   </p>
 </fieldset>
