@@ -1,6 +1,7 @@
 class CampaignsController < ApplicationController
 
   CAMPAIGN_DURATION_DAYS = 3
+  CAMPAIGN_GRAPHING_DURATION = 7
 
   # Index to view all campaigns for an application
   # GET /apps/:app_id/campaigns
@@ -12,6 +13,17 @@ class CampaignsController < ApplicationController
     end
 
     @campaigns = Campaign.find_all_by_app_id(params[:app_id])
+    @daily_campaign_downloads = Array.new
+    @daily_campaign_ecpi = Array.new
+    @daily_campaign_total_spend = Array.new
+    @campaigns.each do |c|
+      if c.active?
+        @daily_campaign_downloads << [c.name, getDailyCampaignDownloads(c, Date.today - CAMPAIGN_GRAPHING_DURATION.days, CAMPAIGN_GRAPHING_DURATION)]
+        @daily_campaign_ecpi << [c.name, getDailyCampaignECpi(c, Date.today - CAMPAIGN_GRAPHING_DURATION.days, CAMPAIGN_GRAPHING_DURATION)]
+        @daily_campaign_total_spend << [c.name, getDailyCampaignSpend(c, Date.today - CAMPAIGN_GRAPHING_DURATION.days, CAMPAIGN_GRAPHING_DURATION)]
+      end
+    end
+
 
   end
 
@@ -275,5 +287,44 @@ class CampaignsController < ApplicationController
     else
       return (current_user.role? :developer)
     end
+  end
+
+  def getDailyCampaignDownloads(campaign, startDate, days)
+    if campaign.nil? || startDate.nil? || days.nil?
+      return nil
+    end
+
+    result_array = Array.new
+    (0..(days-1)).each do |i|
+      result_array << [startDate + i.days, campaign.getDailyDownloads(startDate + i.days)]
+    end
+
+    return result_array
+  end
+
+  def getDailyCampaignECpi(campaign, startDate, days)
+    if campaign.nil? || startDate.nil? || days.nil?
+      return nil
+    end
+
+    result_array = Array.new
+    (0..(days-1)).each do |i|
+      result_array << [startDate + i.days, campaign.getDailyECpi(startDate + i.days)]
+    end
+
+    return result_array
+  end
+
+  def getDailyCampaignSpend(campaign, startDate, days)
+    if campaign.nil? || startDate.nil? || days.nil?
+      return nil
+    end
+
+    result_array = Array.new
+    (0..(days-1)).each do |i|
+      result_array << [startDate + i.days, campaign.getDailySpend(startDate + i.days)]
+    end
+
+    return result_array
   end
 end

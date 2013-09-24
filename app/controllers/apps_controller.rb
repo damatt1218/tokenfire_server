@@ -1,7 +1,7 @@
 class AppsController < ApplicationController
   include ActionView::Helpers::NumberHelper
 
-  # Provides controller to help display all the apps associated with th current
+  # Provides controller to help display all the apps associated with the current
   # user and a summary of statistics
   #  /apps
   def index
@@ -47,6 +47,8 @@ class AppsController < ApplicationController
     @downloads_count = Download.where(:app_download_id  => @application.id,
                                       :pending => false).count
     @mau = @application.getMonthlyActiveUsers(Date.today)
+    @dau_data = getDaus(@application, Date.today - 7.days, 7)
+    @mau_data = getMaus(@application, Date.today - 12.months, 12)
 
 
     unless current_user.role? :admin
@@ -150,6 +152,32 @@ class AppsController < ApplicationController
       result = '+' + result
     end
     return result
+  end
+
+  def getDaus(app, startDate, days)
+    if app.nil? || startDate.nil? || days.nil?
+      return nil
+    end
+
+    result_array = Array.new
+    (0..(days-1)).each do |i|
+      result_array << [startDate + i.days, app.getDailyActiveUsers(startDate + i.days)]
+    end
+
+    return result_array
+  end
+
+  def getMaus(app, startDate, months)
+    if app.nil? || startDate.nil? || months.nil?
+      return nil
+    end
+
+    result_array = Array.new
+    (0..(months-1)).each do |i|
+      result_array << [(startDate + i.months).strftime("%B %Y"), app.getMonthlyActiveUsers(startDate + i.months)]
+    end
+
+    return result_array
   end
 
 end

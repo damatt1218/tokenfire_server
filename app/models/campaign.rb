@@ -30,9 +30,8 @@ class Campaign < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
   validates_presence_of :overall_budget
-  validates_presence_of :daily_budget
   validates :overall_budget, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
-  validates :daily_budget, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
+  validates :daily_budget, :allow_blank => true, :format => { :with => /^\d+??(?:\.\d{0,2})?$/ }, :numericality => {:greater_than => 0}
   validate :validate_budgets
 
   mount_uploader :apk, ApkUploader
@@ -105,5 +104,24 @@ class Campaign < ActiveRecord::Base
 
     save
 
+  end
+
+  def getDailyDownloads(download_date)
+    return CampaignHistory.where(:created_at => download_date.beginning_of_day..download_date.end_of_day).count
+  end
+
+  def getDailyECpi(download_date)
+    downloads = CampaignHistory.where(created_at < download_date.end_of_day).count
+    cost = AchievementHistory.joins(:achievement).where("achievement_histories.created_at < ? AND campaign_id = ?", download_date.end_of_day, id).sum(:cost)
+    if downloads == 0
+      return 0
+    else
+      return cost / downloads
+    end
+  end
+
+  def getDailySpend(download_date)
+    cost = AchievementHistory.joins(:achievement).where("achievement_histories.created_at > ? AND achievement_histories.created_at < ? AND campaign_id = ?", download_date.beginning_of_day, download_date.end_of_day, id).sum(:cost)
+    return cost
   end
 end
