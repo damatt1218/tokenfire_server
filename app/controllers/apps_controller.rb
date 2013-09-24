@@ -17,26 +17,26 @@ class AppsController < ApplicationController
     #                                     :disabled => false)
 
     # This should be pre-calculate when we start to get a real amount of data
-    @users = 0
-    @usageTime = 0
-    @dau = 0
-    @dau_delta = 0
-    @mau = 0
-    @formatted_dau_delta = '0'
-    @downloads = 0
+    # @users = 0
+    # @usageTime = 0
+    # @dau = 0
+    # @dau_delta = 0
+    # @mau = 0
+    # @formatted_dau_delta = '0'
+    # @downloads = 0
 
-    @accepted_applications.each do |app|
-       @users += app.accounts.count
-       @usageTime += app.getTotalUsageTime
+    # @accepted_applications.each do |app|
+    #    @users += app.accounts.count
+    #    @usageTime += app.getTotalUsageTime
 
-      @mau += app.getMonthlyActiveUsers(Date.today)
-      @dau += app.getDailyActiveUsers(Date.today)
-      @dau_delta += @dau - app.getDailyActiveUsers(Date.today - 1.days)
-      @downloads += Download.where(:app_download_id  => app.id,
-                                   :pending => false).count
-    end
+    #   @mau += app.getMonthlyActiveUsers(Date.today)
+    #   @dau += app.getDailyActiveUsers(Date.today)
+    #   @dau_delta += @dau - app.getDailyActiveUsers(Date.today - 1.days)
+    #   @downloads += Download.where(:app_download_id  => app.id,
+    #                               :pending => false).count
+    # end
 
-    @formatted_dau_delta = format_delta(@dau_delta)
+    # @formatted_dau_delta = format_delta(@dau_delta)
   end
 
   # Provides application specific information

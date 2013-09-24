@@ -17,7 +17,7 @@
     </div>
     <!-- /KPI #1 -->
     <!-- KPI #2 -->
-    <div class="well span4">
+    <div id="dauDiv" class="well span4">
       <div>
         <i class="icon-group icon-4x pull-left"></i>
 
@@ -30,7 +30,7 @@
     </div>
     <!-- /KPI #2 -->
     <!-- KPI #3 -->
-    <div class="well span4">
+    <div id="mauDiv" class="well span4">
       <div>
         <i class="icon-calendar icon-4x pull-left"></i>
 
@@ -48,59 +48,9 @@
 
 <!-- Graphs -->
 <div class="row-fluid">
-  <!--
-  GRAPHS GO HERE
-  For now graph DAU and MAU. Future should be toggleable for different KPIs.
-  -->
-  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-  <script type="text/javascript">
-      google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-          var dau_data = google.visualization.arrayToDataTable([
-            ['Day', 'DAUs']
-            <% if !@dau_data.nil? %>
-              ,
-              <% @dau_data.each_with_index do |d, index| %>
-                ['<%= d[0] %>', <%= d[1] %>]
-                <% if index != @dau_data.size - 1 %>
-                  ,
-                <% end %>
-              <% end %>
-            <% end %>
-          ]);
-
-          var mau_data = google.visualization.arrayToDataTable([
-              ['Month', 'MAUs']
-              <% if !@dau_data.nil? %>
-                ,
-                <% @mau_data.each_with_index do |m, index| %>
-                 ['<%= m[0] %>', <%= m[1] %>]
-                  <% if index != @mau_data.size - 1 %>
-                    ,
-                  <% end %>
-                <% end %>
-              <% end %>
-          ]);
-
-          var dau_options = {
-              title: 'Daily Active Users',
-              vAxis: {minValue:0}
-          };
-          var mau_options = {
-              title: 'Monthly Active Users',
-              vAxis: {minValue:0}
-          };
-
-          var dau_chart = new google.visualization.LineChart(document.getElementById('dau_chart_div'));
-          dau_chart.draw(dau_data, dau_options);
-          var mau_chart = new google.visualization.LineChart(document.getElementById('mau_chart_div'));
-          mau_chart.draw(mau_data, mau_options);
-      }
-  </script>
-
-  <div id="dau_chart_div" style="width: 900px; height: 250px;"></div>
-  <div id="mau_chart_div" style="width: 900px; height: 250px;"></div>
+  <div class="well well-small">
+    <div id="mainChart"></div>
+  </div>
 
 </div>
 <!-- /Graphs -->
@@ -134,4 +84,79 @@
 </div>
 <!-- /Session Analytics -->
 
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var dau_data = google.visualization.arrayToDataTable([
+          ['Day', 'DAU']
+          <% if !@dau_data.nil? %>
+            ,
+            <% @dau_data.each_with_index do |d, index| %>
+              ['<%= d[0] %>', <%= d[1] %>]
+              <% if index != @dau_data.size - 1 %>
+                ,
+              <% end %>
+            <% end %>
+          <% end %>
+        ]);
 
+        var mau_data = google.visualization.arrayToDataTable([
+            ['Month', 'MAU']
+            <% if !@dau_data.nil? %>
+              ,
+              <% @mau_data.each_with_index do |m, index| %>
+               ['<%= m[0] %>', <%= m[1] %>]
+                <% if index != @mau_data.size - 1 %>
+                  ,
+                <% end %>
+              <% end %>
+            <% end %>
+        ]);
+
+        var dau_options = {
+            title: 'Daily Active Users',
+            vAxis: {
+              minValue: 0,
+              viewWindow: {min:0}
+            },
+            legend: {
+              position: 'none'
+            }
+        };
+        var mau_options = {
+            title: 'Monthly Active Users',
+            vAxis: {
+              minValue: 0,
+              viewWindow: {min:0}
+            },
+            legend: {
+              position: 'none'
+            }
+        };
+
+        var mainChart = new google.visualization.LineChart(document.getElementById('mainChart'));
+        mainChart.draw(dau_data, dau_options);
+
+        // Create toggles for graph
+        function graphToggle (elementId, data, options) {
+          div = document.getElementById(elementId);
+
+          div.onclick = function () {
+            mainChart.draw(data, options);
+          };
+          div.onmouseover = function() {
+            this.style.opacity = .6,
+            this.style.color = 'green';
+          };
+          div.onmouseout = function() {
+            this.style.opacity = 1,
+            this.style.color = ''
+          };
+        }
+
+        dauDiv = new graphToggle('dauDiv', dau_data, dau_options);
+        mauDiv = new graphToggle('mauDiv', mau_data, mau_options);
+    }
+</script>
