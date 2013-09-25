@@ -167,9 +167,9 @@ class App < ActiveRecord::Base
       if c.active == true && c.approved == true
         return c
       end
-
-      return nil
     end
+
+    return nil
   end
 
 
