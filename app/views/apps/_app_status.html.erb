@@ -1,0 +1,10 @@
+<% if application.accepted == true %>
+  <span class="label label-success">Active</span>
+<% elsif application.submitted == true && application.accepted == false %>
+  <span class="label label-warning">Pending</span>
+<% else %>
+  <span class="label">Not Submitted</span>
+<% end %>
+<% if application[:apk].nil? %>
+  <span class="label">missing APK</span>
+<% end %>

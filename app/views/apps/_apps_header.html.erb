@@ -1,12 +1,6 @@
 <h1>
   <%= @application.name.capitalize %>
-  <% if @application.accepted == true %>
-    <span class="label label-success">Active</span>
-  <% elsif @application.submitted == true && @application.accepted == false %>
-    <span class="label label-warning">Pending</span>
-  <% else %>
-    <span class="label">Inactive</span>
-  <% end %>
+  <%= render 'apps/app_status', application: @application %>
 </h1>
 
 <div class="navbar">

@@ -1,22 +1,13 @@
 <table class="table table-bordered table-striped">
   <tr>
     <th>ID</th>
-    <th>Status</th>
     <th>Name</th>
     <th>Icon</th>
+    <th>Actions</th>
   </tr>
   <% applications.each do |application| %>
     <tr>
       <td><%= application.id %></td>
-      <td>
-        <% if application.accepted == true %>
-          <span class="label label-success">Active</span>
-        <% elsif application.submitted == true && application.accepted == false %>
-          <span class="label label-warning">Pending</span>
-        <% else %>
-          <span class="label">Inactive</span>
-        <% end %>
-      </td>
       <td><%= link_to application.name, admin_app_path(application) %></td>
       <td>
         <% if application.image_url == nil %>
@@ -24,6 +15,9 @@
         <% else %>
           <%= image_tag application.image_url.to_s %>
         <% end %>
+      </td>
+      <td>
+        <%= link_to "Edit", edit_admin_app_path(application) %>
       </td>
     </tr>
   <% end %>

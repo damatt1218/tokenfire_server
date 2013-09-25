@@ -72,11 +72,10 @@
       <% if @downloads_count == 0 %>
         <td colspan=6>No Downloads Yet</td>
       <% else %>
-      <td><%= @application.getAverageSessionsPerDay %></td>
-      <td><%= @application.getAverageSessionsPerMonth %></td>
-      <td><%= Time.at(@application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
-      <td><%= Time.at(@application.getTotalUsageTime).gmtime.strftime('%R:%S') %></td>
-
+        <td><%= @application.getAverageSessionsPerDay %></td>
+        <td><%= @application.getAverageSessionsPerMonth %></td>
+        <td><%= Time.at(@application.getAverageSessionLength).gmtime.strftime('%R:%S') %></td>
+        <td><%= Time.at(@application.getTotalUsageTime).gmtime.strftime('%R:%S') %></td>
       <% end %>
     </tr>
     </tbody>

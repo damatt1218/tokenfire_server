@@ -22,6 +22,20 @@ module Admin
       @mau = @application.getMonthlyActiveUsers(Date.today)
     end
 
+    def edit
+      @application = App.find(params[:id])
+    end
+
+    def update
+      @application = App.find(params[:id])
+
+      if @application.update_attributes(params[:application], :as => :admin)
+        redirect_to admin_apps_path, :notice => 'App was successfully updated.'
+      else
+        render :action => "edit", :error => 'Could not update app.'
+      end
+    end
+
     # Allows "soft deletion" of apps instead of destroying the object altogether
     # /apps/disable/<id>
     def disable

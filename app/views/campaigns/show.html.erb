@@ -1,40 +1,4 @@
-<header>
-  <p class="lead pull-right">
-    Status: <% if @campaign.active == false %>Inactive<% else %>Active<% end %>
-  </p>
-  <h1>Campaign: <%= @campaign.name %></h1>
-</header>
-
-<div class="navbar">
-  <div class="navbar-inner">
-    <ul class="nav">
-      <li><%= link_to "Analytics", app_path(@application) %></li>
-      <li class="active"><%= link_to "Campaigns", app_campaigns_path(@application) %></li>
-    </ul>
-    <ul class="nav pull-right">
-      <% if @application.disabled == false %>
-        <% if @application.submitted == false %>
-          <li><%= link_to 'Submit For Review', apps_submit_path(@application)%></li>
-        <% end %>
-      <% end %>
-      <li>
-        <%= link_to 'App Key', oauth_application_path(@application) %>
-      </li>
-      <li>
-        <%= link_to 'Edit', edit_oauth_application_path(@application) %>
-      </li>
-        <% if current_user.role? :admin %>
-          <%= link_to 'Delete', apps_disable_path(@application), :data => {:confirm => 'Are you sure?'} %>
-          <% if @application.accepted == false %>
-            <%= link_to 'Accept Application', apps_accept_path(@application), :class => "btn btn-info" %>
-          <% end %>
-          <% if @application.disabled == true %>
-            <%= link_to 'Restore', apps_restore_path(@application), :class => "btn btn-info" %>
-          <% end %>
-        <% end %>
-    </ul>
-  </div>
-</div>
+<%= render 'apps/apps_header' %>
 
 <% if @campaign.active %>
   <%= render 'campaign_stats' %>

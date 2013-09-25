@@ -8,6 +8,8 @@ class App < ActiveRecord::Base
   attr_accessible :name, :redirect_uri
   attr_accessible :description, :image, :name, :rating, :remote_image_url, :url, :disabled, :accepted, :submitted, :apk
 
+    attr_accessible :description, :image, :name, :rating, :remote_image_url, :url, :disabled, :accepted, :submitted, :apk,  :as => :admin
+
   # Scopes
   scope :active, where(accepted: true, disabled: false)
   scope :submitted, where(accepted: false, disabled: false, submitted: true)

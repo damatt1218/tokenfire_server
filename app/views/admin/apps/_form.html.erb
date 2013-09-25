@@ -1,0 +1,61 @@
+<% if application.errors.any? %>
+  <div class="alert-message error" data-alert><a class="close" href="#">×</a>
+    <p>Whoops! Check your form for possible errors</p>
+    <p>
+      <% application.errors.full_messages.each do |msg| %>
+          <%= msg %><br>
+      <% end %>
+    </p>
+  </div>
+
+<% end %>
+
+<%= f.label :name %>
+<i><small>Public name for listing in TokenFire marketplace.</small></i>
+<%= f.text_field :name, :class=>"input-block-level" %>
+
+<%= f.label :description %>
+<i><small>Public description for listing in TokenFire marketplace.</small></i>
+<%= f.text_area :description, :rows => '3', :class => 'input-block-level' %>
+
+<%= f.label :image, 'App Icon' %>
+<i><small>Please upload a 96 x 96 icon for listings in the TokenFire marketplace.</small></i>
+<div class="row-fluid">
+  <div class="span10">
+    <%= f.file_field :image %>
+    <%= f.label :remote_image_url, "Or image URL" %>
+    <%= f.text_field :remote_image_url %>
+  </div>
+  <div class="span2">
+    <%= image_tag application.image_url.to_s %>
+  </div>
+</div>
+
+<%= f.label :url, "Google Play Package Name" %>
+<i><small>Example: com.tokenfire.android</small></i><br>
+<%= f.text_field :url %>
+
+<%= f.label :apk, 'APK' %>
+<i><small>We will verify correct integration of the Android SDK for QA.</small></i>
+<% if !application.apk.nil? %><i><small>Current uploaded apk: <b><%= application[:apk] %></b></small></i><br><% end %>
+<%= f.file_field :apk %><br><br>
+
+<% if current_user.role? :admin %>
+  <% if application.submitted? %>
+    <p>
+      <%= f.label :accepted %>
+      <%= f.check_box :accepted %>
+    </p>
+  <% end %>
+  <p>
+    <%= f.label :disabled, :class => 'checkbox inline' %>
+    <%= f.check_box :disabled %>
+  </p>
+<% end %>
+
+<hr>
+
+<p>
+  <%= f.submit :Save, :class => "btn btn-primary" %>
+  <%= link_to "Cancel", :back, :class => 'btn' %>
+</p>

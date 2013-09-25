@@ -1,0 +1,6 @@
+<div class="well span12">
+  <legend>Edit Application</legend>
+  <%= form_for :application, :url => admin_app_path(@application), :html => { :method => :put } do |f| %>
+    <%= render 'form', :application => @application, :f => f %>
+  <% end %>
+</div>
