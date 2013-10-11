@@ -58,6 +58,16 @@ class AppsController < ApplicationController
     end
   end
 
+
+  def quickstart
+    @applications = App.where(:account_id => current_user.account.id, :disabled => false)
+    @accepted_applications = App.where(:account_id => current_user.account.id).active
+    @selected_app = nil
+    if params.has_key?(:appid)
+      @selected_app = App.find(params[:appid])
+    end
+  end
+
   # Allows "soft deletion" of apps instead of destroying the object altogether
   # /apps/disable/<id>
   def disable

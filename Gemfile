@@ -43,6 +43,9 @@ end
 
 gem 'jquery-rails'
 gem 'd3-rails'
+gem 'client_side_validations'
+
+gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
 # Added for local testing
 group :development do

@@ -213,6 +213,8 @@ module Api
       record_achievement &&= (achievement.enabled?)
       # AND there is still budget available in the campaign
       record_achievement &&= achievement.campaign.hasRemainingBudget(achievement.cost)
+      # AND there is still (developer) balance available in the account
+      record_achievement &&= achievement.campaign.app.account.hasRemainingDevBalance(achievement.cost)
 
       # The user should be paid for the achievement if they meet any special requirements
       payout = record_achievement # TODO - Check for special cases when the achievement is only available to some users
@@ -230,12 +232,14 @@ module Api
         payout &&= achievement_history.save
       end
 
-      # Pay the user
+      # Pay the user and deduct from developer balance
       if payout
         user.account.balance += achievement.value.to_f
         user.account.save
 
-        # TODO - Where do we record how much the developer owes us?
+        achievement.campaign.app.account.developer_balance -= achievement.cost
+        achievement.campaign.app.account.save
+        achievement.campaign.app.account.updateDevReservedBalance
       end
     end
 

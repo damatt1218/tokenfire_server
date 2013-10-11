@@ -85,6 +85,9 @@ module Api
           end
         end
         campaign_hist.save
+
+        # update developer reserved balance
+        app.account.updateDevReservedBalance
       end
 
       if download

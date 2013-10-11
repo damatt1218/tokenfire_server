@@ -226,7 +226,7 @@ module Api
 
       if !device.nil?
         device.achievement_histories.each do |history|
-          if history.achievement.app.id == app.id
+          if history.achievement.campaign.app.id == app.id
             if history.achievement.enabled
               tokens_achieved += history.achievement.value
             end

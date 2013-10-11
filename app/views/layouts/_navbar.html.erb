@@ -20,6 +20,9 @@
             <% else %>
               <li><%=  link_to "Dashboard", root_path %></li>
               <li>
+                <%= link_to "QuickStart", apps_quickstart_path %>
+              </li>
+              <li>
                 <div class="btn-group">
                   <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                     Select Application
@@ -40,6 +43,9 @@
                 <%= link_to new_oauth_application_path do %>
                   <i class="icon-plus-sign icon-large inline"></i>
                 <% end %>
+              </li>
+              <li>
+                <%= link_to "Balance: " + number_to_currency(current_user.account.developer_balance), charges_add_balance_path %>
               </li>
             <% end %>
           </ul>

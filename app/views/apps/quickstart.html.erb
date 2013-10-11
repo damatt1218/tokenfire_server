@@ -1,0 +1,185 @@
+<% app_uid = "00DEADBEEF0000S3CR3T00000DEADBEEF0000S3CR3T00000DEADBEEF0000S3CR3T00" %>
+<% app_secret = "00DEADBEEF0000S3CR3T00000DEADBEEF0000S3CR3T00000DEADBEEF0000S3CR3T00" %>
+<% if !@selected_app.nil? %>
+  <% app_uid = @selected_app.uid %>
+  <% app_secret = @selected_app.secret %>
+<% end %>
+
+<header class="page-header">
+  <h1>Quick Start Guide</h1>
+  <h5>This guide will get you started with creating an app and integrating the SDK</h5>
+</header>
+
+<link href="https://github.global.ssl.fastly.net/assets/github-4299ee2bbd353ddd9aee9ca605f8000567d972bf.css" media="all" rel="stylesheet" type="text/css" />
+<link href="https://github.global.ssl.fastly.net/assets/github2-8468ddcc212fcb1ac1fe986c7f6e1f2384624205.css" media="all" rel="stylesheet" type="text/css" />
+<script type='text/javascript' src='http://code.jquery.com/jquery-1.7.1.js'></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+
+
+<script language="javascript" type="text/javascript">
+    $(window).load(function(){
+
+        $("#section2").accordion({
+            collapsible: true,
+            autoHeight: false,
+            active: false
+        });
+        $("#section3").accordion({
+            collapsible: true,
+            autoHeight: false,
+            active: false
+        });
+        $("#section4").accordion({
+            collapsible: true,
+            autoHeight: false,
+            active: false
+        });
+        $("#section5").accordion({
+            collapsible: true,
+            autoHeight: false,
+            active: false
+        });
+        $('#link').find('li').on('click', function() {
+            var id = $(this).data('id');
+            // Watch the console and you'll see that this gets called
+            // exactly once for each panel.
+            console.log('The id: ' + id);
+            if (id == "0")
+            {
+                $("#dropdown-name").replaceWith('<a class="btn dropdown-toggle quickstart-toggle" data-toggle="dropdown" href="#" id="dropdown-name">Create App <span class="caret"></span></a>');
+                $("#step1").replaceWith('<div id="step1"><%= form_for :application, :url => create_app_path, :html => { :method => :post} do |f| %><%= escape_javascript(render "doorkeeper/applications/form", :application => App.new, :f => f) %><% end %></div>');
+            }
+        });
+    });
+
+</script>
+
+<input type="hidden" id="app_id" value="0">
+<div class="well well-small">
+  <div class="sectionNumber">1</div>
+  <div class="sectionHeader">Choose or Create Your App</div>
+
+  <div class="btn-group">
+    <a class="btn dropdown-toggle quickstart-toggle" data-toggle="dropdown" href="#" id="dropdown-name">
+      <% if @selected_app.nil? %>
+        Select Application
+      <%else%>
+        <%= @selected_app.name %>
+      <% end %>
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" id="link">
+      <li data-id = "0" data-appname="Create App "><%= link_to "+ Create App", '#' %></li>
+      <% if @applications.count > 0 %>
+          <% @applications.where(:disabled=>false).each do |application| %>
+              <li><%= link_to application.name, {:controller => "apps", :action => "quickstart", :appid => application.id }%></li>
+          <% end %>
+      <% else %>
+        No applications
+      <% end %>
+    </ul>
+  </div>
+  <% if @selected_app.nil? %>
+    <div id="step1"></div>
+  <% else %>
+    <div id="step1">
+      <h4>Application ID:</h4>
+      <p><code id="application_id"><%= app_uid %></code></p>
+      <h4>Secret: </h4>
+      <p><code id="secret"><%= app_secret %></code></p>
+    </div>
+  <% end %>
+</div>
+
+<div class="well well-small" id="section2">
+  <h3><div class="sectionNumber">2</div>
+  <div class="sectionHeader">Download the SDK</div>
+  <div class="sectionExpand">[+] expand</div></h3>
+  <div><p>Download the latest version of the SDK <a href="https://github.com/damatt/tokenfire_android_sdk/raw/master/tokenfireactivity.jar">here</a>.</p></div>
+</div>
+
+<div class="well well-small" id="section3">
+  <h3><div class="sectionNumber">3</div>
+  <div class="sectionHeader">Install the SDK</div>
+    <div class="sectionExpand">[+] expand</div> </h3>
+  <ol>
+    <li>Copy the .jar file into your project. Typically the .jar files will be located in the libs directory of your project.  If your project does not already have a "libs" folder, create one at the root of the project by right-clicking the project and choosing "New" and then "Folder."</li>
+    <li>In Eclipse, go to Project -&gt; Properties -&gt; Java Build Path -&gt; Libraries</li>
+    <li>Click the "Add JARs..." and select the .jar file.</li>
+    <li>
+      <p>In your AndroidManifest.xml file add the following underneath your <code>&lt;manifest&gt;..&lt;/manifest&gt;</code> tag:</p>
+
+      <div class="highlight highlight-xml"><pre><span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">"android.permission.INTERNET"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;uses-permission</span> <span class="na">android:name=</span><span class="s">"android.permission.ACCESS_NETWORK_STATE"</span><span class="nt">/&gt;</span>
+</pre></div>
+    </li>
+    <li>
+      <p>In your AndroidManifest.xml file add the following underneath your <code>&lt;application&gt;..&lt;/application&gt;</code> tag:</p>
+
+      <div class="highlight highlight-xml"><pre><span class="nt">&lt;service</span> <span class="na">android:name=</span><span class="s">"com.tokenfire.clientsdk.android.restful.RESTService"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;service</span> <span class="na">android:name=</span><span class="s">"com.tokenfire.clientsdk.android.auth.AuthService"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;service</span> <span class="na">android:name=</span><span class="s">"org.OpenUDID.OpenUDID_service"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;intent-filter&gt;</span>
+        <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">"org.OpenUDID.GETUDID"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/intent-filter&gt;</span>
+ <span class="nt">&lt;/service&gt;</span>
+ <span class="nt">&lt;receiver</span> <span class="na">android:name=</span><span class="s">"com.tokenfire.clientsdk.android.tracking.ReferralReceiver"</span> <span class="na">android:exported=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;intent-filter&gt;</span>
+        <span class="nt">&lt;action</span> <span class="na">android:name=</span><span class="s">"com.android.vending.INSTALL_REFERRER"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/intent-filter&gt;</span>
+<span class="nt">&lt;/receiver&gt;</span>
+</pre></div>
+    </li>
+    <li>
+      <p>Extend your main activity with TokenFireActivity:</p>
+
+      <div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyMainActivity</span> <span class="kd">extends</span> <span class="n">TokenfireActivity</span> <span class="o">{</span>
+    <span class="c1">//... Do application specific stuff here</span>
+<span class="o">}</span>
+</pre></div>
+    </li>
+    <li><p>Get the ApplicationID and SecretKey generated from the TokenFire Developer Portal.</p></li>
+    <li>
+
+
+      <p>In the <code>OnCreate(..)</code> function in your main activity, add the following lines replacing the ApplicationID and SecretKey where appropriate (If you have selected an app above, your values will be shown in the code below):</p>
+
+      <div class="highlight highlight-java"><pre><span class="kd">super</span><span class="o">.</span><span class="na">setApplicationID</span><span class="o">(</span><span class="s" id="appId">"<%= app_uid %>>"</span><span class="o">);</span>
+<span class="kd">super</span><span class="o">.</span><span class="na">setApplicationSecret</span><span class="o">(</span><span class="s" id="appSecret">"<%= app_secret %>>"</span><span class="o">);</span>
+<span class="kd">super</span><span class="o">.</span><span class="na">onCreate</span><span class="o">(</span><span class="n">savedInstanceState</span><span class="o">);</span>
+</pre></div>
+    </li>
+     </ol>
+</div>
+
+<div class="well well-small" id="section4">
+  <h3><div class="sectionNumber">4</div>
+    <div class="sectionHeader">Submit the APK</div>
+    <div class="sectionExpand">[+] expand</div></h3>
+    <% if @selected_app.nil? %>
+      <div><p id="submitApk">No app selected.</p></div>
+    <% else %>
+      <%= form_for @selected_app, :as => :application, :url => oauth_application_path(@selected_app), :validate => true, :html => { :method => :put } do |f| %>
+          <%= f.label :apk, 'APK' %>
+          <i><small>We will verify correct integration of the Android SDK for QA.</small></i>
+          <% if !@selected_app.apk.nil? %><i><small>Current uploaded apk: <b><%= @selected_app[:apk] %></b></small></i><br><% end %>
+          <%= f.file_field :apk %><br><br>
+          <p>
+            <%= f.submit :Save, :class => "btn btn-primary" %>
+          </p>
+      <% end %>
+    <% end %>
+</div>
+
+<div class="well well-small" id="section5">
+  <h3><div class="sectionNumber">5</div>
+    <div class="sectionHeader">Submit the App for Review</div>
+    <div class="sectionExpand">[+] expand</div></h3>
+    <div>
+      <% if @selected_app.nil? %>
+        <p id="submitApp">No app selected.</p>
+      <% else %>
+        <%= link_to "Submit for Approval", apps_submit_path(@selected_app), :class => "btn btn-primary" %>
+      <% end %>
+    </div>
+</div>

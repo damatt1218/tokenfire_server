@@ -27,6 +27,7 @@ MobileRewardz::Application.routes.draw do
   match 'apps/restore/:id', :to => 'apps#restore', :via => :get, :as => :apps_restore
   match 'apps/accept/:id', :to => 'apps#accept', :via => :get, :as => :apps_accept
   match 'apps/submit/:id', :to => 'apps#submit', :as => :apps_submit
+  match 'apps/quickstart' => 'apps#quickstart'
   resources :apps do
     match 'campaigns/:id/soft_delete', :to => 'campaigns#softDelete', :as => :soft_delete_app_campaign
     match 'campaigns/:id/restore', :to => 'campaigns#restore', :as => :restore_app_campaign
@@ -99,6 +100,10 @@ MobileRewardz::Application.routes.draw do
     match 'currency', :to => 'dashboard#currency'
     match 'rewards/pending_redeemed', :to => 'reward_histories#index'
   end
+
+
+  match 'charges/add_balance', :to => 'charges#add'
+  resources :charges
 
 
   # The priority is based upon order of creation:

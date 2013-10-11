@@ -50,7 +50,8 @@ class Campaign < ActiveRecord::Base
   def isAvailable
     if self.active? && self.approved?
       if (self.achievements.sum(&:cost) > (self.overall_budget - self.overall_used_budget)) ||
-        (self.achievements.sum(&:cost) > (self.daily_budget - self.daily_used_budget))
+        (self.achievements.sum(&:cost) > (self.daily_budget - self.daily_used_budget)) ||
+        (self.achievements.sum(&:cost) > self.app.account.developer_reserved_balance)
         return false
       else
         return true
