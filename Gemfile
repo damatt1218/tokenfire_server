@@ -44,6 +44,7 @@ end
 gem 'jquery-rails'
 gem 'd3-rails'
 gem 'client_side_validations'
+gem 'newrelic_rpm'
 
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
